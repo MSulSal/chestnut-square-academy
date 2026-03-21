@@ -44,7 +44,10 @@ $pre_kindergarten_url     = home_url( '/academies/programs/pre-kindergarten/' );
 $kindergarten_url         = home_url( '/academies/programs/kindergarten/' );
 $school_age_url           = home_url( '/academies/programs/school-age-programs/' );
 $summer_camp_url          = home_url( '/academies/programs/summer-camp/' );
-$request_info_url         = home_url( '/contact-us/' );
+$is_academies_index       = is_page( 'academies' );
+$header_cta_url           = $is_academies_index ? $academies_url : home_url( '/contact-us/' );
+$header_cta_label         = $is_academies_index ? 'Find Your Academy' : 'Request Info';
+$header_cta_aria          = $is_academies_index ? 'Find Your Academy - View All Academies' : 'Request Info';
 $desktop_logo_default     = 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/kiddie-academy-logo.png';
 $mobile_logo_default      = 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/2023-refresh/kiddie-academy-logo-stacked.svg';
 $desktop_logo             = apply_filters( 'kms_asset_url', $desktop_logo_default, 'header_logo_desktop' );
@@ -128,7 +131,7 @@ $mobile_logo              = apply_filters( 'kms_asset_url', $mobile_logo_default
 						</a>
 					</div>
 					<div class="find-button">
-						<a href="<?php echo esc_url( $request_info_url ); ?>" class="button-round" aria-label="Request Info">Request Info</a>
+						<a href="<?php echo esc_url( $header_cta_url ); ?>" class="button-round" aria-label="<?php echo esc_attr( $header_cta_aria ); ?>"><?php echo esc_html( $header_cta_label ); ?></a>
 					</div>
 					<div class="expand-button mobile-button">
 						<span class="toplevel">
@@ -144,7 +147,7 @@ $mobile_logo              = apply_filters( 'kms_asset_url', $mobile_logo_default
 
 				<div id="compact-menu">
 					<div class="container">
-						<a href="<?php echo esc_url( $request_info_url ); ?>" class="button-round shadow" aria-label="Request Info">Request Info</a>
+						<a href="<?php echo esc_url( $header_cta_url ); ?>" class="button-round shadow" aria-label="<?php echo esc_attr( $header_cta_aria ); ?>"><?php echo esc_html( $header_cta_label ); ?></a>
 						<div class="expand-button-desktop">
 							<span class="toplevel">
 								<input type="checkbox" id="compact_menu_checkbox">

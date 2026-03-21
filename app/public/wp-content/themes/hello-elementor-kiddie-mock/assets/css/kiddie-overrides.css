@@ -1,3 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap");
+
+@font-face {
+  font-family: "Childhood";
+  src: url("../fonts/Childhood-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Overrides for WordPress/Elementor compatibility and missing icon-font fallbacks. */
 
 .kiddie-mock-site .site-main,
@@ -119,4 +129,189 @@ img.lazy[data-lazy-src]:not([src]) {
 
 #scroll-top {
   cursor: pointer;
+}
+
+/* Home hero keyword should render in the same crayon style as the reference. */
+.kiddie-mock-site.page-home #hero .copy h1 .headline-highlight,
+.kiddie-mock-site.home #hero .copy h1 .headline-highlight {
+  font-family: "Childhood", "Permanent Marker", "Comic Sans MS", cursive !important;
+  font-size: 1.167em;
+  display: block;
+  width: fit-content;
+  color: #f2c638 !important;
+  line-height: 120%;
+  margin-top: 10px;
+  margin-bottom: -10px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.kiddie-mock-site.page-home #hero .copy h1,
+.kiddie-mock-site.home #hero .copy h1 {
+  text-transform: none;
+}
+
+/* Accessibility widget parity (bottom-left floating button). */
+.kiddie-mock-site .accessibility-widget {
+  position: fixed;
+  left: 22px;
+  bottom: 22px;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: #005cc4;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22);
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  z-index: 2147483000;
+}
+
+.kiddie-mock-site .accessibility-widget:hover,
+.kiddie-mock-site .accessibility-widget:focus-visible {
+  background: #006fed;
+  color: #ffffff;
+}
+
+.kiddie-mock-site .accessibility-widget i {
+  font-size: 24px;
+  line-height: 1;
+}
+
+/* Academies page split hero + state strip parity. */
+.kiddie-mock-site .kma-academies-hero {
+  display: flex;
+  min-height: 500px;
+  border-top: 1px solid #ded8d1;
+}
+
+.kiddie-mock-site .kma-academies-hero-left {
+  flex: 0 0 56%;
+  background: #f3f3f3;
+}
+
+.kiddie-mock-site .kma-academies-hero-right {
+  flex: 1 1 44%;
+  background: #f5f1ec;
+  border-left: 1px solid #d4cec8;
+}
+
+.kiddie-mock-site .kma-academies-hero-inner {
+  max-width: 600px;
+  padding: 42px 34px 34px 24px;
+}
+
+.kiddie-mock-site .kma-academies-hero-inner h1 {
+  margin: 0 0 20px;
+  font-size: clamp(34px, 3.05vw, 48px);
+  line-height: 1.06;
+}
+
+.kiddie-mock-site .kma-academies-hero-inner p {
+  margin: 0 0 16px;
+  max-width: 520px;
+}
+
+.kiddie-mock-site .kma-academies-hero .locator-small .locator .form {
+  max-width: 100%;
+}
+
+.kiddie-mock-site .kma-academies-hero .locator-small .locator .form button {
+  min-width: 190px;
+}
+
+.kiddie-mock-site .kma-academies-hero .locator-small .locator .get-current-location {
+  margin-top: 8px;
+}
+
+.kiddie-mock-site .kma-state-strip {
+  background: #005cc4;
+  padding: 28px 0 30px;
+}
+
+.kiddie-mock-site .kma-state-strip .content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.kiddie-mock-site .kma-state-strip h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(30px, 2.35vw, 44px);
+  line-height: 1.05;
+  white-space: nowrap;
+}
+
+.kiddie-mock-site .kma-state-strip-form {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: 0 1 48%;
+}
+
+.kiddie-mock-site .kma-select-wrap {
+  flex: 1 1 auto;
+}
+
+.kiddie-mock-site .kma-select-wrap select {
+  width: 100%;
+  height: 54px;
+  border-radius: 28px 0 0 28px;
+  border: none;
+  padding: 0 22px;
+  font-size: 34px;
+  line-height: 1;
+  color: #1f2e57;
+  font-family: museo-slab, serif;
+  font-weight: 800;
+  appearance: auto;
+}
+
+.kiddie-mock-site .kma-state-strip-form .button-round {
+  border-radius: 0 28px 28px 0;
+  min-width: 102px;
+  height: 54px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+@media screen and (max-width: 1199px) {
+  .kiddie-mock-site .kma-academies-hero {
+    min-height: 0;
+    flex-direction: column;
+  }
+
+  .kiddie-mock-site .kma-academies-hero-left {
+    display: none;
+  }
+
+  .kiddie-mock-site .kma-academies-hero-right {
+    border-left: 0;
+  }
+
+  .kiddie-mock-site .kma-academies-hero-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 18px 34px;
+  }
+
+  .kiddie-mock-site .kma-state-strip .content-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .kiddie-mock-site .kma-state-strip-form {
+    flex: 1 1 auto;
+  }
+
+  .kiddie-mock-site .kma-select-wrap select {
+    font-size: 24px;
+  }
 }

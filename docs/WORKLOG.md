@@ -112,3 +112,8 @@
 - feat(asset-manager): added `Appearance > Kiddie Mock Assets` with searchable image-slot table, live previews, media-library picker buttons, save/reset actions, and URL override persistence.
 - feat(asset-pipeline): wired theme header/footer logos into asset-slot filter keys so brand/logo swaps can be done from admin without code edits.
 - chore(qa): reran local Playwright screenshot captures after layout and asset-manager changes to validate render behavior.
+- feat(parity-home): updated hero keyword treatment to enforced `LEARNING` highlight with local `Childhood` font fallback and stronger crayon-style rendering.
+- feat(parity-academies): rebuilt `/academies/` top section to split-hero + search panel + blue state strip structure and matched header CTA behavior on that route.
+- feat(accessibility-ui): added floating bottom-left accessibility icon treatment to better mirror live reference behavior.
+- feat(sync): added runtime content/meta sync safeguards so legacy Elementor snapshots can be auto-upgraded while keeping future edits dashboard-friendly.
+- chore(qa): added iterative pass screenshots (`pass3`-`pass6`) for home/academies/approach parity checks.

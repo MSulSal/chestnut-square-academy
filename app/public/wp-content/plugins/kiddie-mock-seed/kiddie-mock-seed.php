@@ -441,32 +441,64 @@ HTML;
 function kms_get_academies_html() {
 	return <<<HTML
 <main id="main-content">
-	<section class="subpage-hero padding-bottom padding-top offset-bg-parent">
-		<div class="offset-bg tan extend-left round-bottom-right no-media"></div>
-		<div class="text-and-image content-wrapper no-media">
-			<div class="text-left">
-				<h1>Find Your Academy</h1>
-				<p>Search by city, state, or zip code.</p>
+	<section class="kma-academies-hero">
+		<div class="kma-academies-hero-left" aria-hidden="true"></div>
+		<div class="kma-academies-hero-right">
+			<div class="kma-academies-hero-inner">
+				<h1>Find a Kiddie Academy&reg; Child Care Near You</h1>
+				<p>All across the country, Kiddie Academy Educational Child Care is helping prepare children for life. Find the most convenient of our 360+ locations near you.</p>
+				<div class="locator-small">
+					<div class="locator">
+						<div class="form">
+							<div class="input-container">
+								<input type="text" name="location" class="semi-transparent location-search-autocomplete" placeholder="City, State or Zip" aria-label="City, State or Zip" />
+							</div>
+							<button class="button" type="submit">Search Academies</button>
+						</div>
+						<a class="get-current-location" href="/academies/?useMyLocation=true"><i class="fa-solid fa-location-crosshairs"></i>Use your current location</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>
-	<div class="find-academy margin-top" id="find-academy">
+
+	<section class="kma-state-strip">
+		<div class="content-wrapper">
+			<div class="kma-state-strip-text">
+				<h2>Find an Academy in Your State</h2>
+			</div>
+			<div class="kma-state-strip-form">
+				<div class="kma-select-wrap">
+					<select aria-label="Select Your State">
+						<option selected>Select Your State</option>
+						<option>Texas</option>
+						<option>California</option>
+						<option>Florida</option>
+						<option>Maryland</option>
+					</select>
+				</div>
+				<button class="button-round">Show</button>
+			</div>
+		</div>
+	</section>
+
+	<section class="find-academy" id="find-academy">
 		<div class="content-wrapper">
 			<div class="text-container">
 				<h4>Find an Academy Near You</h4>
-				<p>Kiddie Academy Educational Child Care helps children make the most of learning moments in locations across the country.</p>
+				<p>Kiddie Academy Educational Child Care helps children make the most of learning moments in locations across the country. Discover one near you.</p>
 			</div>
 			<div class="locator">
 				<div class="form">
 					<div class="input-container">
-						<input type="text" name="location" class="semi-transparent location-search-autocomplete" placeholder="City, State or Zipcode" aria-label="City, State or Zipcode" />
+						<input type="text" name="location-2" class="semi-transparent location-search-autocomplete" placeholder="City, State or Zipcode" aria-label="City, State or Zipcode" />
 					</div>
 					<button class="button" type="submit">Find Your Academy</button>
 				</div>
 				<a class="get-current-location" href="/academies/?useMyLocation=true"><i class="fa-solid fa-location-crosshairs"></i>Use your current location</a>
 			</div>
 		</div>
-	</div>
+	</section>
 </main>
 HTML;
 }
@@ -744,6 +776,45 @@ function kms_run_seed( $overwrite = true ) {
 
 	flush_rewrite_rules();
 }
+
+/**
+ * One-time safety sync: mirror post_content into Elementor document meta.
+ *
+ * This keeps frontend rendering aligned even when page content was updated
+ * but cached/stale Elementor document data remained behind.
+ */
+function kms_sync_elementor_documents_once() {
+	if ( get_option( 'kms_elementor_sync_version' ) === '1.0.1' ) {
+		return;
+	}
+
+	$blueprints = kms_get_page_blueprints();
+
+	foreach ( $blueprints as $blueprint ) {
+		$page = get_page_by_path( $blueprint['path'], OBJECT, 'page' );
+		if ( ! $page instanceof WP_Post ) {
+			continue;
+		}
+
+		kms_set_elementor_document( (int) $page->ID, (string) $page->post_content );
+	}
+
+	update_option( 'kms_elementor_sync_version', '1.0.1' );
+}
+add_action( 'init', 'kms_sync_elementor_documents_once', 25 );
+
+/**
+ * One-time runtime reseed to guarantee current templates are reflected on site.
+ */
+function kms_runtime_reseed_once() {
+	if ( get_option( 'kms_runtime_seed_version' ) === '1.0.1' ) {
+		return;
+	}
+
+	kms_run_seed( true );
+	update_option( 'kms_runtime_seed_version', '1.0.1' );
+}
+add_action( 'init', 'kms_runtime_reseed_once', 30 );
 
 /**
  * Activation callback.
