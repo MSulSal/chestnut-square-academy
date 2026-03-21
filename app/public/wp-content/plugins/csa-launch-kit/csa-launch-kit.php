@@ -150,6 +150,10 @@ function csa_lk_activate() {
 		update_option( 'csa_lk_enable_faq_schema', '1' );
 	}
 
+	if ( false === get_option( 'csa_lk_domain_verified', false ) ) {
+		update_option( 'csa_lk_domain_verified', '0' );
+	}
+
 	csa_lk_run_setup( false );
 }
 register_activation_hook( __FILE__, 'csa_lk_activate' );
@@ -271,6 +275,16 @@ function csa_lk_register_settings() {
 			'type'              => 'string',
 			'sanitize_callback' => 'sanitize_text_field',
 			'default'           => '1',
+		)
+	);
+
+	register_setting(
+		'csa_lk_business_settings',
+		'csa_lk_domain_verified',
+		array(
+			'type'              => 'string',
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => '0',
 		)
 	);
 }
@@ -622,6 +636,11 @@ function csa_lk_get_publish_audit() {
 		++$blocking_count;
 	}
 
+	if ( '1' !== (string) get_option( 'csa_lk_domain_verified', '0' ) ) {
+		$technical_issues[] = 'Domain ownership/DNS verification is not confirmed in CSA Business Profile.';
+		++$blocking_count;
+	}
+
 	if ( '1' !== (string) get_option( 'blog_public', '1' ) ) {
 		$technical_notices[] = 'Search engine visibility is currently discouraged (good for staging, switch for production launch).';
 	}
@@ -802,6 +821,17 @@ function csa_lk_render_business_settings_page() {
 							Enable built-in FAQ schema
 						</label>
 						<p class="description">Disable these if your SEO plugin already outputs equivalent schema to avoid duplicates.</p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">Domain Ownership Verification</th>
+					<td>
+						<input type="hidden" name="csa_lk_domain_verified" value="0" />
+						<label>
+							<input type="checkbox" name="csa_lk_domain_verified" value="1" <?php checked( '1', (string) get_option( 'csa_lk_domain_verified', '0' ) ); ?> />
+							I confirm domain ownership is in the client account and DNS points only to the approved website.
+						</label>
+						<p class="description">Preflight will block launch until this is confirmed.</p>
 					</td>
 				</tr>
 			</table>

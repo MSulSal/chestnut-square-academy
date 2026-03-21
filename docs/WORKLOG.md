@@ -34,3 +34,4 @@
 - chore(stack): preloaded recommended production plugins locally (Yoast SEO, UpdraftPlus, WP Mail SMTP, Fluent Forms, Solid Security) to reduce manual setup.
 - feat(qa): added recommended plugin activation status checks to preflight UI and exported reports.
 - docs(handoff): added non-technical owner quick guide for routine edits, checks, and monthly maintenance.
+- feat(risk): added explicit domain ownership/DNS verification gate that blocks preflight until confirmed.

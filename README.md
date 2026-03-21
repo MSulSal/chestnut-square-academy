@@ -39,6 +39,7 @@ Business Profile settings include a copy-ready NAP block and JSON reference for 
 9. Test tour form submission from the Contact page.
 10. Download and archive the preflight report from `Tools > CSA Launch Kit`.
 11. In `Tools > CSA Launch Kit`, switch indexing mode appropriately (staging noindex vs production indexing).
+12. In `Settings > CSA Business Profile`, check domain ownership/DNS verification once confirmed.
 
 ## Notes
 - This project intentionally flags uncertain facts with `[VERIFY]` and `[DO NOT PUBLISH UNTIL CONFIRMED]`.
