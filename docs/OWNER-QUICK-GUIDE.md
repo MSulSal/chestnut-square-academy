@@ -18,6 +18,9 @@ This guide is for daily website use after handoff.
 4. Verify launch readiness:
 - Go to `Tools > CSA Launch Kit`
 - Confirm blocking items are `0`
+5. Follow owner data map:
+- Go to `Tools > CSA Launch Kit > Owner Data Entry Map (With Examples)`
+- Fill fields from `Settings > CSA Business Profile` and `Settings > CSA Tour Form`
 
 ## Before Any Public Update
 1. Make sure new information is confirmed (no placeholders).

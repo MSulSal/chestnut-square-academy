@@ -36,6 +36,8 @@
 - docs(handoff): added non-technical owner quick guide for routine edits, checks, and monthly maintenance.
 - feat(risk): added explicit domain ownership/DNS verification gate that blocks preflight until confirmed.
 - feat(automation): added one-click activation action for recommended plugins directly from CSA Launch Kit tools page.
+- feat(ux): added owner-facing data-entry map (with field examples and edit locations) in launch tools and business settings placeholders.
+- docs(instawp): added an InstaWP owner test-run plan plus dedicated owner data-entry mapping document.
 - chore(runtime): activated theme/plugin stack via Local WP-CLI runtime (Elementor, CSA Launch Kit, Yoast SEO, UpdraftPlus, WP Mail SMTP, Fluent Forms, Solid Security).
 - chore(runtime): executed launch-kit setup seed in WordPress, set permalink structure to `/%postname%/`, set `blog_public=0` (staging noindex), and removed default Sample Page.
 - chore(runtime): verified current launch-kit audit remains non-zero (`blocking=34`), confirming unresolved `[VERIFY]` and factual gates are still correctly enforced.

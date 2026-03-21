@@ -11,6 +11,8 @@ Elementor-friendly WordPress build package for Chestnut Square Academy.
 - Launch execution runbook: `docs/LAUNCH-DAY-RUNBOOK.md`
 - Handoff credentials template: `docs/HANDOFF-CREDENTIAL-INVENTORY.md`
 - Non-technical owner guide: `docs/OWNER-QUICK-GUIDE.md`
+- Owner data entry map: `docs/OWNER-DATA-ENTRY-MAP.md`
+- InstaWP owner rehearsal plan: `docs/INSTAWP-OWNER-TEST-RUN.md`
 - Hello Elementor child theme: `app/public/wp-content/themes/hello-elementor-csa`
 - Launch/setup plugin: `app/public/wp-content/plugins/csa-launch-kit`
 - Launch kit release notes: `docs/CSA-LAUNCH-KIT-CHANGELOG.md`

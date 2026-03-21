@@ -1,5 +1,10 @@
 # CSA Launch Kit Changelog
 
+## 1.5.0 - 2026-03-21
+- Added owner-facing data entry map in `Tools > CSA Launch Kit` with field examples and edit locations.
+- Added example placeholders and clearer field descriptions in `Settings > CSA Business Profile` and `Settings > CSA Tour Form`.
+- Added owner docs for data entry and InstaWP rehearsal workflow.
+
 ## 1.4.0 - 2026-03-21
 - Added schema output toggles (LocalBusiness and FAQ) in Business Profile settings.
 - Added staging/production indexing mode toggles in launch tools.

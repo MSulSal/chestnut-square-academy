@@ -3,7 +3,7 @@
  * Plugin Name: CSA Launch Kit
  * Plugin URI: https://chestnutsquareacademy.local
  * Description: One-click starter setup for Chestnut Square Academy pages, menus, business profile, and Schedule a Tour form.
- * Version: 1.4.0
+ * Version: 1.5.0
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: csa-launch-kit
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CSA_LAUNCH_KIT_VERSION', '1.4.0' );
+define( 'CSA_LAUNCH_KIT_VERSION', '1.5.0' );
 
 /**
  * Return default business profile values.
@@ -76,6 +76,76 @@ function csa_lk_get_recommended_plugins() {
 		'updraftplus/updraftplus.php'               => 'UpdraftPlus',
 		'wp-mail-smtp/wp_mail_smtp.php'             => 'WP Mail SMTP',
 		'better-wp-security/better-wp-security.php' => 'Solid Security',
+	);
+}
+
+/**
+ * Get owner-facing data entry map with examples.
+ *
+ * @return array<int,array<string,string>>
+ */
+function csa_lk_get_owner_data_entry_map() {
+	return array(
+		array(
+			'field'   => 'Business Name',
+			'where'   => 'LocalBusiness schema, citation block, global profile references.',
+			'example' => 'Chestnut Square Academy',
+			'edit'    => 'Settings > CSA Business Profile',
+		),
+		array(
+			'field'   => 'Address',
+			'where'   => 'Contact page, quick facts sections, map/citation references.',
+			'example' => '402 S Chestnut St, McKinney, TX 75069',
+			'edit'    => 'Settings > CSA Business Profile',
+		),
+		array(
+			'field'   => 'Phone',
+			'where'   => 'Call buttons and phone links across pages.',
+			'example' => '(972) 555-0123',
+			'edit'    => 'Settings > CSA Business Profile',
+		),
+		array(
+			'field'   => 'Public Email',
+			'where'   => 'Contact page and email links.',
+			'example' => 'director@example.com',
+			'edit'    => 'Settings > CSA Business Profile',
+		),
+		array(
+			'field'   => 'Hours',
+			'where'   => 'Quick facts, contact details, FAQ wording.',
+			'example' => 'Monday-Friday, 6:00 AM-6:00 PM',
+			'edit'    => 'Settings > CSA Business Profile',
+		),
+		array(
+			'field'   => 'Google Map Embed URL',
+			'where'   => 'Map block on Contact / Schedule a Tour page.',
+			'example' => 'https://www.google.com/maps?q=402+S+Chestnut+St,+McKinney,+TX+75069&output=embed',
+			'edit'    => 'Settings > CSA Business Profile',
+		),
+		array(
+			'field'   => 'Business Description',
+			'where'   => 'LocalBusiness schema description.',
+			'example' => 'Trusted early learning and childcare in Downtown McKinney, Texas.',
+			'edit'    => 'Settings > CSA Business Profile',
+		),
+		array(
+			'field'   => 'Tour Notification Email',
+			'where'   => 'Admin routing for Schedule a Tour submissions.',
+			'example' => 'enrollment@example.com',
+			'edit'    => 'Settings > CSA Tour Form',
+		),
+		array(
+			'field'   => 'Tour Success Message',
+			'where'   => 'Confirmation text shown after form submit.',
+			'example' => 'Thank you. Your tour request has been received...',
+			'edit'    => 'Settings > CSA Tour Form',
+		),
+		array(
+			'field'   => 'Page Content Placeholders',
+			'where'   => 'Home/About/Programs/Gallery/FAQ/Contact and optional pages.',
+			'example' => 'Replace all [VERIFY] and [DO NOT PUBLISH UNTIL CONFIRMED] tokens.',
+			'edit'    => 'Pages > Edit with Elementor',
+		),
 	);
 }
 
@@ -402,6 +472,7 @@ function csa_lk_render_tools_page() {
 	$indexing_status = isset( $_GET['csa_indexing'] ) ? sanitize_text_field( wp_unslash( $_GET['csa_indexing'] ) ) : '';
 	$plugin_status = isset( $_GET['csa_plugins'] ) ? sanitize_text_field( wp_unslash( $_GET['csa_plugins'] ) ) : '';
 	$audit  = csa_lk_get_publish_audit();
+	$data_map = csa_lk_get_owner_data_entry_map();
 	?>
 	<div class="wrap">
 		<h1>CSA Launch Kit</h1>
@@ -548,6 +619,31 @@ function csa_lk_render_tools_page() {
 				</tbody>
 			</table>
 		<?php endif; ?>
+
+		<hr />
+
+		<h2>Owner Data Entry Map (With Examples)</h2>
+		<p>Use this as a fill-in guide for client-provided data. No real data needs to be injected by developers.</p>
+		<table class="widefat striped" style="max-width: 1200px;">
+			<thead>
+				<tr>
+					<th>Field</th>
+					<th>Where It Appears</th>
+					<th>Example Format</th>
+					<th>Where To Edit</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $data_map as $entry ) : ?>
+					<tr>
+						<td><?php echo esc_html( $entry['field'] ); ?></td>
+						<td><?php echo esc_html( $entry['where'] ); ?></td>
+						<td><?php echo esc_html( $entry['example'] ); ?></td>
+						<td><?php echo esc_html( $entry['edit'] ); ?></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
 
 		<hr />
 
@@ -768,14 +864,15 @@ function csa_lk_render_settings_page() {
 				<tr>
 					<th scope="row"><label for="csa_lk_tour_email">Notification Email</label></th>
 					<td>
-						<input type="email" class="regular-text" id="csa_lk_tour_email" name="csa_lk_tour_email" value="<?php echo esc_attr( get_option( 'csa_lk_tour_email', get_option( 'admin_email' ) ) ); ?>" />
-						<p class="description">Tour requests are sent to this inbox.</p>
+						<input type="email" class="regular-text" id="csa_lk_tour_email" name="csa_lk_tour_email" placeholder="Example: enrollment@example.com" value="<?php echo esc_attr( get_option( 'csa_lk_tour_email', get_option( 'admin_email' ) ) ); ?>" />
+						<p class="description">Tour requests are sent to this inbox. Example format: <code>enrollment@example.com</code>.</p>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row"><label for="csa_lk_tour_success_message">Success Message</label></th>
 					<td>
-						<textarea class="large-text" rows="3" id="csa_lk_tour_success_message" name="csa_lk_tour_success_message"><?php echo esc_textarea( get_option( 'csa_lk_tour_success_message', '' ) ); ?></textarea>
+						<textarea class="large-text" rows="3" id="csa_lk_tour_success_message" name="csa_lk_tour_success_message" placeholder="Example: Thank you. Your tour request has been received."><?php echo esc_textarea( get_option( 'csa_lk_tour_success_message', '' ) ); ?></textarea>
+						<p class="description">Shown after successful submission. Keep tone warm and clear.</p>
 					</td>
 				</tr>
 			</table>
@@ -800,31 +897,52 @@ function csa_lk_render_business_settings_page() {
 			<table class="form-table" role="presentation">
 				<tr>
 					<th scope="row"><label for="csa_lk_business_name">Business Name</label></th>
-					<td><input type="text" class="regular-text" id="csa_lk_business_name" name="csa_lk_business_name" value="<?php echo esc_attr( csa_lk_get_business_option( 'csa_lk_business_name' ) ); ?>" /></td>
+					<td>
+						<input type="text" class="regular-text" id="csa_lk_business_name" name="csa_lk_business_name" placeholder="Example: Chestnut Square Academy" value="<?php echo esc_attr( csa_lk_get_business_option( 'csa_lk_business_name' ) ); ?>" />
+						<p class="description">Used for citation block and schema name.</p>
+					</td>
 				</tr>
 				<tr>
 					<th scope="row"><label for="csa_lk_business_address">Address</label></th>
-					<td><textarea class="large-text" rows="2" id="csa_lk_business_address" name="csa_lk_business_address"><?php echo esc_textarea( csa_lk_get_business_option( 'csa_lk_business_address' ) ); ?></textarea></td>
+					<td>
+						<textarea class="large-text" rows="2" id="csa_lk_business_address" name="csa_lk_business_address" placeholder="Example: 402 S Chestnut St, McKinney, TX 75069"><?php echo esc_textarea( csa_lk_get_business_option( 'csa_lk_business_address' ) ); ?></textarea>
+						<p class="description">Shown on Contact page and citation references.</p>
+					</td>
 				</tr>
 				<tr>
 					<th scope="row"><label for="csa_lk_business_phone">Phone</label></th>
-					<td><input type="text" class="regular-text" id="csa_lk_business_phone" name="csa_lk_business_phone" value="<?php echo esc_attr( csa_lk_get_business_option( 'csa_lk_business_phone' ) ); ?>" /></td>
+					<td>
+						<input type="text" class="regular-text" id="csa_lk_business_phone" name="csa_lk_business_phone" placeholder="Example: (972) 555-0123" value="<?php echo esc_attr( csa_lk_get_business_option( 'csa_lk_business_phone' ) ); ?>" />
+						<p class="description">Used for click-to-call buttons and phone links.</p>
+					</td>
 				</tr>
 				<tr>
 					<th scope="row"><label for="csa_lk_business_email">Public Email</label></th>
-					<td><input type="email" class="regular-text" id="csa_lk_business_email" name="csa_lk_business_email" value="<?php echo esc_attr( csa_lk_get_business_option( 'csa_lk_business_email' ) ); ?>" /></td>
+					<td>
+						<input type="email" class="regular-text" id="csa_lk_business_email" name="csa_lk_business_email" placeholder="Example: director@example.com" value="<?php echo esc_attr( csa_lk_get_business_option( 'csa_lk_business_email' ) ); ?>" />
+						<p class="description">Shown on Contact page and used in schema.</p>
+					</td>
 				</tr>
 				<tr>
 					<th scope="row"><label for="csa_lk_business_hours">Hours</label></th>
-					<td><input type="text" class="regular-text" id="csa_lk_business_hours" name="csa_lk_business_hours" value="<?php echo esc_attr( csa_lk_get_business_option( 'csa_lk_business_hours' ) ); ?>" /></td>
+					<td>
+						<input type="text" class="regular-text" id="csa_lk_business_hours" name="csa_lk_business_hours" placeholder="Example: Monday-Friday, 6:00 AM-6:00 PM" value="<?php echo esc_attr( csa_lk_get_business_option( 'csa_lk_business_hours' ) ); ?>" />
+						<p class="description">Appears in quick facts, contact details, and FAQ references.</p>
+					</td>
 				</tr>
 				<tr>
 					<th scope="row"><label for="csa_lk_business_map_embed">Google Map Embed URL</label></th>
-					<td><textarea class="large-text" rows="2" id="csa_lk_business_map_embed" name="csa_lk_business_map_embed"><?php echo esc_textarea( csa_lk_get_business_option( 'csa_lk_business_map_embed' ) ); ?></textarea></td>
+					<td>
+						<textarea class="large-text" rows="2" id="csa_lk_business_map_embed" name="csa_lk_business_map_embed" placeholder="Example: https://www.google.com/maps?q=402+S+Chestnut+St,+McKinney,+TX+75069&output=embed"><?php echo esc_textarea( csa_lk_get_business_option( 'csa_lk_business_map_embed' ) ); ?></textarea>
+						<p class="description">Used in Contact page map block via <code>[csa_map_embed]</code>.</p>
+					</td>
 				</tr>
 				<tr>
 					<th scope="row"><label for="csa_lk_business_description">Business Description</label></th>
-					<td><textarea class="large-text" rows="2" id="csa_lk_business_description" name="csa_lk_business_description"><?php echo esc_textarea( csa_lk_get_business_option( 'csa_lk_business_description' ) ); ?></textarea></td>
+					<td>
+						<textarea class="large-text" rows="2" id="csa_lk_business_description" name="csa_lk_business_description" placeholder="Example: Trusted early learning and childcare in Downtown McKinney, Texas."><?php echo esc_textarea( csa_lk_get_business_option( 'csa_lk_business_description' ) ); ?></textarea>
+						<p class="description">Used for LocalBusiness schema description.</p>
+					</td>
 				</tr>
 				<tr>
 					<th scope="row">Schema Output</th>
