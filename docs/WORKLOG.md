@@ -33,3 +33,4 @@
 - docs(versioning): added launch kit changelog with release history for easier client-facing updates.
 - chore(stack): preloaded recommended production plugins locally (Yoast SEO, UpdraftPlus, WP Mail SMTP, Fluent Forms, Solid Security) to reduce manual setup.
 - feat(qa): added recommended plugin activation status checks to preflight UI and exported reports.
+- docs(handoff): added non-technical owner quick guide for routine edits, checks, and monthly maintenance.
