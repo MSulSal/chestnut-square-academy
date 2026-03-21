@@ -63,3 +63,7 @@
 - feat(design): added fingerpaint/watercolor-style faded background layers for a more playful daycare atmosphere.
 - feat(navbar): switched nav link typography to a thicker playful style (`Baloo 2`) with subtle crayon-like edge shadowing.
 - feat(navbar): adjusted circular logo crop/size positioning so the logo fills the navbar badge more naturally.
+- feat(design): removed default underlined link styling and shifted to cleaner text-link treatment.
+- feat(design): replaced pill/capsule button style with compact rounded-rectangle buttons.
+- feat(design): flattened card-heavy aesthetic into lighter editorial blocks with fewer boxed panels and softer section structure.
+- feat(navbar): updated circular logo rendering to show full logo lockup (no text crop) using contain-fit treatment at larger size.
