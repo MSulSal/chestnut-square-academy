@@ -27,3 +27,4 @@
 - feat(reporting): added one-click downloadable preflight report for launch audits and stakeholder handoff records.
 - feat(workflow): added staging/production indexing mode toggles in launch tools for safer deployment transitions.
 - feat(local-seo): added copy-ready NAP citation block and JSON business profile reference to improve listing consistency workflows.
+- docs(operations): added launch-day runbook and credential inventory template for cleaner production cutover and non-technical owner handoff.

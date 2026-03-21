@@ -8,6 +8,8 @@ Elementor-friendly WordPress build package for Chestnut Square Academy.
 - Phase 2 implementation guide: `docs/PHASE2-ELEMENTOR-SETUP.md`
 - Elementor page build flow: `docs/ELEMENTOR-BUILD-CHECKLIST.md`
 - Fact verification gate: `docs/FACT-VERIFICATION-MATRIX.md`
+- Launch execution runbook: `docs/LAUNCH-DAY-RUNBOOK.md`
+- Handoff credentials template: `docs/HANDOFF-CREDENTIAL-INVENTORY.md`
 - Hello Elementor child theme: `app/public/wp-content/themes/hello-elementor-csa`
 - Launch/setup plugin: `app/public/wp-content/plugins/csa-launch-kit`
 
