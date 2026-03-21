@@ -75,6 +75,29 @@ function csa_lk_has_placeholder_token( $value ) {
 }
 
 /**
+ * Check whether Elementor plugin is active.
+ *
+ * @return bool
+ */
+function csa_lk_is_elementor_active() {
+	if ( function_exists( 'is_plugin_active' ) ) {
+		return is_plugin_active( 'elementor/elementor.php' );
+	}
+
+	if ( defined( 'ABSPATH' ) ) {
+		$plugin_file = ABSPATH . 'wp-admin/includes/plugin.php';
+		if ( file_exists( $plugin_file ) ) {
+			require_once $plugin_file;
+			if ( function_exists( 'is_plugin_active' ) ) {
+				return is_plugin_active( 'elementor/elementor.php' );
+			}
+		}
+	}
+
+	return false;
+}
+
+/**
  * Plugin activation callback.
  */
 function csa_lk_activate() {
@@ -263,6 +286,11 @@ function csa_lk_render_dashboard_widget() {
 	$audit = csa_lk_get_publish_audit();
 	?>
 	<p><strong>Blocking items:</strong> <?php echo esc_html( (string) $audit['blocking_count'] ); ?></p>
+	<p>
+		Business: <?php echo esc_html( (string) count( $audit['business_issues'] ) ); ?> |
+		Technical: <?php echo esc_html( (string) count( $audit['technical_issues'] ) ); ?> |
+		Pages: <?php echo esc_html( (string) ( count( $audit['page_issues'] ) + count( $audit['missing_pages'] ) ) ); ?>
+	</p>
 	<ul>
 		<li><a href="<?php echo esc_url( admin_url( 'tools.php?page=csa-launch-kit' ) ); ?>">Open CSA Launch Kit</a></li>
 		<li><a href="<?php echo esc_url( admin_url( 'options-general.php?page=csa-business-profile' ) ); ?>">Edit CSA Business Profile</a></li>
@@ -270,6 +298,14 @@ function csa_lk_render_dashboard_widget() {
 		<li><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=page' ) ); ?>">Review Pages in Elementor</a></li>
 		<li><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=csa_tour_request' ) ); ?>">View Tour Requests</a></li>
 	</ul>
+	<?php if ( ! empty( $audit['technical_notices'] ) ) : ?>
+		<p><strong>Notices:</strong></p>
+		<ul>
+			<?php foreach ( $audit['technical_notices'] as $notice ) : ?>
+				<li><?php echo esc_html( $notice ); ?></li>
+			<?php endforeach; ?>
+		</ul>
+	<?php endif; ?>
 	<p>Publish only after blockers are zero and all [VERIFY] items are resolved.</p>
 	<?php
 }
@@ -314,6 +350,26 @@ function csa_lk_render_tools_page() {
 			<ul>
 				<?php foreach ( $audit['business_issues'] as $issue ) : ?>
 					<li><?php echo esc_html( $issue ); ?></li>
+				<?php endforeach; ?>
+			</ul>
+		<?php endif; ?>
+
+		<h3>Technical Readiness Checks</h3>
+		<?php if ( empty( $audit['technical_issues'] ) ) : ?>
+			<p>Core technical checks look good.</p>
+		<?php else : ?>
+			<ul>
+				<?php foreach ( $audit['technical_issues'] as $issue ) : ?>
+					<li><?php echo esc_html( $issue ); ?></li>
+				<?php endforeach; ?>
+			</ul>
+		<?php endif; ?>
+
+		<?php if ( ! empty( $audit['technical_notices'] ) ) : ?>
+			<h4>Technical Notices</h4>
+			<ul>
+				<?php foreach ( $audit['technical_notices'] as $notice ) : ?>
+					<li><?php echo esc_html( $notice ); ?></li>
 				<?php endforeach; ?>
 			</ul>
 		<?php endif; ?>
@@ -372,6 +428,8 @@ function csa_lk_get_publish_audit() {
 	$business_issues = array();
 	$page_issues     = array();
 	$missing_pages   = array();
+	$technical_issues = array();
+	$technical_notices = array();
 	$blocking_count  = 0;
 
 	$required_fields = array(
@@ -422,10 +480,53 @@ function csa_lk_get_publish_audit() {
 		}
 	}
 
+	if ( 'hello-elementor-csa' !== get_stylesheet() ) {
+		$technical_issues[] = 'Hello Elementor CSA child theme is not active.';
+		++$blocking_count;
+	}
+
+	if ( ! csa_lk_is_elementor_active() ) {
+		$technical_issues[] = 'Elementor plugin is not active.';
+		++$blocking_count;
+	}
+
+	$home_page = get_page_by_path( 'home', OBJECT, 'page' );
+	if ( 'page' !== get_option( 'show_on_front' ) ) {
+		$technical_issues[] = 'Front page display is not set to a static page.';
+		++$blocking_count;
+	} elseif ( ! $home_page || (int) get_option( 'page_on_front' ) !== (int) $home_page->ID ) {
+		$technical_issues[] = 'Homepage is not assigned to the Home page.';
+		++$blocking_count;
+	}
+
+	$permalink_structure = (string) get_option( 'permalink_structure' );
+	if ( '' === $permalink_structure ) {
+		$technical_issues[] = 'Permalinks are set to Plain. Change to Post name before launch.';
+		++$blocking_count;
+	}
+
+	$tour_email = (string) get_option( 'csa_lk_tour_email', '' );
+	if ( ! is_email( $tour_email ) ) {
+		$technical_issues[] = 'Tour form notification email is invalid or missing.';
+		++$blocking_count;
+	}
+
+	$map_embed = csa_lk_get_business_option( 'csa_lk_business_map_embed' );
+	if ( '' === trim( $map_embed ) || ! filter_var( $map_embed, FILTER_VALIDATE_URL ) ) {
+		$technical_issues[] = 'Map embed URL is missing or invalid.';
+		++$blocking_count;
+	}
+
+	if ( '1' !== (string) get_option( 'blog_public', '1' ) ) {
+		$technical_notices[] = 'Search engine visibility is currently discouraged (good for staging, switch for production launch).';
+	}
+
 	return array(
 		'business_issues' => $business_issues,
 		'page_issues'     => $page_issues,
 		'missing_pages'   => $missing_pages,
+		'technical_issues' => $technical_issues,
+		'technical_notices' => $technical_notices,
 		'blocking_count'  => $blocking_count,
 	);
 }

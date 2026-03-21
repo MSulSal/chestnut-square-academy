@@ -22,3 +22,5 @@
 - feat(seo): added automatic FAQ schema generation on the FAQ page when publish-ready Q/A pairs are present.
 - feat(admin): added `CSA Launch Status` dashboard widget with quick links and live blocker count for non-technical handoff.
 - docs(handoff): added a dedicated fact-verification matrix used as a hard pre-publish truth gate.
+- feat(qa): extended launch preflight with technical readiness checks (theme/plugin/homepage/permalinks/tour email/map URL + staging indexing notice).
+- docs(elementor): added a page-by-page Elementor build checklist for faster visual implementation and consistent section structure.
