@@ -16,6 +16,7 @@ Date: March 21, 2026
 ## What the launch plugin includes
 - One-click setup tool at `Tools > CSA Launch Kit`.
 - Preflight audit panel in `Tools > CSA Launch Kit` that counts unresolved `[VERIFY]` and `[DO NOT PUBLISH UNTIL CONFIRMED]` markers.
+- Dashboard widget (`CSA Launch Status`) with quick links and live blocking-item count.
 - Starter page generation for:
 - Home
 - About

@@ -6,6 +6,7 @@ Elementor-friendly WordPress build package for Chestnut Square Academy.
 - Planning blueprint: `docs/CSA-Website-Build-Blueprint.md`
 - Running worklog: `docs/WORKLOG.md`
 - Phase 2 implementation guide: `docs/PHASE2-ELEMENTOR-SETUP.md`
+- Fact verification gate: `docs/FACT-VERIFICATION-MATRIX.md`
 - Hello Elementor child theme: `app/public/wp-content/themes/hello-elementor-csa`
 - Launch/setup plugin: `app/public/wp-content/plugins/csa-launch-kit`
 

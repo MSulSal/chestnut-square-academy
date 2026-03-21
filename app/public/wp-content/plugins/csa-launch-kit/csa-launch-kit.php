@@ -241,6 +241,40 @@ function csa_lk_publish_blocker_notice() {
 add_action( 'admin_notices', 'csa_lk_publish_blocker_notice' );
 
 /**
+ * Register dashboard widget for quick launch status.
+ */
+function csa_lk_register_dashboard_widget() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	wp_add_dashboard_widget(
+		'csa_lk_dashboard_widget',
+		'CSA Launch Status',
+		'csa_lk_render_dashboard_widget'
+	);
+}
+add_action( 'wp_dashboard_setup', 'csa_lk_register_dashboard_widget' );
+
+/**
+ * Render dashboard widget content.
+ */
+function csa_lk_render_dashboard_widget() {
+	$audit = csa_lk_get_publish_audit();
+	?>
+	<p><strong>Blocking items:</strong> <?php echo esc_html( (string) $audit['blocking_count'] ); ?></p>
+	<ul>
+		<li><a href="<?php echo esc_url( admin_url( 'tools.php?page=csa-launch-kit' ) ); ?>">Open CSA Launch Kit</a></li>
+		<li><a href="<?php echo esc_url( admin_url( 'options-general.php?page=csa-business-profile' ) ); ?>">Edit CSA Business Profile</a></li>
+		<li><a href="<?php echo esc_url( admin_url( 'options-general.php?page=csa-tour-form' ) ); ?>">Edit CSA Tour Form Settings</a></li>
+		<li><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=page' ) ); ?>">Review Pages in Elementor</a></li>
+		<li><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=csa_tour_request' ) ); ?>">View Tour Requests</a></li>
+	</ul>
+	<p>Publish only after blockers are zero and all [VERIFY] items are resolved.</p>
+	<?php
+}
+
+/**
  * Render tools page.
  */
 function csa_lk_render_tools_page() {

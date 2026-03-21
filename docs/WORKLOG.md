@@ -20,3 +20,5 @@
 - feat(qa): expanded preflight audit to flag missing required core pages in addition to placeholder token checks.
 - feat(content): expanded starter setup to also generate optional `Careers`, `Parent Resources`, and `Privacy Policy` pages.
 - feat(seo): added automatic FAQ schema generation on the FAQ page when publish-ready Q/A pairs are present.
+- feat(admin): added `CSA Launch Status` dashboard widget with quick links and live blocker count for non-technical handoff.
+- docs(handoff): added a dedicated fact-verification matrix used as a hard pre-publish truth gate.
