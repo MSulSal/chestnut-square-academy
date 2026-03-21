@@ -29,3 +29,5 @@
 - feat(local-seo): added copy-ready NAP citation block and JSON business profile reference to improve listing consistency workflows.
 - docs(operations): added launch-day runbook and credential inventory template for cleaner production cutover and non-technical owner handoff.
 - feat(seo): added settings toggles for built-in LocalBusiness/FAQ schema to prevent duplicate schema when SEO plugins are active.
+- chore(versioning): bumped `csa-launch-kit` plugin version metadata to `1.4.0` to match cumulative feature state.
+- docs(versioning): added launch kit changelog with release history for easier client-facing updates.

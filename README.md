@@ -12,6 +12,7 @@ Elementor-friendly WordPress build package for Chestnut Square Academy.
 - Handoff credentials template: `docs/HANDOFF-CREDENTIAL-INVENTORY.md`
 - Hello Elementor child theme: `app/public/wp-content/themes/hello-elementor-csa`
 - Launch/setup plugin: `app/public/wp-content/plugins/csa-launch-kit`
+- Launch kit release notes: `docs/CSA-LAUNCH-KIT-CHANGELOG.md`
 
 Starter setup now creates required pages plus optional `Careers`, `Parent Resources`, and `Privacy Policy` pages.
 The launch kit also outputs LocalBusiness + FAQ schema automatically when fields/content are publish-ready.

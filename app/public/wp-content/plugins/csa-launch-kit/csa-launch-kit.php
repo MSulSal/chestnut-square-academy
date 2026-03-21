@@ -3,7 +3,7 @@
  * Plugin Name: CSA Launch Kit
  * Plugin URI: https://chestnutsquareacademy.local
  * Description: One-click starter setup for Chestnut Square Academy pages, menus, business profile, and Schedule a Tour form.
- * Version: 1.1.0
+ * Version: 1.4.0
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: csa-launch-kit
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CSA_LAUNCH_KIT_VERSION', '1.1.0' );
+define( 'CSA_LAUNCH_KIT_VERSION', '1.4.0' );
 
 /**
  * Return default business profile values.
