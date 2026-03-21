@@ -67,3 +67,22 @@
 - feat(design): replaced pill/capsule button style with compact rounded-rectangle buttons.
 - feat(design): flattened card-heavy aesthetic into lighter editorial blocks with fewer boxed panels and softer section structure.
 - feat(navbar): updated circular logo rendering to show full logo lockup (no text crop) using contain-fit treatment at larger size.
+- fix(ui-links): hard-disabled underline styles on nav and CTA/button links with higher-specificity rules to prevent WordPress global link styles from reappearing.
+- feat(design): restored kid-signaling visual cues (stronger fingerpaint background, playful nav text shadow, colorful fact/card accents, and staggered gallery rhythm) while keeping no-underline link behavior.
+- feat(navbar): applied pastel ROYGBIV sequence to nav items (desktop + mobile menu) with matching hover/current shades.
+- tweak(navbar): increased nav text size and aligned header container width/padding with hero section (`max-width: 1080px` + matching horizontal clamp) for cleaner horizontal rhythm.
+- tweak(navbar-logo): increased circular logo fit very slightly (`99%`, mobile `100%`) and matched circle base color to logo background to remove visible white ring without cropping logo content.
+- tweak(hero-logo): switched hero logo shortcode to prefer `logo-square.png` (fallback to `logo.jpg`) and added the square logo asset to theme images.
+- tweak(hero): moved rainbow accent from top line to an integrated left-edge ROYGBIV stripe and adjusted hero padding so it reads as part of section structure.
+- tweak(layout): expanded header/content containers to a wide-frame layout (`max-width: 1440px`) with larger horizontal breathing room to remove narrow center-column feel.
+- tweak(layout): restored lightweight info-card treatment inside open columns (pastel top accents + airy spacing) to keep friendly scannability without reverting to stacked card-heavy sections.
+- feat(hero): updated hero heading to a "Where Learning Grows" style treatment with a crayon-like highlight word and supporting subhead.
+- tweak(hero): removed hero rounded corners and kept integrated left ROYGBIV stripe for cleaner, less boxed presentation.
+- tweak(cards): restored colorful top-left dot accents on open info cards while preserving wider/open layout spacing.
+- feat(layout): rebuilt all seeded page blueprints around a full-site Kiddie-style structure (hero split, age/program explorer, trust content, FAQ, conversion hub with form + map).
+- feat(home): added dedicated sections for parent quotes and news/event-style update cards to mirror broader childcare-site storytelling flow.
+- feat(contact): refactored contact page into conversion-first two-column block plus standalone full-width map section.
+- feat(css): replaced legacy mixed stylesheet with a unified visual/layout system for open-width composition, structured section bands, and consistent component styling.
+- feat(docs): added `docs/LAYOUT-COMPONENT-MAP.md` with exact component order/placement for every page.
+- chore(qa): validated updated launch-kit PHP syntax via Local PHP binary lint check.
+- chore(runtime): attempted WP-CLI setup-overwrite push, but Local MySQL runtime port was offline in this session, so seeded page content refresh is pending next local runtime start.
