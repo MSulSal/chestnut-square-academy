@@ -15,6 +15,7 @@ Date: March 21, 2026
 
 ## What the launch plugin includes
 - One-click setup tool at `Tools > CSA Launch Kit`.
+- Preflight audit panel in `Tools > CSA Launch Kit` that counts unresolved `[VERIFY]` and `[DO NOT PUBLISH UNTIL CONFIRMED]` markers.
 - Starter page generation for:
 - Home
 - About
@@ -28,6 +29,16 @@ Date: March 21, 2026
 - Tour request storage as private admin entries (`Tour Requests` post type).
 - Email notifications for new form submissions.
 - Form settings page at `Settings > CSA Tour Form`.
+- Business profile settings page at `Settings > CSA Business Profile`.
+- Reusable shortcodes for centralized profile fields:
+- `[csa_address]`
+- `[csa_phone_link]`
+- `[csa_email_link]`
+- `[csa_hours]`
+- `[csa_call_button]`
+- `[csa_tour_button]`
+- `[csa_map_embed]`
+- Automatic LocalBusiness schema output when required profile fields are fully verified.
 
 ## Exact activation sequence
 1. Activate theme `Hello Elementor CSA`.
@@ -36,6 +47,7 @@ Date: March 21, 2026
 4. Go to `Tools > CSA Launch Kit` and click `Run Starter Setup`.
 5. Go to `Settings > CSA Tour Form` and set notification email + confirmation text.
 6. Open each generated page in Elementor and finalize layout/content.
+7. Run preflight check in `Tools > CSA Launch Kit` until blocking count is `0`.
 
 ## Required post-setup edits
 - Replace all `[VERIFY]` placeholders.

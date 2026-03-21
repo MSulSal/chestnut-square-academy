@@ -16,9 +16,11 @@ Elementor-friendly WordPress build package for Chestnut Square Academy.
 - `Elementor`
 - `CSA Launch Kit`
 4. Go to `Tools > CSA Launch Kit` and click `Run Starter Setup`.
-5. Go to `Settings > CSA Tour Form` and set notification email.
-6. Open each page in Elementor and replace all `[VERIFY]` placeholders.
-7. Test tour form submission from the Contact page.
+5. Go to `Settings > CSA Business Profile` and fill in verified business details.
+6. Go to `Settings > CSA Tour Form` and set notification email.
+7. Open each page in Elementor and replace all `[VERIFY]` placeholders.
+8. Run `Tools > CSA Launch Kit` preflight until blocking count is `0`.
+9. Test tour form submission from the Contact page.
 
 ## Notes
 - This project intentionally flags uncertain facts with `[VERIFY]` and `[DO NOT PUBLISH UNTIL CONFIRMED]`.

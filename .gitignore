@@ -1,0 +1,28 @@
+# LocalWP runtime/config artifacts
+/conf/
+/logs/
+
+# WordPress core (do not track in this project repo)
+/app/public/*
+
+# Keep custom project code under wp-content
+!/app/public/wp-content/
+/app/public/wp-content/*
+!/app/public/wp-content/plugins/
+!/app/public/wp-content/themes/
+
+# Ignore all plugins/themes by default
+/app/public/wp-content/plugins/*
+/app/public/wp-content/themes/*
+
+# Keep only project-owned plugin/theme code
+!/app/public/wp-content/plugins/csa-launch-kit/
+!/app/public/wp-content/plugins/csa-launch-kit/**
+!/app/public/wp-content/themes/hello-elementor-csa/
+!/app/public/wp-content/themes/hello-elementor-csa/**
+
+# Keep docs and root project files
+!/docs/
+!/docs/**
+!/README.md
+!/.gitignore

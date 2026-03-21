@@ -2,8 +2,8 @@
 /**
  * Plugin Name: CSA Launch Kit
  * Plugin URI: https://chestnutsquareacademy.local
- * Description: One-click starter setup for Chestnut Square Academy pages, menus, and Schedule a Tour form.
- * Version: 1.0.0
+ * Description: One-click starter setup for Chestnut Square Academy pages, menus, business profile, and Schedule a Tour form.
+ * Version: 1.1.0
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: csa-launch-kit
@@ -15,7 +15,64 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CSA_LAUNCH_KIT_VERSION', '1.0.0' );
+define( 'CSA_LAUNCH_KIT_VERSION', '1.1.0' );
+
+/**
+ * Return default business profile values.
+ *
+ * @return array<string,string>
+ */
+function csa_lk_get_business_defaults() {
+	return array(
+		'csa_lk_business_name'        => 'Chestnut Square Academy',
+		'csa_lk_business_address'     => '402 S Chestnut St, McKinney, TX 75069 [VERIFY]',
+		'csa_lk_business_phone'       => '[VERIFY PHONE]',
+		'csa_lk_business_email'       => get_option( 'admin_email' ),
+		'csa_lk_business_hours'       => 'Monday-Friday, 6:00 AM-6:00 PM [VERIFY]',
+		'csa_lk_business_map_embed'   => 'https://www.google.com/maps?q=402+S+Chestnut+St,+McKinney,+TX+75069&output=embed',
+		'csa_lk_business_description' => 'Trusted early learning and childcare in Downtown McKinney, Texas.',
+	);
+}
+
+/**
+ * Get business option value with fallback to defaults.
+ *
+ * @param string $key Option key.
+ * @return string
+ */
+function csa_lk_get_business_option( $key ) {
+	$defaults = csa_lk_get_business_defaults();
+	$default  = isset( $defaults[ $key ] ) ? $defaults[ $key ] : '';
+	$value    = get_option( $key, $default );
+
+	return is_string( $value ) ? $value : $default;
+}
+
+/**
+ * Check if value still contains unresolved verification tokens.
+ *
+ * @param string $value Field value.
+ * @return bool
+ */
+function csa_lk_has_placeholder_token( $value ) {
+	if ( ! is_string( $value ) ) {
+		return true;
+	}
+
+	$needles = array(
+		'[VERIFY]',
+		'[VERIFY PHONE]',
+		'[DO NOT PUBLISH UNTIL CONFIRMED]',
+	);
+
+	foreach ( $needles as $needle ) {
+		if ( false !== stripos( $value, $needle ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
 
 /**
  * Plugin activation callback.
@@ -27,6 +84,12 @@ function csa_lk_activate() {
 
 	if ( ! get_option( 'csa_lk_tour_success_message' ) ) {
 		update_option( 'csa_lk_tour_success_message', 'Thank you. Your tour request has been received. Our team will contact you soon to confirm your visit.' );
+	}
+
+	foreach ( csa_lk_get_business_defaults() as $key => $value ) {
+		if ( ! get_option( $key ) ) {
+			update_option( $key, $value );
+		}
 	}
 
 	csa_lk_run_setup( false );
@@ -76,6 +139,14 @@ function csa_lk_add_admin_pages() {
 		'csa-tour-form',
 		'csa_lk_render_settings_page'
 	);
+
+	add_options_page(
+		'CSA Business Profile',
+		'CSA Business Profile',
+		'manage_options',
+		'csa-business-profile',
+		'csa_lk_render_business_settings_page'
+	);
 }
 add_action( 'admin_menu', 'csa_lk_add_admin_pages' );
 
@@ -102,6 +173,28 @@ function csa_lk_register_settings() {
 			'default'           => 'Thank you. Your tour request has been received. Our team will contact you soon to confirm your visit.',
 		)
 	);
+
+	$business_fields = array(
+		'csa_lk_business_name'        => 'sanitize_text_field',
+		'csa_lk_business_address'     => 'sanitize_textarea_field',
+		'csa_lk_business_phone'       => 'sanitize_text_field',
+		'csa_lk_business_email'       => 'sanitize_email',
+		'csa_lk_business_hours'       => 'sanitize_text_field',
+		'csa_lk_business_map_embed'   => 'esc_url_raw',
+		'csa_lk_business_description' => 'sanitize_textarea_field',
+	);
+
+	foreach ( $business_fields as $field => $callback ) {
+		register_setting(
+			'csa_lk_business_settings',
+			$field,
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => $callback,
+				'default'           => csa_lk_get_business_option( $field ),
+			)
+		);
+	}
 }
 add_action( 'admin_init', 'csa_lk_register_settings' );
 
@@ -125,10 +218,34 @@ function csa_lk_elementor_notice() {
 add_action( 'admin_notices', 'csa_lk_elementor_notice' );
 
 /**
+ * Show publish blocker warning when unresolved placeholders remain.
+ */
+function csa_lk_publish_blocker_notice() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	$audit = csa_lk_get_publish_audit();
+	if ( $audit['blocking_count'] < 1 ) {
+		return;
+	}
+
+	$screen = get_current_screen();
+	if ( $screen && strpos( $screen->id, 'csa-launch-kit' ) !== false ) {
+		return;
+	}
+
+	$link = admin_url( 'tools.php?page=csa-launch-kit' );
+	echo '<div class="notice notice-warning"><p><strong>CSA publish blockers:</strong> ' . esc_html( (string) $audit['blocking_count'] ) . ' unresolved verification items. <a href="' . esc_url( $link ) . '">Review in CSA Launch Kit</a>.</p></div>';
+}
+add_action( 'admin_notices', 'csa_lk_publish_blocker_notice' );
+
+/**
  * Render tools page.
  */
 function csa_lk_render_tools_page() {
 	$status = isset( $_GET['csa_setup'] ) ? sanitize_text_field( wp_unslash( $_GET['csa_setup'] ) ) : '';
+	$audit  = csa_lk_get_publish_audit();
 	?>
 	<div class="wrap">
 		<h1>CSA Launch Kit</h1>
@@ -153,15 +270,117 @@ function csa_lk_render_tools_page() {
 
 		<hr />
 
+		<h2>Publish Preflight Audit</h2>
+		<p><strong>Blocking items:</strong> <?php echo esc_html( (string) $audit['blocking_count'] ); ?></p>
+
+		<h3>Business Profile Checks</h3>
+		<?php if ( empty( $audit['business_issues'] ) ) : ?>
+			<p>All required business profile fields look complete.</p>
+		<?php else : ?>
+			<ul>
+				<?php foreach ( $audit['business_issues'] as $issue ) : ?>
+					<li><?php echo esc_html( $issue ); ?></li>
+				<?php endforeach; ?>
+			</ul>
+		<?php endif; ?>
+
+		<h3>Page Placeholder Checks</h3>
+		<?php if ( empty( $audit['page_issues'] ) ) : ?>
+			<p>No placeholder tokens were found in core pages.</p>
+		<?php else : ?>
+			<table class="widefat striped" style="max-width: 980px;">
+				<thead>
+					<tr>
+						<th>Page</th>
+						<th>Placeholder Hits</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $audit['page_issues'] as $row ) : ?>
+						<tr>
+							<td><a href="<?php echo esc_url( get_edit_post_link( $row['id'] ) ); ?>"><?php echo esc_html( $row['title'] ); ?></a></td>
+							<td><?php echo esc_html( (string) $row['hits'] ); ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		<?php endif; ?>
+
+		<hr />
+
 		<h2>Next Steps</h2>
 		<ol>
 			<li>Activate <strong>Hello Elementor CSA</strong> child theme.</li>
 			<li>Activate <strong>Elementor</strong> plugin.</li>
+			<li>Fill out <strong>Settings > CSA Business Profile</strong>.</li>
 			<li>Open pages in Elementor and replace all <code>[VERIFY]</code> placeholders before publishing.</li>
 			<li>Set the Schedule a Tour notification email in Settings > CSA Tour Form.</li>
 		</ol>
 	</div>
 	<?php
+}
+
+/**
+ * Build preflight audit summary.
+ *
+ * @return array<string,mixed>
+ */
+function csa_lk_get_publish_audit() {
+	$business_issues = array();
+	$page_issues     = array();
+	$blocking_count  = 0;
+
+	$required_fields = array(
+		'csa_lk_business_name'    => 'Business name is missing or unresolved.',
+		'csa_lk_business_address' => 'Address is missing or unresolved.',
+		'csa_lk_business_phone'   => 'Phone is missing or unresolved.',
+		'csa_lk_business_email'   => 'Email is missing or unresolved.',
+		'csa_lk_business_hours'   => 'Hours are missing or unresolved.',
+	);
+
+	foreach ( $required_fields as $field => $message ) {
+		$value = csa_lk_get_business_option( $field );
+		if ( '' === trim( $value ) || csa_lk_has_placeholder_token( $value ) ) {
+			$business_issues[] = $message;
+			++$blocking_count;
+		}
+	}
+
+	$core_slugs = array(
+		'home',
+		'about',
+		'programs',
+		'gallery',
+		'faq',
+		'contact-schedule-a-tour',
+	);
+
+	foreach ( $core_slugs as $slug ) {
+		$page = get_page_by_path( $slug, OBJECT, 'page' );
+		if ( ! $page ) {
+			continue;
+		}
+
+		$hits  = 0;
+		$hits += substr_count( $page->post_content, '[VERIFY]' );
+		$hits += substr_count( $page->post_content, '[VERIFY PHONE]' );
+		$hits += substr_count( $page->post_content, '[DO NOT PUBLISH UNTIL CONFIRMED]' );
+
+		if ( $hits > 0 ) {
+			$page_issues[] = array(
+				'id'    => (int) $page->ID,
+				'title' => $page->post_title,
+				'hits'  => $hits,
+			);
+			$blocking_count += $hits;
+		}
+	}
+
+	return array(
+		'business_issues' => $business_issues,
+		'page_issues'     => $page_issues,
+		'blocking_count'  => $blocking_count,
+	);
 }
 
 /**
@@ -186,6 +405,52 @@ function csa_lk_render_settings_page() {
 					<td>
 						<textarea class="large-text" rows="3" id="csa_lk_tour_success_message" name="csa_lk_tour_success_message"><?php echo esc_textarea( get_option( 'csa_lk_tour_success_message', '' ) ); ?></textarea>
 					</td>
+				</tr>
+			</table>
+			<?php submit_button(); ?>
+		</form>
+	</div>
+	<?php
+}
+
+/**
+ * Render business profile settings page.
+ */
+function csa_lk_render_business_settings_page() {
+	?>
+	<div class="wrap">
+		<h1>CSA Business Profile</h1>
+		<p>These values power reusable shortcodes and local schema output.</p>
+		<form method="post" action="options.php">
+			<?php settings_fields( 'csa_lk_business_settings' ); ?>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><label for="csa_lk_business_name">Business Name</label></th>
+					<td><input type="text" class="regular-text" id="csa_lk_business_name" name="csa_lk_business_name" value="<?php echo esc_attr( csa_lk_get_business_option( 'csa_lk_business_name' ) ); ?>" /></td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="csa_lk_business_address">Address</label></th>
+					<td><textarea class="large-text" rows="2" id="csa_lk_business_address" name="csa_lk_business_address"><?php echo esc_textarea( csa_lk_get_business_option( 'csa_lk_business_address' ) ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="csa_lk_business_phone">Phone</label></th>
+					<td><input type="text" class="regular-text" id="csa_lk_business_phone" name="csa_lk_business_phone" value="<?php echo esc_attr( csa_lk_get_business_option( 'csa_lk_business_phone' ) ); ?>" /></td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="csa_lk_business_email">Public Email</label></th>
+					<td><input type="email" class="regular-text" id="csa_lk_business_email" name="csa_lk_business_email" value="<?php echo esc_attr( csa_lk_get_business_option( 'csa_lk_business_email' ) ); ?>" /></td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="csa_lk_business_hours">Hours</label></th>
+					<td><input type="text" class="regular-text" id="csa_lk_business_hours" name="csa_lk_business_hours" value="<?php echo esc_attr( csa_lk_get_business_option( 'csa_lk_business_hours' ) ); ?>" /></td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="csa_lk_business_map_embed">Google Map Embed URL</label></th>
+					<td><textarea class="large-text" rows="2" id="csa_lk_business_map_embed" name="csa_lk_business_map_embed"><?php echo esc_textarea( csa_lk_get_business_option( 'csa_lk_business_map_embed' ) ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="csa_lk_business_description">Business Description</label></th>
+					<td><textarea class="large-text" rows="2" id="csa_lk_business_description" name="csa_lk_business_description"><?php echo esc_textarea( csa_lk_get_business_option( 'csa_lk_business_description' ) ); ?></textarea></td>
 				</tr>
 			</table>
 			<?php submit_button(); ?>
@@ -341,17 +606,14 @@ function csa_lk_get_page_blueprints() {
   <h1>Trusted Early Learning in Downtown McKinney</h1>
   <p>A warm, dependable place for your child to learn, play, and grow while your family feels informed and supported.</p>
   <div class="csa-note"><strong>[DO NOT PUBLISH UNTIL CONFIRMED]</strong> Replace all placeholders marked with [VERIFY].</div>
-  <div class="csa-cta-row">
-    <a class="csa-btn csa-btn-primary" href="/contact-schedule-a-tour/">Schedule a Tour</a>
-    <a class="csa-btn csa-btn-secondary" href="tel:[VERIFY PHONE]">Call Now [VERIFY]</a>
-  </div>
+  <div class="csa-cta-row">[csa_tour_button label="Schedule a Tour"] [csa_call_button label="Call Now"]</div>
 </section>
 
 <section class="csa-shell">
   <h2>Quick Facts</h2>
   <div class="csa-quickfacts">
-    <div class="csa-fact"><strong>Location:</strong><br>402 S Chestnut St, McKinney, TX 75069 [VERIFY]</div>
-    <div class="csa-fact"><strong>Hours:</strong><br>Monday-Friday, 6:00 AM-6:00 PM [VERIFY]</div>
+    <div class="csa-fact"><strong>Location:</strong><br>[csa_address]</div>
+    <div class="csa-fact"><strong>Hours:</strong><br>[csa_hours]</div>
     <div class="csa-fact"><strong>Ages Served:</strong><br>[VERIFY]</div>
     <div class="csa-fact"><strong>Meals:</strong><br>Breakfast/Lunch [VERIFY]</div>
   </div>
@@ -387,7 +649,7 @@ function csa_lk_get_page_blueprints() {
   <ul>
     <li><strong>Do you offer tours?</strong> Yes, families are encouraged to tour.</li>
     <li><strong>What ages do you accept?</strong> Final placement depends on current enrollment and licensing [VERIFY].</li>
-    <li><strong>How do I get started?</strong> Submit a tour request form or call us directly [VERIFY PHONE].</li>
+    <li><strong>How do I get started?</strong> Submit a tour request form or call us directly.</li>
   </ul>
   <p><a href="/faq/">View All FAQs</a></p>
 </section>
@@ -395,10 +657,7 @@ function csa_lk_get_page_blueprints() {
 <section class="csa-shell csa-card">
   <h2>Ready to Visit Chestnut Square Academy?</h2>
   <p>We would love to meet your family, answer your questions, and help you find the right fit.</p>
-  <div class="csa-cta-row">
-    <a class="csa-btn csa-btn-primary" href="/contact-schedule-a-tour/">Schedule a Tour</a>
-    <a class="csa-btn csa-btn-secondary" href="tel:[VERIFY PHONE]">Call Now [VERIFY]</a>
-  </div>
+  <div class="csa-cta-row">[csa_tour_button label="Schedule a Tour"] [csa_call_button label="Call Now"]</div>
 </section>
 HTML;
 
@@ -419,7 +678,7 @@ HTML;
   <h2>Meet Our Team [VERIFY]</h2>
   <p>Our teachers and staff are dedicated to caring for each child with patience, consistency, and professionalism.</p>
 
-  <p><a class="csa-btn csa-btn-primary" href="/contact-schedule-a-tour/">Schedule a Tour</a></p>
+  <p>[csa_tour_button label="Schedule a Tour"]</p>
 </section>
 HTML;
 
@@ -447,7 +706,7 @@ HTML;
   <h2>Transportation and Field Trips [VERIFY]</h2>
   <p>[DO NOT PUBLISH UNTIL CONFIRMED] Confirm availability by age group and season.</p>
 
-  <p><a class="csa-btn csa-btn-primary" href="/contact-schedule-a-tour/">Schedule a Tour</a></p>
+  <p>[csa_tour_button label="Schedule a Tour"]</p>
 </section>
 HTML;
 
@@ -473,7 +732,7 @@ HTML;
     <li>"Exterior of Chestnut Square Academy in Downtown McKinney"</li>
   </ul>
 
-  <p><a class="csa-btn csa-btn-primary" href="/contact-schedule-a-tour/">Want to visit in person? Schedule a Tour</a></p>
+  <p>[csa_tour_button label="Want to visit in person? Schedule a Tour"]</p>
 </section>
 HTML;
 
@@ -505,9 +764,9 @@ HTML;
   <p>Start with a tour request. After your visit, our team will share next steps for availability and paperwork.</p>
 
   <h2>How quickly will someone follow up?</h2>
-  <p>We aim to reply as soon as possible during business hours. For urgent questions, call us directly [VERIFY PHONE].</p>
+  <p>We aim to reply as soon as possible during business hours. For urgent questions, call us directly: [csa_phone_link]</p>
 
-  <p><a class="csa-btn csa-btn-primary" href="/contact-schedule-a-tour/">Schedule a Tour</a></p>
+  <p>[csa_tour_button label="Schedule a Tour"]</p>
 </section>
 HTML;
 
@@ -519,10 +778,10 @@ HTML;
   <div class="csa-grid">
     <article class="csa-card">
       <h2>Contact Details</h2>
-      <p><strong>Address:</strong> 402 S Chestnut St, McKinney, TX 75069 [VERIFY]</p>
-      <p><strong>Phone:</strong> [VERIFY]</p>
-      <p><strong>Email:</strong> [VERIFY]</p>
-      <p><strong>Hours:</strong> Monday-Friday, [VERIFY]</p>
+      <p><strong>Address:</strong> [csa_address]</p>
+      <p><strong>Phone:</strong> [csa_phone_link]</p>
+      <p><strong>Email:</strong> [csa_email_link]</p>
+      <p><strong>Hours:</strong> [csa_hours]</p>
       <h3>What happens next?</h3>
       <ol>
         <li>Submit the form with your preferred day/time.</li>
@@ -532,7 +791,7 @@ HTML;
     </article>
     <article class="csa-card">
       <h2>Map</h2>
-      <iframe class="csa-map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=402+S+Chestnut+St,+McKinney,+TX+75069&output=embed" title="Map to Chestnut Square Academy"></iframe>
+      [csa_map_embed]
     </article>
   </div>
 
@@ -576,8 +835,183 @@ HTML;
  */
 function csa_lk_register_shortcodes() {
 	add_shortcode( 'csa_schedule_tour_form', 'csa_lk_render_tour_form' );
+	add_shortcode( 'csa_address', 'csa_lk_shortcode_address' );
+	add_shortcode( 'csa_phone', 'csa_lk_shortcode_phone' );
+	add_shortcode( 'csa_email', 'csa_lk_shortcode_email' );
+	add_shortcode( 'csa_hours', 'csa_lk_shortcode_hours' );
+	add_shortcode( 'csa_call_button', 'csa_lk_shortcode_call_button' );
+	add_shortcode( 'csa_tour_button', 'csa_lk_shortcode_tour_button' );
+	add_shortcode( 'csa_phone_link', 'csa_lk_shortcode_phone_link' );
+	add_shortcode( 'csa_email_link', 'csa_lk_shortcode_email_link' );
+	add_shortcode( 'csa_map_embed', 'csa_lk_shortcode_map_embed' );
 }
 add_action( 'init', 'csa_lk_register_shortcodes' );
+
+/**
+ * Build tel URI from a phone value.
+ *
+ * @param string $phone Phone string.
+ * @return string
+ */
+function csa_lk_phone_to_tel_uri( $phone ) {
+	$numeric = preg_replace( '/[^0-9+]/', '', (string) $phone );
+
+	if ( empty( $numeric ) || csa_lk_has_placeholder_token( (string) $phone ) ) {
+		return '#';
+	}
+
+	return 'tel:' . $numeric;
+}
+
+/**
+ * Shortcode: address.
+ *
+ * @return string
+ */
+function csa_lk_shortcode_address() {
+	return esc_html( csa_lk_get_business_option( 'csa_lk_business_address' ) );
+}
+
+/**
+ * Shortcode: phone.
+ *
+ * @return string
+ */
+function csa_lk_shortcode_phone() {
+	return esc_html( csa_lk_get_business_option( 'csa_lk_business_phone' ) );
+}
+
+/**
+ * Shortcode: email.
+ *
+ * @return string
+ */
+function csa_lk_shortcode_email() {
+	return esc_html( csa_lk_get_business_option( 'csa_lk_business_email' ) );
+}
+
+/**
+ * Shortcode: hours.
+ *
+ * @return string
+ */
+function csa_lk_shortcode_hours() {
+	return esc_html( csa_lk_get_business_option( 'csa_lk_business_hours' ) );
+}
+
+/**
+ * Shortcode: call button.
+ *
+ * @param array<string,string> $atts Attributes.
+ * @return string
+ */
+function csa_lk_shortcode_call_button( $atts ) {
+	$atts  = shortcode_atts(
+		array(
+			'label' => 'Call Now',
+		),
+		$atts
+	);
+	$phone = csa_lk_get_business_option( 'csa_lk_business_phone' );
+	$href  = csa_lk_phone_to_tel_uri( $phone );
+
+	return '<a class="csa-btn csa-btn-secondary" href="' . esc_url( $href ) . '">' . esc_html( $atts['label'] ) . '</a>';
+}
+
+/**
+ * Shortcode: tour button.
+ *
+ * @param array<string,string> $atts Attributes.
+ * @return string
+ */
+function csa_lk_shortcode_tour_button( $atts ) {
+	$atts = shortcode_atts(
+		array(
+			'label' => 'Schedule a Tour',
+		),
+		$atts
+	);
+
+	return '<a class="csa-btn csa-btn-primary" href="' . esc_url( home_url( '/contact-schedule-a-tour/' ) ) . '">' . esc_html( $atts['label'] ) . '</a>';
+}
+
+/**
+ * Shortcode: phone link.
+ *
+ * @return string
+ */
+function csa_lk_shortcode_phone_link() {
+	$phone = csa_lk_get_business_option( 'csa_lk_business_phone' );
+	$href  = csa_lk_phone_to_tel_uri( $phone );
+
+	return '<a href="' . esc_url( $href ) . '">' . esc_html( $phone ) . '</a>';
+}
+
+/**
+ * Shortcode: email link.
+ *
+ * @return string
+ */
+function csa_lk_shortcode_email_link() {
+	$email = csa_lk_get_business_option( 'csa_lk_business_email' );
+	$href  = is_email( $email ) ? 'mailto:' . sanitize_email( $email ) : '#';
+
+	return '<a href="' . esc_url( $href ) . '">' . esc_html( $email ) . '</a>';
+}
+
+/**
+ * Shortcode: map embed iframe.
+ *
+ * @return string
+ */
+function csa_lk_shortcode_map_embed() {
+	$src = csa_lk_get_business_option( 'csa_lk_business_map_embed' );
+
+	if ( empty( $src ) ) {
+		return '<p>[VERIFY] Add map embed URL in Settings > CSA Business Profile.</p>';
+	}
+
+	return '<iframe class="csa-map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="' . esc_url( $src ) . '" title="Map to Chestnut Square Academy"></iframe>';
+}
+
+/**
+ * Output LocalBusiness schema when profile data is complete.
+ */
+function csa_lk_output_localbusiness_schema() {
+	if ( is_admin() ) {
+		return;
+	}
+
+	$required = array(
+		csa_lk_get_business_option( 'csa_lk_business_name' ),
+		csa_lk_get_business_option( 'csa_lk_business_address' ),
+		csa_lk_get_business_option( 'csa_lk_business_phone' ),
+		csa_lk_get_business_option( 'csa_lk_business_email' ),
+	);
+
+	foreach ( $required as $value ) {
+		if ( '' === trim( $value ) || csa_lk_has_placeholder_token( $value ) ) {
+			return;
+		}
+	}
+
+	$schema = array(
+		'@context'    => 'https://schema.org',
+		'@type'       => 'ChildCare',
+		'name'        => csa_lk_get_business_option( 'csa_lk_business_name' ),
+		'url'         => home_url( '/' ),
+		'telephone'   => csa_lk_get_business_option( 'csa_lk_business_phone' ),
+		'email'       => csa_lk_get_business_option( 'csa_lk_business_email' ),
+		'description' => csa_lk_get_business_option( 'csa_lk_business_description' ),
+		'address'     => array(
+			'@type'         => 'PostalAddress',
+			'streetAddress' => csa_lk_get_business_option( 'csa_lk_business_address' ),
+		),
+	);
+
+	echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>';
+}
+add_action( 'wp_head', 'csa_lk_output_localbusiness_schema', 40 );
 
 /**
  * Shortcode output for tour form.

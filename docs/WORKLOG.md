@@ -12,3 +12,8 @@
 - feat(plugin): created `csa-launch-kit` plugin with one-click starter page/menu setup and homepage assignment.
 - feat(form): added shortcode-based `Schedule a Tour` form with anti-spam honeypot, nonce validation, email notifications, and private request storage.
 - docs(phase2): added Elementor activation/setup guide and updated README quick-start workflow.
+- chore(repo): added `.gitignore` to keep WordPress core/vendor/runtime files out of version control while tracking only project-owned code.
+- feat(plugin): upgraded `csa-launch-kit` with centralized business profile settings and reusable shortcodes for address/phone/email/hours/map/CTA buttons.
+- feat(plugin): added preflight publish audit in `Tools > CSA Launch Kit` plus admin warning when unresolved verification placeholders remain.
+- feat(seo): added conditional LocalBusiness schema output from verified business profile settings.
+- docs(phase2): updated activation flow to include business profile setup and preflight zero-blocker requirement.
