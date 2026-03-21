@@ -24,3 +24,4 @@
 - docs(handoff): added a dedicated fact-verification matrix used as a hard pre-publish truth gate.
 - feat(qa): extended launch preflight with technical readiness checks (theme/plugin/homepage/permalinks/tour email/map URL + staging indexing notice).
 - docs(elementor): added a page-by-page Elementor build checklist for faster visual implementation and consistent section structure.
+- feat(reporting): added one-click downloadable preflight report for launch audits and stakeholder handoff records.

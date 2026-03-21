@@ -26,6 +26,7 @@ The launch kit also outputs LocalBusiness + FAQ schema automatically when fields
 7. Open each page in Elementor and replace all `[VERIFY]` placeholders.
 8. Run `Tools > CSA Launch Kit` preflight until blocking count is `0`.
 9. Test tour form submission from the Contact page.
+10. Download and archive the preflight report from `Tools > CSA Launch Kit`.
 
 ## Notes
 - This project intentionally flags uncertain facts with `[VERIFY]` and `[DO NOT PUBLISH UNTIL CONFIRMED]`.

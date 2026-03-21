@@ -338,6 +338,12 @@ function csa_lk_render_tools_page() {
 			<?php submit_button( 'Run Starter Setup' ); ?>
 		</form>
 
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="margin-top: 8px;">
+			<?php wp_nonce_field( 'csa_lk_download_report' ); ?>
+			<input type="hidden" name="action" value="csa_lk_download_report" />
+			<?php submit_button( 'Download Preflight Report', 'secondary', 'submit', false ); ?>
+		</form>
+
 		<hr />
 
 		<h2>Publish Preflight Audit</h2>
@@ -532,6 +538,55 @@ function csa_lk_get_publish_audit() {
 }
 
 /**
+ * Build preflight report text content.
+ *
+ * @param array<string,mixed> $audit Audit array.
+ * @return string
+ */
+function csa_lk_build_preflight_report( $audit ) {
+	$lines   = array();
+	$lines[] = 'CSA Preflight Report';
+	$lines[] = 'Generated: ' . gmdate( 'Y-m-d H:i:s' ) . ' UTC';
+	$lines[] = 'Blocking items: ' . (string) $audit['blocking_count'];
+	$lines[] = '';
+
+	$sections = array(
+		'Business Issues'   => isset( $audit['business_issues'] ) ? $audit['business_issues'] : array(),
+		'Technical Issues'  => isset( $audit['technical_issues'] ) ? $audit['technical_issues'] : array(),
+		'Technical Notices' => isset( $audit['technical_notices'] ) ? $audit['technical_notices'] : array(),
+		'Missing Pages'     => isset( $audit['missing_pages'] ) ? $audit['missing_pages'] : array(),
+	);
+
+	foreach ( $sections as $title => $items ) {
+		$lines[] = '## ' . $title;
+		if ( empty( $items ) ) {
+			$lines[] = '- None';
+		} else {
+			foreach ( $items as $item ) {
+				$lines[] = '- ' . wp_strip_all_tags( (string) $item );
+			}
+		}
+		$lines[] = '';
+	}
+
+	$lines[] = '## Page Placeholder Issues';
+	if ( empty( $audit['page_issues'] ) ) {
+		$lines[] = '- None';
+	} else {
+		foreach ( $audit['page_issues'] as $row ) {
+			$title = isset( $row['title'] ) ? (string) $row['title'] : 'Unknown page';
+			$hits  = isset( $row['hits'] ) ? (int) $row['hits'] : 0;
+			$lines[] = '- ' . $title . ': ' . (string) $hits . ' placeholder hits';
+		}
+	}
+	$lines[] = '';
+
+	$lines[] = 'Recommendation: Launch only when blocking items are 0.';
+
+	return implode( "\n", $lines ) . "\n";
+}
+
+/**
  * Render form settings page.
  */
 function csa_lk_render_settings_page() {
@@ -631,6 +686,29 @@ function csa_lk_handle_setup_action() {
 	exit;
 }
 add_action( 'admin_post_csa_lk_run_setup', 'csa_lk_handle_setup_action' );
+
+/**
+ * Handle preflight report download.
+ */
+function csa_lk_handle_download_report_action() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( esc_html__( 'You do not have permission to download this report.', 'csa-launch-kit' ) );
+	}
+
+	check_admin_referer( 'csa_lk_download_report' );
+
+	$audit      = csa_lk_get_publish_audit();
+	$report     = csa_lk_build_preflight_report( $audit );
+	$filename   = 'csa-preflight-report-' . gmdate( 'Ymd-His' ) . '.txt';
+
+	nocache_headers();
+	header( 'Content-Type: text/plain; charset=utf-8' );
+	header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+
+	echo $report; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	exit;
+}
+add_action( 'admin_post_csa_lk_download_report', 'csa_lk_handle_download_report_action' );
 
 /**
  * One-click setup for pages/menu/homepage.
