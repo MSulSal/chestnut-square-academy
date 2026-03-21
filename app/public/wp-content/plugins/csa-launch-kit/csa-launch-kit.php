@@ -132,6 +132,14 @@ function csa_lk_activate() {
 		}
 	}
 
+	if ( false === get_option( 'csa_lk_enable_local_schema', false ) ) {
+		update_option( 'csa_lk_enable_local_schema', '1' );
+	}
+
+	if ( false === get_option( 'csa_lk_enable_faq_schema', false ) ) {
+		update_option( 'csa_lk_enable_faq_schema', '1' );
+	}
+
 	csa_lk_run_setup( false );
 }
 register_activation_hook( __FILE__, 'csa_lk_activate' );
@@ -235,6 +243,26 @@ function csa_lk_register_settings() {
 			)
 		);
 	}
+
+	register_setting(
+		'csa_lk_business_settings',
+		'csa_lk_enable_local_schema',
+		array(
+			'type'              => 'string',
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => '1',
+		)
+	);
+
+	register_setting(
+		'csa_lk_business_settings',
+		'csa_lk_enable_faq_schema',
+		array(
+			'type'              => 'string',
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => '1',
+		)
+	);
 }
 add_action( 'admin_init', 'csa_lk_register_settings' );
 
@@ -696,6 +724,22 @@ function csa_lk_render_business_settings_page() {
 				<tr>
 					<th scope="row"><label for="csa_lk_business_description">Business Description</label></th>
 					<td><textarea class="large-text" rows="2" id="csa_lk_business_description" name="csa_lk_business_description"><?php echo esc_textarea( csa_lk_get_business_option( 'csa_lk_business_description' ) ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th scope="row">Schema Output</th>
+					<td>
+						<input type="hidden" name="csa_lk_enable_local_schema" value="0" />
+						<label style="display:block;margin-bottom:8px;">
+							<input type="checkbox" name="csa_lk_enable_local_schema" value="1" <?php checked( '1', (string) get_option( 'csa_lk_enable_local_schema', '1' ) ); ?> />
+							Enable built-in LocalBusiness schema
+						</label>
+						<input type="hidden" name="csa_lk_enable_faq_schema" value="0" />
+						<label style="display:block;">
+							<input type="checkbox" name="csa_lk_enable_faq_schema" value="1" <?php checked( '1', (string) get_option( 'csa_lk_enable_faq_schema', '1' ) ); ?> />
+							Enable built-in FAQ schema
+						</label>
+						<p class="description">Disable these if your SEO plugin already outputs equivalent schema to avoid duplicates.</p>
+					</td>
 				</tr>
 			</table>
 			<?php submit_button(); ?>
@@ -1338,6 +1382,10 @@ function csa_lk_output_localbusiness_schema() {
 		return;
 	}
 
+	if ( '1' !== (string) get_option( 'csa_lk_enable_local_schema', '1' ) ) {
+		return;
+	}
+
 	$required = array(
 		csa_lk_get_business_option( 'csa_lk_business_name' ),
 		csa_lk_get_business_option( 'csa_lk_business_address' ),
@@ -1417,6 +1465,10 @@ function csa_lk_extract_faq_pairs( $content ) {
  */
 function csa_lk_output_faq_schema() {
 	if ( is_admin() || ! is_page( 'faq' ) ) {
+		return;
+	}
+
+	if ( '1' !== (string) get_option( 'csa_lk_enable_faq_schema', '1' ) ) {
 		return;
 	}
 

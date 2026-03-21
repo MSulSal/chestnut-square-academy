@@ -15,6 +15,7 @@ Elementor-friendly WordPress build package for Chestnut Square Academy.
 
 Starter setup now creates required pages plus optional `Careers`, `Parent Resources`, and `Privacy Policy` pages.
 The launch kit also outputs LocalBusiness + FAQ schema automatically when fields/content are publish-ready.
+Schema output can be toggled in `Settings > CSA Business Profile` to avoid duplicate schema with SEO plugins.
 Business Profile settings include a copy-ready NAP block and JSON reference for citation cleanup.
 
 ## Quick Start (LocalWP)

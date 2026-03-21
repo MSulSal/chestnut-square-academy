@@ -50,6 +50,7 @@ Date: March 21, 2026
 - `[csa_map_embed]`
 - Automatic LocalBusiness schema output when required profile fields are fully verified.
 - Automatic FAQPage schema output on the FAQ page when at least two publish-ready Q/A pairs are detected.
+- Schema toggles in Business Profile settings allow disabling built-in schema when an SEO plugin already outputs schema.
 
 ## Exact activation sequence
 1. Activate theme `Hello Elementor CSA`.
