@@ -48,3 +48,11 @@
 - docs(update): refreshed README and phase-2 setup notes to reflect scaffold-vs-polish workflow and current runtime capabilities.
 - chore(runtime): re-ran starter setup with overwrite to apply upgraded seeded copy directly into existing Local WordPress pages for immediate preview.
 - chore(runtime): confirmed launch preflight blocker count now reflects expanded verification gates (`blocking=47`), indicating unresolved facts are still correctly blocked from publish.
+- feat(design): imported owner-provided brand assets (`docs/logo.jpg`, `docs/vibe.jpg`) into child theme assets for direct on-site use.
+- feat(design): redesigned child theme CSS for a warmer, cleaner, photo-led visual system aligned to logo palette and classroom vibe image.
+- feat(content): replaced front-end seeded copy with finished-product wording and removed placeholder/warning/disclaimer text from public page templates.
+- feat(content): incorporated owner-provided approved messaging (Historic Chestnut Village location, 6 weeks to 5/6 years, occupancy 46, Texas Rising Star).
+- feat(shortcodes): added image shortcodes `[csa_logo]` and `[csa_vibe_photo]` to make branded media reusable in seeded layouts.
+- chore(runtime): reran starter setup overwrite to apply the redesigned finished-copy templates into current Local pages.
+- chore(runtime): updated live business profile options in local WordPress to remove old placeholder values from address/phone/hours/description.
+- chore(runtime): verified post-redesign audit now reports `page_issues=0`, `business_issues=0`, with only domain verification gate remaining (`blocking=1`).

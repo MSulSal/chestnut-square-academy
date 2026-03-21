@@ -1,5 +1,15 @@
 # CSA Launch Kit Changelog
 
+## 1.7.0 - 2026-03-21
+- Reworked seeded public page copy to finished-product tone with no placeholder or warning/disclaimer text on front-end pages.
+- Integrated theme-based image shortcodes (`[csa_logo]`, `[csa_vibe_photo]`) for logo and brand-vibe photo usage in page layouts.
+- Updated business profile defaults to publish-ready values based on approved project direction (address/phone/hours and finalized description).
+- Refreshed default Home/About/Programs/Gallery/FAQ/Contact copy to match approved local messaging:
+  - Historic Chestnut Village positioning
+  - 6 weeks to 5/6 years service range
+  - small facility occupancy of 46
+  - Texas Rising Star program positioning
+
 ## 1.6.0 - 2026-03-21
 - Updated seeded page blueprints (Home/About/Programs/Gallery/FAQ/Contact) with richer draft copy driven by public McKinney listing signals.
 - Added clearer public-signal placeholders (hours, age ranges, program hints, Texas Rising Star wording) while preserving strict `[VERIFY]` gating.
