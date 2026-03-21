@@ -92,26 +92,36 @@ function csa_lk_has_placeholder_token( $value ) {
 }
 
 /**
- * Check whether Elementor plugin is active.
+ * Check whether a plugin is active.
  *
+ * @param string $plugin_file Plugin main file path (relative to plugins dir).
  * @return bool
  */
-function csa_lk_is_elementor_active() {
+function csa_lk_is_plugin_active( $plugin_file ) {
 	if ( function_exists( 'is_plugin_active' ) ) {
-		return is_plugin_active( 'elementor/elementor.php' );
+		return is_plugin_active( $plugin_file );
 	}
 
 	if ( defined( 'ABSPATH' ) ) {
-		$plugin_file = ABSPATH . 'wp-admin/includes/plugin.php';
-		if ( file_exists( $plugin_file ) ) {
-			require_once $plugin_file;
+		$admin_plugin_file = ABSPATH . 'wp-admin/includes/plugin.php';
+		if ( file_exists( $admin_plugin_file ) ) {
+			require_once $admin_plugin_file;
 			if ( function_exists( 'is_plugin_active' ) ) {
-				return is_plugin_active( 'elementor/elementor.php' );
+				return is_plugin_active( $plugin_file );
 			}
 		}
 	}
 
 	return false;
+}
+
+/**
+ * Check whether Elementor plugin is active.
+ *
+ * @return bool
+ */
+function csa_lk_is_elementor_active() {
+	return csa_lk_is_plugin_active( 'elementor/elementor.php' );
 }
 
 /**
@@ -448,6 +458,26 @@ function csa_lk_render_tools_page() {
 			</ul>
 		<?php endif; ?>
 
+		<?php if ( ! empty( $audit['plugin_statuses'] ) ) : ?>
+			<h4>Recommended Plugin Status</h4>
+			<table class="widefat striped" style="max-width: 700px;">
+				<thead>
+					<tr>
+						<th>Plugin</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $audit['plugin_statuses'] as $plugin_row ) : ?>
+						<tr>
+							<td><?php echo esc_html( (string) $plugin_row['label'] ); ?></td>
+							<td><?php echo ! empty( $plugin_row['active'] ) ? 'Active' : 'Inactive'; ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		<?php endif; ?>
+
 		<h3>Page Placeholder Checks</h3>
 		<?php if ( ! empty( $audit['missing_pages'] ) ) : ?>
 			<p><strong>Missing Required Pages:</strong></p>
@@ -504,6 +534,7 @@ function csa_lk_get_publish_audit() {
 	$missing_pages   = array();
 	$technical_issues = array();
 	$technical_notices = array();
+	$plugin_statuses = array();
 	$blocking_count  = 0;
 
 	$required_fields = array(
@@ -595,12 +626,32 @@ function csa_lk_get_publish_audit() {
 		$technical_notices[] = 'Search engine visibility is currently discouraged (good for staging, switch for production launch).';
 	}
 
+	$recommended_plugins = array(
+		'wordpress-seo/wp-seo.php'               => 'Yoast SEO',
+		'updraftplus/updraftplus.php'            => 'UpdraftPlus',
+		'wp-mail-smtp/wp_mail_smtp.php'          => 'WP Mail SMTP',
+		'better-wp-security/better-wp-security.php' => 'Solid Security',
+	);
+
+	foreach ( $recommended_plugins as $plugin_file => $label ) {
+		$is_active         = csa_lk_is_plugin_active( $plugin_file );
+		$plugin_statuses[] = array(
+			'label'  => $label,
+			'active' => $is_active,
+		);
+
+		if ( ! $is_active ) {
+			$technical_notices[] = 'Recommended plugin inactive: ' . $label . '.';
+		}
+	}
+
 	return array(
 		'business_issues' => $business_issues,
 		'page_issues'     => $page_issues,
 		'missing_pages'   => $missing_pages,
 		'technical_issues' => $technical_issues,
 		'technical_notices' => $technical_notices,
+		'plugin_statuses' => $plugin_statuses,
 		'blocking_count'  => $blocking_count,
 	);
 }
@@ -645,6 +696,18 @@ function csa_lk_build_preflight_report( $audit ) {
 			$title = isset( $row['title'] ) ? (string) $row['title'] : 'Unknown page';
 			$hits  = isset( $row['hits'] ) ? (int) $row['hits'] : 0;
 			$lines[] = '- ' . $title . ': ' . (string) $hits . ' placeholder hits';
+		}
+	}
+	$lines[] = '';
+
+	$lines[] = '## Recommended Plugin Status';
+	if ( empty( $audit['plugin_statuses'] ) ) {
+		$lines[] = '- None';
+	} else {
+		foreach ( $audit['plugin_statuses'] as $plugin_row ) {
+			$label = isset( $plugin_row['label'] ) ? (string) $plugin_row['label'] : 'Unknown plugin';
+			$state = ! empty( $plugin_row['active'] ) ? 'Active' : 'Inactive';
+			$lines[] = '- ' . $label . ': ' . $state;
 		}
 	}
 	$lines[] = '';

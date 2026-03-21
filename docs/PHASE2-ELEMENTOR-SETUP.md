@@ -27,6 +27,7 @@ Date: March 21, 2026
 - `Enable Staging Mode (Noindex)`
 - `Enable Production Indexing`
 - Technical readiness checks in preflight: active theme/plugin, homepage assignment, permalink mode, valid tour email, valid map URL, and staging indexing notice.
+- Preflight also shows recommended plugin activation status (Yoast SEO, UpdraftPlus, WP Mail SMTP, Solid Security).
 - Dashboard widget (`CSA Launch Status`) with quick links and live blocking-item count.
 - Starter page generation for:
 - Home
