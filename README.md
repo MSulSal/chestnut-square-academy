@@ -10,6 +10,7 @@ Elementor-friendly WordPress build package for Chestnut Square Academy.
 - Launch/setup plugin: `app/public/wp-content/plugins/csa-launch-kit`
 
 Starter setup now creates required pages plus optional `Careers`, `Parent Resources`, and `Privacy Policy` pages.
+The launch kit also outputs LocalBusiness + FAQ schema automatically when fields/content are publish-ready.
 
 ## Quick Start (LocalWP)
 1. Start the site in LocalWP.

@@ -19,3 +19,4 @@
 - docs(phase2): updated activation flow to include business profile setup and preflight zero-blocker requirement.
 - feat(qa): expanded preflight audit to flag missing required core pages in addition to placeholder token checks.
 - feat(content): expanded starter setup to also generate optional `Careers`, `Parent Resources`, and `Privacy Policy` pages.
+- feat(seo): added automatic FAQ schema generation on the FAQ page when publish-ready Q/A pairs are present.

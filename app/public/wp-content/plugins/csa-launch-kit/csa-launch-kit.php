@@ -1072,6 +1072,89 @@ function csa_lk_output_localbusiness_schema() {
 add_action( 'wp_head', 'csa_lk_output_localbusiness_schema', 40 );
 
 /**
+ * Extract FAQ question/answer pairs from page content.
+ *
+ * @param string $content HTML content.
+ * @return array<int,array<string,string>>
+ */
+function csa_lk_extract_faq_pairs( $content ) {
+	$pairs = array();
+
+	if ( ! is_string( $content ) || '' === trim( $content ) ) {
+		return $pairs;
+	}
+
+	if ( ! preg_match_all( '/<h2[^>]*>(.*?)<\\/h2>\\s*<p[^>]*>(.*?)<\\/p>/is', $content, $matches, PREG_SET_ORDER ) ) {
+		return $pairs;
+	}
+
+	foreach ( $matches as $match ) {
+		$question = html_entity_decode( wp_strip_all_tags( $match[1] ), ENT_QUOTES, 'UTF-8' );
+		$answer   = html_entity_decode( wp_strip_all_tags( $match[2] ), ENT_QUOTES, 'UTF-8' );
+
+		$question = trim( preg_replace( '/\\s+/', ' ', $question ) );
+		$answer   = trim( preg_replace( '/\\s+/', ' ', $answer ) );
+
+		if ( '' === $question || '' === $answer ) {
+			continue;
+		}
+
+		if ( csa_lk_has_placeholder_token( $question ) || csa_lk_has_placeholder_token( $answer ) ) {
+			continue;
+		}
+
+		$pairs[] = array(
+			'question' => $question,
+			'answer'   => $answer,
+		);
+	}
+
+	return $pairs;
+}
+
+/**
+ * Output FAQPage schema on the FAQ page when content is publish-ready.
+ */
+function csa_lk_output_faq_schema() {
+	if ( is_admin() || ! is_page( 'faq' ) ) {
+		return;
+	}
+
+	$post = get_post();
+	if ( ! $post || 'page' !== $post->post_type ) {
+		return;
+	}
+
+	$content = do_shortcode( (string) $post->post_content );
+	$pairs   = csa_lk_extract_faq_pairs( $content );
+
+	if ( count( $pairs ) < 2 ) {
+		return;
+	}
+
+	$entities = array();
+	foreach ( $pairs as $pair ) {
+		$entities[] = array(
+			'@type'          => 'Question',
+			'name'           => $pair['question'],
+			'acceptedAnswer' => array(
+				'@type' => 'Answer',
+				'text'  => $pair['answer'],
+			),
+		);
+	}
+
+	$schema = array(
+		'@context'   => 'https://schema.org',
+		'@type'      => 'FAQPage',
+		'mainEntity' => $entities,
+	);
+
+	echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>';
+}
+add_action( 'wp_head', 'csa_lk_output_faq_schema', 41 );
+
+/**
  * Shortcode output for tour form.
  *
  * @return string
