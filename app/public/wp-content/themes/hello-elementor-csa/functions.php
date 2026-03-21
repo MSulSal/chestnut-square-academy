@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function csa_theme_enqueue_assets() {
 	wp_enqueue_style(
 		'csa-google-fonts',
-		'https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap',
+		'https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&family=Quicksand:wght@600;700&display=swap',
 		array(),
 		null
 	);
@@ -37,3 +37,20 @@ function csa_theme_setup() {
 	add_editor_style( 'style.css' );
 }
 add_action( 'after_setup_theme', 'csa_theme_setup' );
+
+/**
+ * Hide default theme page titles on static pages.
+ *
+ * Page templates already include intentional in-content headings.
+ *
+ * @param bool $show_title Whether to show theme-level title.
+ * @return bool
+ */
+function csa_theme_hide_default_page_titles( $show_title ) {
+	if ( is_singular( 'page' ) ) {
+		return false;
+	}
+
+	return $show_title;
+}
+add_filter( 'hello_elementor_page_title', 'csa_theme_hide_default_page_titles' );

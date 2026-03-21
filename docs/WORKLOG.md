@@ -56,3 +56,7 @@
 - chore(runtime): reran starter setup overwrite to apply the redesigned finished-copy templates into current Local pages.
 - chore(runtime): updated live business profile options in local WordPress to remove old placeholder values from address/phone/hours/description.
 - chore(runtime): verified post-redesign audit now reports `page_issues=0`, `business_issues=0`, with only domain verification gate remaining (`blocking=1`).
+- feat(design): replaced serif-forward typography with a rounded sans pairing (`Quicksand` headings + `Nunito Sans` body) to better match daycare vibe direction.
+- feat(design): rebuilt child-theme CSS with a brighter, softer, more photo-friendly visual style and less template-like card treatment.
+- feat(ux): removed default Hello Elementor page-title output for static pages so duplicate top labels (like "Home") no longer appear above page content.
+- feat(navbar): replaced text-only site title in header with a circular logo treatment using the provided `logo.jpg` asset.
