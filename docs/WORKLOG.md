@@ -25,3 +25,4 @@
 - feat(qa): extended launch preflight with technical readiness checks (theme/plugin/homepage/permalinks/tour email/map URL + staging indexing notice).
 - docs(elementor): added a page-by-page Elementor build checklist for faster visual implementation and consistent section structure.
 - feat(reporting): added one-click downloadable preflight report for launch audits and stakeholder handoff records.
+- feat(workflow): added staging/production indexing mode toggles in launch tools for safer deployment transitions.

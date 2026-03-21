@@ -298,6 +298,7 @@ function csa_lk_render_dashboard_widget() {
 		<li><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=page' ) ); ?>">Review Pages in Elementor</a></li>
 		<li><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=csa_tour_request' ) ); ?>">View Tour Requests</a></li>
 	</ul>
+	<p><strong>Indexing mode:</strong> <?php echo '1' === (string) get_option( 'blog_public', '1' ) ? 'Production indexing enabled' : 'Staging noindex enabled'; ?></p>
 	<?php if ( ! empty( $audit['technical_notices'] ) ) : ?>
 		<p><strong>Notices:</strong></p>
 		<ul>
@@ -315,6 +316,7 @@ function csa_lk_render_dashboard_widget() {
  */
 function csa_lk_render_tools_page() {
 	$status = isset( $_GET['csa_setup'] ) ? sanitize_text_field( wp_unslash( $_GET['csa_setup'] ) ) : '';
+	$indexing_status = isset( $_GET['csa_indexing'] ) ? sanitize_text_field( wp_unslash( $_GET['csa_indexing'] ) ) : '';
 	$audit  = csa_lk_get_publish_audit();
 	?>
 	<div class="wrap">
@@ -324,6 +326,13 @@ function csa_lk_render_tools_page() {
 			<div class="notice notice-success is-dismissible"><p>Setup complete.</p></div>
 		<?php elseif ( 'error' === $status ) : ?>
 			<div class="notice notice-error is-dismissible"><p>Setup could not complete. Please check permissions and try again.</p></div>
+		<?php endif; ?>
+		<?php if ( 'staging' === $indexing_status ) : ?>
+			<div class="notice notice-warning is-dismissible"><p>Staging mode enabled. Search indexing is now discouraged.</p></div>
+		<?php elseif ( 'production' === $indexing_status ) : ?>
+			<div class="notice notice-success is-dismissible"><p>Production indexing enabled. Search indexing is now allowed.</p></div>
+		<?php elseif ( 'indexing-error' === $indexing_status ) : ?>
+			<div class="notice notice-error is-dismissible"><p>Could not change indexing mode. Please try again.</p></div>
 		<?php endif; ?>
 
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
@@ -342,6 +351,20 @@ function csa_lk_render_tools_page() {
 			<?php wp_nonce_field( 'csa_lk_download_report' ); ?>
 			<input type="hidden" name="action" value="csa_lk_download_report" />
 			<?php submit_button( 'Download Preflight Report', 'secondary', 'submit', false ); ?>
+		</form>
+
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="margin-top: 8px;">
+			<?php wp_nonce_field( 'csa_lk_set_indexing_mode' ); ?>
+			<input type="hidden" name="action" value="csa_lk_set_indexing_mode" />
+			<input type="hidden" name="mode" value="staging" />
+			<?php submit_button( 'Enable Staging Mode (Noindex)', 'secondary', 'submit', false ); ?>
+		</form>
+
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="margin-top: 8px;">
+			<?php wp_nonce_field( 'csa_lk_set_indexing_mode' ); ?>
+			<input type="hidden" name="action" value="csa_lk_set_indexing_mode" />
+			<input type="hidden" name="mode" value="production" />
+			<?php submit_button( 'Enable Production Indexing', 'secondary', 'submit', false ); ?>
 		</form>
 
 		<hr />
@@ -709,6 +732,40 @@ function csa_lk_handle_download_report_action() {
 	exit;
 }
 add_action( 'admin_post_csa_lk_download_report', 'csa_lk_handle_download_report_action' );
+
+/**
+ * Handle indexing mode switch for staging/production.
+ */
+function csa_lk_handle_set_indexing_mode_action() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( esc_html__( 'You do not have permission to change indexing mode.', 'csa-launch-kit' ) );
+	}
+
+	check_admin_referer( 'csa_lk_set_indexing_mode' );
+	$mode = isset( $_POST['mode'] ) ? sanitize_text_field( wp_unslash( $_POST['mode'] ) ) : '';
+
+	if ( 'staging' === $mode ) {
+		update_option( 'blog_public', '0' );
+		$status = 'staging';
+	} elseif ( 'production' === $mode ) {
+		update_option( 'blog_public', '1' );
+		$status = 'production';
+	} else {
+		$status = 'indexing-error';
+	}
+
+	wp_safe_redirect(
+		add_query_arg(
+			array(
+				'page'         => 'csa-launch-kit',
+				'csa_indexing' => $status,
+			),
+			admin_url( 'tools.php' )
+		)
+	);
+	exit;
+}
+add_action( 'admin_post_csa_lk_set_indexing_mode', 'csa_lk_handle_set_indexing_mode_action' );
 
 /**
  * One-click setup for pages/menu/homepage.

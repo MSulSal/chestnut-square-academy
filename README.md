@@ -27,6 +27,7 @@ The launch kit also outputs LocalBusiness + FAQ schema automatically when fields
 8. Run `Tools > CSA Launch Kit` preflight until blocking count is `0`.
 9. Test tour form submission from the Contact page.
 10. Download and archive the preflight report from `Tools > CSA Launch Kit`.
+11. In `Tools > CSA Launch Kit`, switch indexing mode appropriately (staging noindex vs production indexing).
 
 ## Notes
 - This project intentionally flags uncertain facts with `[VERIFY]` and `[DO NOT PUBLISH UNTIL CONFIRMED]`.

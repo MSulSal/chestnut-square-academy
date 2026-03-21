@@ -17,6 +17,9 @@ Date: March 21, 2026
 - One-click setup tool at `Tools > CSA Launch Kit`.
 - Preflight audit panel in `Tools > CSA Launch Kit` that counts unresolved `[VERIFY]` and `[DO NOT PUBLISH UNTIL CONFIRMED]` markers.
 - One-click preflight report download (`.txt`) from `Tools > CSA Launch Kit` for owner/client handoff records.
+- One-click indexing mode toggles in `Tools > CSA Launch Kit`:
+- `Enable Staging Mode (Noindex)`
+- `Enable Production Indexing`
 - Technical readiness checks in preflight: active theme/plugin, homepage assignment, permalink mode, valid tour email, valid map URL, and staging indexing notice.
 - Dashboard widget (`CSA Launch Status`) with quick links and live blocking-item count.
 - Starter page generation for:
