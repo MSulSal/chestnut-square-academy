@@ -1,72 +1,63 @@
-# Chestnut Square Academy Layout + Component Map
+# Chestnut Square Academy Layout + Component Map (Exact-Structure Pass)
 
 ## Home
-1. Header: circular logo + ROYGBIV nav
-2. Hero split:
-   - Left: logo, "Where Learning Grows", supporting copy, two CTAs
-   - Right: primary lifestyle/classroom image
-3. Quick Facts strip (4 columns)
-4. Learning for Every Age explorer:
-   - Left: stacked age/program rail
-   - Right: feature image + short program summary + link to Programs
-5. Why Families Choose Us (3 trust cards)
-6. Parent Quotes (3 testimonials)
-7. A Day at Chestnut Square (4 routine cards)
-8. Gallery Highlights (4 image tiles)
-9. News/Events style updates (2 cards)
-10. FAQ preview (4 Q/A cards + link to FAQ)
-11. Find Out More hub (3-column):
-   - Contact details + CTAs
-   - Schedule a Tour form
-   - Embedded map
+1. Utility top bar (address, phone, hours, utility links)
+2. Primary nav/header (logo left, main nav right)
+3. Alert ribbon (enrollment message + action link)
+4. Full-bleed hero stage (background image + tagline + dual CTAs)
+5. Academy details strip (name, address, phone, hours + action buttons)
+6. Learning for Every Age section:
+   - Left: stacked age list cards
+   - Right: feature image + program summary
+7. News, Events & Promotions section (2 promo cards)
+8. Why Parents Love section (3 feature cards + ready row)
+9. Parent testimonials row (3 cards)
+10. FAQ accordion section
+11. Summer learning callout section
+12. Academy highlights section (4 cards)
+13. Find Out More section:
+   - Contact details card
+   - Schedule a Tour form card
+14. Map section
+15. Gallery highlights section
 
 ## About
-1. Page hero split:
-   - Left: page intro copy
-   - Right: image
-2. School overview + family-first approach
-3. 3-column value block:
-   - Family expectations
-   - Downtown identity
-   - Director message
-4. Meet Our Team (3 profile-style cards)
-5. CTA row (Schedule Tour + Call)
+1. Page hero stage
+2. Academy details strip
+3. Story section
+4. 3-card difference section
+5. Team section
+6. Find Out More section (contact + form)
 
 ## Programs
-1. Page hero split
-2. Program overview intro
-3. Learning for Every Age explorer:
-   - Left: age/program rail
-   - Right: image + summary copy
-4. Program cards (Infant, Toddler, Preschool, Pre-K)
-5. Typical Day section (routine list)
-6. Meals/Spanish/Community Experiences cards
-7. Closing CTA row
+1. Page hero stage
+2. Learning for Every Age section (left age stack, right feature panel)
+3. Program overview cards
+4. Program highlights cards
+5. Find Out More section (contact + form)
 
 ## Gallery
-1. Page hero split
-2. Gallery intro
-3. Mixed gallery grid:
-   - First tile is feature tile (larger)
-   - Remaining tiles regular
-4. Photo themes list
-5. CTA row
+1. Page hero stage
+2. Featured gallery grid
+3. Photo themes card grid
+4. Find Out More section (contact + form)
 
 ## FAQ
-1. Page hero split
-2. FAQ content stack (Q/A in heading + paragraph pattern)
-3. CTA row
+1. Page hero stage
+2. Q&A stack section
+3. Find Out More section (contact + form)
 
 ## Contact / Schedule a Tour
-1. Page hero split
-2. Main conversion section (2 columns):
-   - Contact details + "what happens next" steps
+1. Page hero stage
+2. Find Out More section:
+   - Contact details + "what happens next"
    - Schedule a Tour form
-3. Full-width map block below
+3. Map section
 
-## Global component behavior
-- Header width aligns with page content width.
-- Nav labels are color-sequenced in ROYGBIV order.
-- Info cards keep top-left accent dots for quick visual scanning.
-- CTA buttons use consistent rectangular style (no underlines).
-- Map appears in both Home and Contact pages to support immediate direction lookup.
+## Global Behavior
+- Layout uses a shared max-width container with full-bleed hero bands.
+- Header stack is two-tiered: utility bar + navigation row.
+- Buttons follow a consistent two-style system (outline blue + filled yellow).
+- Hero and page-hero responsiveness collapses from wide desktop stage to compact mobile stack.
+- Age/program section collapses from 2-column desktop to single-column mobile.
+- Find Out More conversion block collapses from 2-column desktop to single-column mobile.

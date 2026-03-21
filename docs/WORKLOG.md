@@ -86,3 +86,9 @@
 - feat(docs): added `docs/LAYOUT-COMPONENT-MAP.md` with exact component order/placement for every page.
 - chore(qa): validated updated launch-kit PHP syntax via Local PHP binary lint check.
 - chore(runtime): attempted WP-CLI setup-overwrite push, but Local MySQL runtime port was offline in this session, so seeded page content refresh is pending next local runtime start.
+- feat(overhaul): rebuilt Home blueprint to a clone-level section stack (alert ribbon, full-bleed hero, academy strip, age rail, news/promotions, parent-love, testimonials, FAQ accordion, highlights, find-out form, map).
+- feat(overhaul): refactored About/Programs/Gallery/FAQ/Contact blueprints to the same layout grammar and conversion/map logic.
+- feat(header): added utility top bar output in child theme (`wp_body_open`) for location/phone/hours + utility links above primary nav.
+- feat(typography): switched theme font stack to `Bree Serif + Nunito Sans + Permanent Marker` to better match requested reference composition.
+- feat(css): replaced stylesheet with a stricter structural system for hero stage overlays, academy strip, age/program rail, promo cards, FAQ accordion, find-out conversion block, and responsive breakpoints.
+- docs(overhaul): rewrote `docs/LAYOUT-COMPONENT-MAP.md` to reflect exact-structure pass and final global behavior.

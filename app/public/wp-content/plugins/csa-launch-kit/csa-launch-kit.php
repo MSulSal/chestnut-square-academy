@@ -1234,104 +1234,184 @@ function csa_lk_assign_menus( $page_ids ) {
  */
 function csa_lk_get_page_blueprints() {
 	$home = <<<HTML
-<section class="csa-shell csa-hero">
-  <div class="csa-hero-grid">
-    <div class="csa-hero-copy">
-      <div class="csa-logo-wrap">[csa_logo]</div>
-      <h1 class="csa-tagline"><span class="csa-tagline-line">Where</span><span class="csa-tagline-line csa-tagline-crayon">Learning</span><span class="csa-tagline-line">Grows</span></h1>
-      <p class="csa-hero-subhead">Warm, reliable early learning in Historic Downtown McKinney for children ages 6 weeks to 5/6 years.</p>
-      <p>Chestnut Square Academy is a close-knit center in the Historic Chestnut Village area where children are known, cared for, and encouraged every day.</p>
-      <div class="csa-cta-row">[csa_tour_button label="Schedule a Tour"] [csa_call_button label="Call Now"]</div>
+<section class="csa-alert-banner">
+  <div class="csa-shell csa-alert-inner">
+    <p><strong>Now Enrolling in Downtown McKinney</strong> Schedule a tour and see our classrooms in person.</p>
+    <p><a class="csa-link-cta" href="/contact-schedule-a-tour/">Schedule a Tour</a></p>
+  </div>
+</section>
+
+<section class="csa-hero-stage">
+  <div class="csa-hero-media">[csa_vibe_photo]</div>
+  <div class="csa-shell csa-hero-shell">
+    <div class="csa-hero-overlay">
+      <h1 class="csa-hero-wordmark"><span>Where</span><span class="csa-hero-brush">LEARNING</span><span>Grows</span></h1>
+      <p>Warm, dependable early learning in the heart of Historic Downtown McKinney.</p>
+      <div class="csa-cta-row">[csa_tour_button label="Request Information"] [csa_call_button label="Schedule a Tour"]</div>
     </div>
-    <div class="csa-hero-photo">[csa_vibe_photo]</div>
   </div>
 </section>
 
-<section class="csa-shell csa-quickfacts-wrap">
-  <div class="csa-quickfacts">
-    <div class="csa-fact"><strong>Historic Downtown Location</strong><span>[csa_address]</span></div>
-    <div class="csa-fact"><strong>Open Monday-Friday</strong><span>[csa_hours]</span></div>
-    <div class="csa-fact"><strong>Ages Served</strong><span>6 weeks to 5/6 years</span></div>
-    <div class="csa-fact"><strong>Small Center Size</strong><span>Licensed occupancy of 46 children</span></div>
+<section class="csa-shell csa-academy-strip">
+  <div class="csa-academy-details">
+    <h2>Chestnut Square Academy</h2>
+    <p>[csa_address]</p>
+    <p><strong>Phone:</strong> [csa_phone_link]</p>
+    <p><strong>Today's Hours:</strong> [csa_hours]</p>
+  </div>
+  <div class="csa-academy-actions">
+    <a class="csa-btn csa-btn-secondary" href="/contact-schedule-a-tour/">Request Information</a>
+    <a class="csa-btn csa-btn-primary" href="/contact-schedule-a-tour/">Schedule a Tour</a>
+    <a class="csa-link-cta" href="/contact-schedule-a-tour/">Get Directions</a>
   </div>
 </section>
 
-<section class="csa-shell csa-band">
+<section class="csa-shell csa-age-stage">
   <div class="csa-section-head">
     <p class="csa-kicker">Now Enrolling</p>
     <h2>Learning for Every Age</h2>
   </div>
-  <div class="csa-program-explorer">
-    <aside class="csa-age-rail">
-      <ul class="csa-age-list">
-        <li class="is-active"><strong>Infant</strong><span>6 weeks to 12 months</span></li>
-        <li><strong>Toddler</strong><span>13 to 24 months</span></li>
-        <li><strong>Early Preschool</strong><span>2-year-olds</span></li>
-        <li><strong>Preschool</strong><span>3-year-olds</span></li>
-        <li><strong>Pre-K</strong><span>4 to 5 years</span></li>
-      </ul>
-    </aside>
-    <article class="csa-program-spotlight">
-      <div class="csa-program-image">[csa_vibe_photo]</div>
-      <div class="csa-program-copy">
-        <h3>Nurturing Care + Purposeful Learning</h3>
-        <p>Each classroom combines caring relationships, guided play, and age-appropriate routines that help children feel secure and ready to grow.</p>
+  <div class="csa-age-layout">
+    <ul class="csa-age-stack">
+      <li class="is-active"><strong>Infant</strong><span>6 weeks to 12 months</span></li>
+      <li><strong>Toddler</strong><span>13 to 24 months</span></li>
+      <li><strong>Early Preschool</strong><span>2-year-olds</span></li>
+      <li><strong>Preschool</strong><span>3-year-olds</span></li>
+      <li><strong>Pre-K</strong><span>4 to 5 years</span></li>
+    </ul>
+    <article class="csa-age-visual">
+      <div class="csa-age-image">[csa_vibe_photo]</div>
+      <div class="csa-age-copy">
+        <h3>Purposeful Learning in a Warm Small-School Setting</h3>
+        <p>Our teachers nurture each child through caring relationships, guided routines, and developmentally appropriate daily learning.</p>
         <p><a class="csa-link-cta" href="/programs/">Explore Programs</a></p>
       </div>
     </article>
   </div>
 </section>
 
-<section class="csa-shell">
+<section class="csa-shell csa-news-stage">
   <div class="csa-section-head">
-    <h2>Why Families Choose Chestnut Square Academy</h2>
+    <h2>News, Events & Promotions</h2>
+    <p>The latest happenings at Chestnut Square Academy and in our community.</p>
   </div>
-  <div class="csa-feature-grid">
-    <article class="csa-open-item">
-      <h3>Texas Rising Star Program</h3>
-      <p>CSA is a Texas Rising Star daycare serving families in Downtown McKinney.</p>
+  <div class="csa-news-grid">
+    <article class="csa-news-card">
+      <h3>Enrollment Tours Available</h3>
+      <p>Families can now request tours for upcoming enrollment. We would love to meet you and answer your questions.</p>
+      <p><a class="csa-link-cta" href="/contact-schedule-a-tour/">Read More</a></p>
     </article>
-    <article class="csa-open-item">
-      <h3>Small-Center Attention</h3>
-      <p>Our occupancy of 46 creates a personal experience where children and families are genuinely known.</p>
-    </article>
-    <article class="csa-open-item">
-      <h3>Historic Neighborhood Setting</h3>
-      <p>Located in the Historic Chestnut Village area, our school blends hometown warmth with dependable care.</p>
+    <article class="csa-news-card">
+      <h3>Downtown Community Focus</h3>
+      <p>As a center located in Historic Chestnut Village, we value neighborhood connection and family partnership.</p>
+      <p><a class="csa-link-cta" href="/about/">Learn More</a></p>
     </article>
   </div>
 </section>
 
-<section class="csa-shell">
+<section class="csa-shell csa-love-stage">
   <div class="csa-section-head">
     <h2>Why Parents Love Chestnut Square Academy</h2>
   </div>
+  <div class="csa-love-grid">
+    <article class="csa-open-item">
+      <h3>The Chestnut Square Difference</h3>
+      <p>Our team nurtures, educates, and inspires children through dependable routines and meaningful care.</p>
+      <p><a class="csa-link-cta" href="/about/">About Us</a></p>
+    </article>
+    <article class="csa-open-item">
+      <h3>A Learning Approach Built for Early Growth</h3>
+      <p>Children experience balanced days that include language, movement, social learning, and classroom exploration.</p>
+      <p><a class="csa-link-cta" href="/programs/">Our Programs</a></p>
+    </article>
+    <article class="csa-open-item">
+      <h3>Safe, Healthy Environment</h3>
+      <p>Family trust matters. We maintain clear procedures and attentive care in every classroom.</p>
+      <p><a class="csa-link-cta" href="/faq/">Health & Safety FAQ</a></p>
+    </article>
+  </div>
+  <div class="csa-ready-row">
+    <p><strong>Ready to learn more?</strong> We can help with tour details, daily routine questions, and enrollment next steps.</p>
+    <div class="csa-cta-row">[csa_tour_button label="Virtual Tour"] [csa_call_button label="Schedule a Tour"]</div>
+  </div>
+</section>
+
+<section class="csa-shell csa-testimonial-stage">
   <div class="csa-quote-grid">
     <article class="csa-quote-card">
-      <p>"The school feels welcoming, and the teachers make our child feel comfortable every day."</p>
+      <p>"The staff is warm and welcoming and my child gets so much attention."</p>
       <strong>Chestnut Square Parent</strong>
     </article>
     <article class="csa-quote-card">
-      <p>"We appreciate the communication and the calm routine. It has made mornings much easier for our family."</p>
+      <p>"Everyone really cares for our children, and we appreciate the communication with families."</p>
       <strong>Chestnut Square Parent</strong>
     </article>
     <article class="csa-quote-card">
-      <p>"It is a small center, and that personal attention really stands out."</p>
+      <p>"It is a small center, and that personal attention is exactly what we were looking for."</p>
       <strong>Chestnut Square Parent</strong>
     </article>
   </div>
 </section>
 
-<section class="csa-shell csa-band csa-band-soft">
+<section class="csa-shell csa-faq-stage">
   <div class="csa-section-head">
-    <h2>A Day at Chestnut Square</h2>
+    <h2>Your Most Asked Questions</h2>
+  </div>
+  <div class="csa-faq-list">
+    <details open><summary>How can I find out more about Chestnut Square Academy?</summary><p>Submit a tour request below and our team will contact you with next steps and availability information.</p></details>
+    <details><summary>What ages do you serve?</summary><p>We offer care for children from 6 weeks to 5/6 years old.</p></details>
+    <details><summary>What are your hours?</summary><p>We are open Monday through Friday, [csa_hours].</p></details>
+    <details><summary>Are you part of Texas Rising Star?</summary><p>Yes. Chestnut Square Academy is part of the Texas Rising Star Program.</p></details>
+    <details><summary>How large is the center?</summary><p>CSA is a small facility with occupancy of 46.</p></details>
+  </div>
+</section>
+
+<section class="csa-shell csa-camp-stage">
+  <article class="csa-camp-callout">
+    <h3>Summer Learning Experiences</h3>
+    <p>Our summer season includes hands-on activities and themed classroom exploration designed for active learners.</p>
+    <p><a class="csa-link-cta" href="/programs/">Learn About Summer Programs</a></p>
+  </article>
+</section>
+
+<section class="csa-shell">
+  <div class="csa-section-head">
+    <h2>Highlights of Our Academy</h2>
   </div>
   <div class="csa-open-columns">
-    <article class="csa-open-item"><h3>Morning Welcome</h3><p>Children settle in with caring teachers and a smooth start to the day.</p></article>
-    <article class="csa-open-item"><h3>Learning Through Play</h3><p>Classrooms combine guided lessons, movement, and hands-on discovery.</p></article>
-    <article class="csa-open-item"><h3>Meals and Rest</h3><p>Children follow age-appropriate meal and quiet-time rhythms.</p></article>
-    <article class="csa-open-item"><h3>Afternoon Pickup</h3><p>Families receive warm updates and a consistent end-of-day routine.</p></article>
+    <article class="csa-open-item"><h3>Small Classroom Community</h3><p>Children and families are known by name in our close-knit school.</p></article>
+    <article class="csa-open-item"><h3>Family Partnership</h3><p>We prioritize clear communication and dependable routines for every age group.</p></article>
+    <article class="csa-open-item"><h3>Historic Downtown Convenience</h3><p>Located in Historic Chestnut Village with a neighborhood-centered feel.</p></article>
+    <article class="csa-open-item"><h3>Texas Rising Star Participation</h3><p>Our center is part of the Texas Rising Star Program.</p></article>
   </div>
+</section>
+
+<section class="csa-shell csa-findout-stage">
+  <div class="csa-section-head">
+    <h2>Find out more about our Academy.</h2>
+    <p>A member of our team will contact you to confirm tour details and answer your questions.</p>
+  </div>
+  <div class="csa-findout-grid">
+    <article class="csa-findout-contact">
+      <h3>Contact Us</h3>
+      <p><strong>Chestnut Square Academy</strong></p>
+      <p>[csa_address]</p>
+      <p>[csa_phone_link]</p>
+      <p>[csa_call_button label="Call Now"]</p>
+      <p><a class="csa-link-cta" href="/contact-schedule-a-tour/">Get Directions</a></p>
+    </article>
+    <article class="csa-findout-form">
+      <h3>Schedule a Tour</h3>
+      [csa_schedule_tour_form]
+    </article>
+  </div>
+</section>
+
+<section class="csa-shell csa-map-stage">
+  <article class="csa-map-card">
+    <h3>Map</h3>
+    [csa_map_embed]
+  </article>
 </section>
 
 <section class="csa-shell">
@@ -1339,152 +1419,124 @@ function csa_lk_get_page_blueprints() {
     <h2>Gallery Highlights</h2>
   </div>
   <div class="csa-gallery-grid">
-    <figure class="csa-gallery-tile">[csa_vibe_photo]<figcaption>Classroom moments that build confidence and curiosity</figcaption></figure>
     <figure class="csa-gallery-tile">[csa_vibe_photo]<figcaption>Teacher-child interaction rooted in care and trust</figcaption></figure>
     <figure class="csa-gallery-tile">[csa_vibe_photo]<figcaption>Creative, hands-on early learning each day</figcaption></figure>
+    <figure class="csa-gallery-tile">[csa_vibe_photo]<figcaption>Classroom moments that build confidence and curiosity</figcaption></figure>
     <figure class="csa-gallery-tile">[csa_vibe_photo]<figcaption>A neighborhood school in Historic Downtown McKinney</figcaption></figure>
-  </div>
-</section>
-
-<section class="csa-shell csa-band">
-  <div class="csa-section-head">
-    <h2>News, Events & Family Updates</h2>
-  </div>
-  <div class="csa-news-grid">
-    <article class="csa-news-card">
-      <h3>Enrollment Tours Available</h3>
-      <p>We are scheduling in-person tours for families exploring childcare in Downtown McKinney.</p>
-      <p><a class="csa-link-cta" href="/contact-schedule-a-tour/">Schedule Your Tour</a></p>
-    </article>
-    <article class="csa-news-card">
-      <h3>Community-Centered Care</h3>
-      <p>Chestnut Square Academy is proud to serve families in the Historic Chestnut Village neighborhood.</p>
-      <p><a class="csa-link-cta" href="/about/">Read About Our School</a></p>
-    </article>
-  </div>
-</section>
-
-<section class="csa-shell">
-  <div class="csa-section-head">
-    <h2>Your Most Asked Questions</h2>
-  </div>
-  <div class="csa-open-columns">
-    <article class="csa-open-item"><h3>What ages do you serve?</h3><p>We provide care for children from 6 weeks to 5/6 years of age.</p></article>
-    <article class="csa-open-item"><h3>Are you a Texas Rising Star center?</h3><p>Yes. Chestnut Square Academy participates in the Texas Rising Star Program.</p></article>
-    <article class="csa-open-item"><h3>How do we schedule a tour?</h3><p>Use the form below or call us. Our team will follow up quickly to confirm your visit.</p></article>
-    <article class="csa-open-item"><h3>Where are you located?</h3><p>We are located in Historic Downtown McKinney at [csa_address].</p></article>
-  </div>
-  <p><a class="csa-link-cta" href="/faq/">View All FAQs</a></p>
-</section>
-
-<section class="csa-shell csa-band csa-band-soft">
-  <div class="csa-section-head">
-    <h2>Find Out More About Our Academy</h2>
-    <p>A member of our team will contact you to confirm details and answer questions.</p>
-  </div>
-  <div class="csa-contact-hub">
-    <article class="csa-open-item csa-contact-details">
-      <h3>Contact Us</h3>
-      <p><strong>Address:</strong> [csa_address]</p>
-      <p><strong>Phone:</strong> [csa_phone_link]</p>
-      <p><strong>Hours:</strong> [csa_hours]</p>
-      <div class="csa-cta-row">[csa_tour_button label="Schedule a Tour"] [csa_call_button label="Call Now"]</div>
-    </article>
-    <article class="csa-open-item csa-home-form">
-      <h3>Schedule a Tour</h3>
-      [csa_schedule_tour_form]
-    </article>
-    <div class="csa-open-item csa-map-wrap">
-      <h3>Map</h3>
-      [csa_map_embed]
-    </div>
   </div>
 </section>
 HTML;
 
 	$about = <<<HTML
-<section class="csa-shell csa-page-hero">
-  <div class="csa-page-hero-grid">
-    <div>
-      <p class="csa-kicker">About Our School</p>
+<section class="csa-page-hero">
+  <div class="csa-hero-media">[csa_vibe_photo]</div>
+  <div class="csa-shell csa-hero-shell">
+    <div class="csa-hero-overlay csa-hero-overlay-page">
       <h1>About Chestnut Square Academy</h1>
-      <p>Chestnut Square Academy is rooted in Historic Downtown McKinney and built on dependable care, close family partnership, and a warm daily experience for every child.</p>
+      <p>A neighborhood-centered early learning school in Historic Downtown McKinney.</p>
+      <div class="csa-cta-row">[csa_tour_button label="Request Information"] [csa_call_button label="Schedule a Tour"]</div>
     </div>
-    <div class="csa-page-hero-media">[csa_vibe_photo]</div>
+  </div>
+</section>
+
+<section class="csa-shell csa-academy-strip">
+  <div class="csa-academy-details">
+    <h2>Chestnut Square Academy</h2>
+    <p>[csa_address]</p>
+    <p><strong>Phone:</strong> [csa_phone_link]</p>
+    <p><strong>Hours:</strong> [csa_hours]</p>
+  </div>
+  <div class="csa-academy-actions">
+    <a class="csa-btn csa-btn-secondary" href="/contact-schedule-a-tour/">Request Information</a>
+    <a class="csa-btn csa-btn-primary" href="/contact-schedule-a-tour/">Schedule a Tour</a>
   </div>
 </section>
 
 <section class="csa-shell">
-  <h2>Our School Overview</h2>
-  <p>Chestnut Square Academy is located in the heart of the Historic Chestnut Village in Downtown McKinney. We offer care for children from 6 weeks to 5/6 years of age in a warm, family-centered environment.</p>
+  <div class="csa-section-head">
+    <h2>Our Story</h2>
+  </div>
+  <p>Chestnut Square Academy is located in the heart of the Historic Chestnut Village area in Downtown McKinney. We offer care for children from 6 weeks to 5/6 years of age in a warm, family-first environment.</p>
+  <p>As a small center with occupancy of 46, our team provides personal attention, dependable routines, and close communication with families.</p>
+</section>
 
-  <h2>Our Family-First Approach</h2>
-  <p>We are committed to our children as well as their families. Every day is built around safety, consistency, and caring teacher-child relationships that support social, emotional, and early learning growth.</p>
-
-  <div class="csa-open-columns">
+<section class="csa-shell csa-love-stage">
+  <div class="csa-love-grid">
     <article class="csa-open-item">
-      <h3>What Families Can Expect</h3>
-      <ul>
-        <li>A welcoming environment where children are known by name</li>
-        <li>Age-appropriate activities that keep children engaged</li>
-        <li>A dependable routine from drop-off through pickup</li>
-      </ul>
+      <h3>The Chestnut Square Difference</h3>
+      <p>A caring neighborhood school environment where children are known and supported every day.</p>
     </article>
     <article class="csa-open-item">
-      <h3>Rooted in Downtown McKinney</h3>
-      <p>Our location makes Chestnut Square Academy a trusted neighborhood option for families who want quality childcare in a familiar and convenient part of McKinney.</p>
-      <p><strong>Center occupancy:</strong> 46</p>
+      <h3>Family Partnership</h3>
+      <p>We work closely with parents to ensure routines, communication, and expectations stay clear and consistent.</p>
     </article>
     <article class="csa-open-item">
-      <h3>Director Message</h3>
-      <p>Our goal is to create a school where children feel safe, families feel supported, and each day includes meaningful learning moments.</p>
+      <h3>Texas Rising Star</h3>
+      <p>CSA is part of the Texas Rising Star Program and serves families throughout Downtown McKinney.</p>
     </article>
   </div>
+</section>
 
-  <section class="csa-section-head">
+<section class="csa-shell">
+  <div class="csa-section-head">
     <h2>Meet Our Team</h2>
-  </section>
-  <div class="csa-open-columns">
-    <article class="csa-open-item"><h3>Caring Educators</h3><p>Teachers lead each classroom with warmth, structure, and encouraging guidance.</p></article>
-    <article class="csa-open-item"><h3>Family Partnership</h3><p>We work closely with parents and guardians to support every child’s growth.</p></article>
-    <article class="csa-open-item"><h3>Consistent Leadership</h3><p>Our staff focuses on clear communication and dependable care for families.</p></article>
   </div>
+  <div class="csa-open-columns">
+    <article class="csa-open-item"><h3>Caring Educators</h3><p>Teachers lead classrooms with warmth, patience, and structure.</p></article>
+    <article class="csa-open-item"><h3>Consistent Leadership</h3><p>Families experience reliable communication and clear daily rhythms.</p></article>
+    <article class="csa-open-item"><h3>Community Focus</h3><p>We are proud to serve families in Historic Downtown McKinney.</p></article>
+  </div>
+</section>
 
-  <div class="csa-cta-row">[csa_tour_button label="Schedule a Tour"] [csa_call_button label="Call Now"]</div>
+<section class="csa-shell csa-findout-stage">
+  <div class="csa-section-head">
+    <h2>Find out more about our Academy.</h2>
+  </div>
+  <div class="csa-findout-grid">
+    <article class="csa-findout-contact">
+      <h3>Contact Us</h3>
+      <p><strong>Chestnut Square Academy</strong></p>
+      <p>[csa_address]</p>
+      <p>[csa_phone_link]</p>
+      <p>[csa_call_button label="Call Now"]</p>
+    </article>
+    <article class="csa-findout-form">
+      <h3>Schedule a Tour</h3>
+      [csa_schedule_tour_form]
+    </article>
+  </div>
 </section>
 HTML;
 
 	$programs = <<<HTML
-<section class="csa-shell csa-page-hero">
-  <div class="csa-page-hero-grid">
-    <div>
-      <p class="csa-kicker">Programs</p>
+<section class="csa-page-hero">
+  <div class="csa-hero-media">[csa_vibe_photo]</div>
+  <div class="csa-shell csa-hero-shell">
+    <div class="csa-hero-overlay csa-hero-overlay-page">
       <h1>Programs for Every Early Stage</h1>
-      <p>Our programs are designed around age-appropriate care, learning, and social growth in a small-center setting.</p>
+      <p>Age-based classrooms from infant through pre-k in a warm, structured, family-centered setting.</p>
+      <div class="csa-cta-row">[csa_tour_button label="Request Information"] [csa_call_button label="Schedule a Tour"]</div>
     </div>
-    <div class="csa-page-hero-media">[csa_vibe_photo]</div>
   </div>
 </section>
 
-<section class="csa-shell csa-band">
-  <h2>Program Overview</h2>
-  <p>We offer age-appropriate care and learning experiences for children from 6 weeks to 5/6 years of age.</p>
-
-  <div class="csa-program-explorer">
-    <aside class="csa-age-rail">
-      <ul class="csa-age-list">
-        <li class="is-active"><strong>Infant</strong><span>6 weeks to 12 months</span></li>
-        <li><strong>Toddler</strong><span>13 to 24 months</span></li>
-        <li><strong>Early Preschool</strong><span>2-year-olds</span></li>
-        <li><strong>Preschool</strong><span>3-year-olds</span></li>
-        <li><strong>Pre-K</strong><span>4 to 5 years</span></li>
-      </ul>
-    </aside>
-    <article class="csa-program-spotlight">
-      <div class="csa-program-image">[csa_vibe_photo]</div>
-      <div class="csa-program-copy">
-        <h3>Developmentally Appropriate Experiences</h3>
-        <p>Children grow through intentional routines, caring teacher support, and classroom experiences that match each age stage.</p>
+<section class="csa-shell csa-age-stage">
+  <div class="csa-section-head">
+    <h2>Learning for Every Age</h2>
+  </div>
+  <div class="csa-age-layout">
+    <ul class="csa-age-stack">
+      <li class="is-active"><strong>Infant</strong><span>6 weeks to 12 months</span></li>
+      <li><strong>Toddler</strong><span>13 to 24 months</span></li>
+      <li><strong>Early Preschool</strong><span>2-year-olds</span></li>
+      <li><strong>Preschool</strong><span>3-year-olds</span></li>
+      <li><strong>Pre-K</strong><span>4 to 5 years</span></li>
+    </ul>
+    <article class="csa-age-visual">
+      <div class="csa-age-image">[csa_vibe_photo]</div>
+      <div class="csa-age-copy">
+        <h3>Nurturing Classrooms with Purposeful Daily Learning</h3>
+        <p>Children build confidence, communication, social skills, and early academics through play-based, teacher-guided experiences.</p>
       </div>
     </article>
   </div>
@@ -1492,95 +1544,113 @@ HTML;
 
 <section class="csa-shell">
   <div class="csa-open-columns">
-    <article class="csa-open-item"><h2>Infants</h2><p>Nurturing care that supports early bonding, comfort, and developmental milestones.</p></article>
-    <article class="csa-open-item"><h2>Toddlers</h2><p>Guided exploration, language growth, and active social learning.</p></article>
-    <article class="csa-open-item"><h2>Preschool</h2><p>Hands-on learning focused on confidence, social development, and classroom readiness.</p></article>
-    <article class="csa-open-item"><h2>Pre-K</h2><p>A structured transition year that supports independence and school-readiness skills.</p></article>
+    <article class="csa-open-item"><h3>Infants</h3><p>Responsive care focused on comfort, attachment, and developmental milestones.</p></article>
+    <article class="csa-open-item"><h3>Toddlers</h3><p>Language-rich exploration, movement, and guided social interaction.</p></article>
+    <article class="csa-open-item"><h3>Preschool</h3><p>Hands-on learning activities that grow independence and school-readiness foundations.</p></article>
+    <article class="csa-open-item"><h3>Pre-K</h3><p>Structured routines that support transition into kindergarten expectations.</p></article>
   </div>
 </section>
 
-<section class="csa-shell csa-band csa-band-soft">
-  <h2>A Typical Day</h2>
-  <p>Children follow a consistent daily rhythm that includes:</p>
-  <ul>
-    <li>Morning welcome and transition</li>
-    <li>Teacher-led learning and guided play</li>
-    <li>Creative activity blocks and movement</li>
-    <li>Rest or quiet-time routines by age group</li>
-    <li>Afternoon activities and pickup support</li>
-  </ul>
-</section>
-
-<section class="csa-shell">
-  <h2>Meals, Enrichment, and Experiences</h2>
+<section class="csa-shell csa-news-stage">
+  <div class="csa-section-head">
+    <h2>Program Highlights</h2>
+  </div>
   <div class="csa-open-columns">
-    <article class="csa-open-item"><h3>Meals and Snacks</h3><p>Families receive clear daily meal and routine information from our team.</p></article>
-    <article class="csa-open-item"><h3>Spanish Exposure</h3><p>Children may experience age-appropriate Spanish words, songs, and classroom language moments.</p></article>
-    <article class="csa-open-item"><h3>Community Experiences</h3><p>Field-trip and transportation-related opportunities are shared with families as available.</p></article>
+    <article class="csa-open-item"><h3>A Typical Day</h3><p>Morning welcome, guided learning, creative exploration, meals, rest, and afternoon activities.</p></article>
+    <article class="csa-open-item"><h3>Meals and Snacks</h3><p>Families receive clear information on daily meal routines and nutrition support.</p></article>
+    <article class="csa-open-item"><h3>Enrichment</h3><p>Children may experience Spanish vocabulary, art, music, and special themed learning moments.</p></article>
+    <article class="csa-open-item"><h3>Family Communication</h3><p>We partner with families through regular updates and predictable routines.</p></article>
   </div>
 </section>
 
-<section class="csa-shell">
-  <h2>A Small-Center Experience</h2>
-  <p>With occupancy at 46, CSA provides a close-knit setting where children receive personal attention and families build strong relationships with staff.</p>
-
-  <div class="csa-cta-row">[csa_tour_button label="Schedule a Tour"] [csa_call_button label="Call Now"]</div>
+<section class="csa-shell csa-findout-stage">
+  <div class="csa-section-head">
+    <h2>Find out more about our Academy.</h2>
+  </div>
+  <div class="csa-findout-grid">
+    <article class="csa-findout-contact">
+      <h3>Contact Us</h3>
+      <p><strong>Chestnut Square Academy</strong></p>
+      <p>[csa_address]</p>
+      <p>[csa_phone_link]</p>
+      <p>[csa_call_button label="Call Now"]</p>
+    </article>
+    <article class="csa-findout-form">
+      <h3>Schedule a Tour</h3>
+      [csa_schedule_tour_form]
+    </article>
+  </div>
 </section>
 HTML;
 
 	$gallery = <<<HTML
-<section class="csa-shell csa-page-hero">
-  <div class="csa-page-hero-grid">
-    <div>
-      <p class="csa-kicker">Gallery</p>
-      <h1>A Look Inside Chestnut Square Academy</h1>
-      <p>Explore everyday classroom moments, caring teacher interactions, and the welcoming environment families experience at CSA.</p>
+<section class="csa-page-hero">
+  <div class="csa-hero-media">[csa_vibe_photo]</div>
+  <div class="csa-shell csa-hero-shell">
+    <div class="csa-hero-overlay csa-hero-overlay-page">
+      <h1>Gallery</h1>
+      <p>A closer look at classroom life, teacher-child moments, and the daily environment at Chestnut Square Academy.</p>
+      <div class="csa-cta-row">[csa_tour_button label="Request Information"] [csa_call_button label="Schedule a Tour"]</div>
     </div>
-    <div class="csa-page-hero-media">[csa_vibe_photo]</div>
   </div>
 </section>
 
 <section class="csa-shell">
-  <h2>Gallery</h2>
-  <p>A look inside everyday moments at Chestnut Square Academy.</p>
-
-  <div class="csa-section-head">
-    <h2>Featured Moments</h2>
-  </div>
+  <div class="csa-section-head"><h2>Featured Moments</h2></div>
   <div class="csa-gallery-grid">
     <figure class="csa-gallery-tile">[csa_vibe_photo]<figcaption>Hands-on learning with caring teacher support</figcaption></figure>
     <figure class="csa-gallery-tile">[csa_vibe_photo]<figcaption>Creative classroom activities that spark curiosity</figcaption></figure>
     <figure class="csa-gallery-tile">[csa_vibe_photo]<figcaption>Warm, relationship-based early learning</figcaption></figure>
+    <figure class="csa-gallery-tile">[csa_vibe_photo]<figcaption>Daily routines that help children feel safe and confident</figcaption></figure>
+    <figure class="csa-gallery-tile">[csa_vibe_photo]<figcaption>Family-centered school environment in Downtown McKinney</figcaption></figure>
+    <figure class="csa-gallery-tile">[csa_vibe_photo]<figcaption>Teacher guidance that supports growth and independence</figcaption></figure>
   </div>
+</section>
 
-  <h2>Photo Themes</h2>
-  <ul>
-    <li>Classroom learning time</li>
-    <li>Teacher-child interaction</li>
-    <li>Art, sensory, and activity moments</li>
-    <li>School environment and daily routines</li>
-  </ul>
+<section class="csa-shell csa-news-stage">
+  <div class="csa-section-head"><h2>Photo Themes</h2></div>
+  <div class="csa-open-columns">
+    <article class="csa-open-item"><h3>Classroom Learning</h3><p>Circle time, guided activities, and hands-on discovery.</p></article>
+    <article class="csa-open-item"><h3>Teacher Interaction</h3><p>Warm teacher-child relationships at every age level.</p></article>
+    <article class="csa-open-item"><h3>Creative Activities</h3><p>Art, sensory, and movement moments throughout the day.</p></article>
+    <article class="csa-open-item"><h3>School Environment</h3><p>Indoor and outdoor spaces that support safe exploration.</p></article>
+  </div>
+</section>
 
-  <div class="csa-cta-row">[csa_tour_button label="Want to visit in person? Schedule a Tour"] [csa_call_button label="Call Now"]</div>
+<section class="csa-shell csa-findout-stage">
+  <div class="csa-section-head"><h2>Find out more about our Academy.</h2></div>
+  <div class="csa-findout-grid">
+    <article class="csa-findout-contact">
+      <h3>Contact Us</h3>
+      <p><strong>Chestnut Square Academy</strong></p>
+      <p>[csa_address]</p>
+      <p>[csa_phone_link]</p>
+      <p>[csa_call_button label="Call Now"]</p>
+    </article>
+    <article class="csa-findout-form">
+      <h3>Schedule a Tour</h3>
+      [csa_schedule_tour_form]
+    </article>
+  </div>
 </section>
 HTML;
 
 	$faq = <<<HTML
-<section class="csa-shell csa-page-hero">
-  <div class="csa-page-hero-grid">
-    <div>
-      <p class="csa-kicker">FAQ</p>
+<section class="csa-page-hero">
+  <div class="csa-hero-media">[csa_vibe_photo]</div>
+  <div class="csa-shell csa-hero-shell">
+    <div class="csa-hero-overlay csa-hero-overlay-page">
       <h1>Frequently Asked Questions</h1>
-      <p>Clear answers for families exploring child care and early learning at Chestnut Square Academy.</p>
+      <p>Answers to common questions about tours, programs, and daily care at Chestnut Square Academy.</p>
+      <div class="csa-cta-row">[csa_tour_button label="Request Information"] [csa_call_button label="Schedule a Tour"]</div>
     </div>
-    <div class="csa-page-hero-media">[csa_vibe_photo]</div>
   </div>
 </section>
 
 <section class="csa-shell">
-  <h2>Frequently Asked Questions</h2>
+  <h2>Your Most Asked Questions</h2>
   <h2>What are your hours?</h2>
-  <p>We are open Monday through Friday, 6:00 AM to 6:00 PM.</p>
+  <p>We are open Monday through Friday, [csa_hours].</p>
 
   <h2>What ages do you serve?</h2>
   <p>Chestnut Square Academy offers care for children from 6 weeks to 5/6 years of age.</p>
@@ -1603,46 +1673,68 @@ HTML;
   <h2>How quickly will someone follow up?</h2>
   <p>We aim to reply as soon as possible during business hours. For urgent questions, call us directly: [csa_phone_link]</p>
 
-  <div class="csa-cta-row">[csa_tour_button label="Schedule a Tour"] [csa_call_button label="Call Now"]</div>
+  <div class="csa-cta-row">[csa_tour_button label="Request Information"] [csa_call_button label="Schedule a Tour"]</div>
+</section>
+
+<section class="csa-shell csa-findout-stage">
+  <div class="csa-section-head"><h2>Find out more about our Academy.</h2></div>
+  <div class="csa-findout-grid">
+    <article class="csa-findout-contact">
+      <h3>Contact Us</h3>
+      <p><strong>Chestnut Square Academy</strong></p>
+      <p>[csa_address]</p>
+      <p>[csa_phone_link]</p>
+      <p>[csa_call_button label="Call Now"]</p>
+    </article>
+    <article class="csa-findout-form">
+      <h3>Schedule a Tour</h3>
+      [csa_schedule_tour_form]
+    </article>
+  </div>
 </section>
 HTML;
 
 	$contact = <<<HTML
-<section class="csa-shell csa-page-hero">
-  <div class="csa-page-hero-grid">
-    <div>
-      <p class="csa-kicker">Contact</p>
+<section class="csa-page-hero">
+  <div class="csa-hero-media">[csa_vibe_photo]</div>
+  <div class="csa-shell csa-hero-shell">
+    <div class="csa-hero-overlay csa-hero-overlay-page">
       <h1>Contact and Schedule a Tour</h1>
-      <p>Choosing care is a big decision. We are here to answer questions and help your family feel confident about next steps.</p>
+      <p>Contact us to learn more about what makes Chestnut Square Academy a trusted choice for families in Downtown McKinney.</p>
+      <div class="csa-cta-row">[csa_tour_button label="Request Information"] [csa_call_button label="Schedule a Tour"]</div>
     </div>
-    <div class="csa-page-hero-media">[csa_vibe_photo]</div>
   </div>
 </section>
 
-<section class="csa-shell csa-band csa-band-soft">
-  <div class="csa-contact-hub csa-contact-hub-two">
-    <article class="csa-open-item csa-contact-details">
-      <h2>Contact Details</h2>
-      <p><strong>Address:</strong> [csa_address]</p>
-      <p><strong>Phone:</strong> [csa_phone_link]</p>
+<section class="csa-shell csa-findout-stage">
+  <div class="csa-section-head">
+    <h2>Find out more about our Academy.</h2>
+    <p>A member of our team will contact you.</p>
+  </div>
+  <div class="csa-findout-grid">
+    <article class="csa-findout-contact">
+      <h3>Contact Us</h3>
+      <p><strong>Chestnut Square Academy</strong></p>
+      <p>[csa_address]</p>
+      <p>[csa_phone_link]</p>
       <p><strong>Hours:</strong> [csa_hours]</p>
       <h3>What happens next?</h3>
       <ol>
-        <li>Submit the form with your preferred day/time.</li>
-        <li>Our team will contact you to confirm your visit window.</li>
-        <li>Tour the school, meet staff, and discuss enrollment options.</li>
+        <li>Submit the form with your preferred day and time.</li>
+        <li>We contact you to confirm your visit.</li>
+        <li>You tour the school and meet our team.</li>
       </ol>
     </article>
-    <article class="csa-open-item csa-form-block">
-      <h2>Schedule a Tour</h2>
+    <article class="csa-findout-form">
+      <h3>Schedule a Tour</h3>
       [csa_schedule_tour_form]
     </article>
   </div>
 </section>
 
-<section class="csa-shell">
-  <article class="csa-open-item csa-map-wrap">
-    <h2>Map</h2>
+<section class="csa-shell csa-map-stage">
+  <article class="csa-map-card">
+    <h3>Map</h3>
     [csa_map_embed]
   </article>
 </section>
