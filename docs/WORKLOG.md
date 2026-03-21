@@ -31,3 +31,4 @@
 - feat(seo): added settings toggles for built-in LocalBusiness/FAQ schema to prevent duplicate schema when SEO plugins are active.
 - chore(versioning): bumped `csa-launch-kit` plugin version metadata to `1.4.0` to match cumulative feature state.
 - docs(versioning): added launch kit changelog with release history for easier client-facing updates.
+- chore(stack): preloaded recommended production plugins locally (Yoast SEO, UpdraftPlus, WP Mail SMTP, Fluent Forms, Solid Security) to reduce manual setup.

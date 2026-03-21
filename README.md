@@ -25,6 +25,11 @@ Business Profile settings include a copy-ready NAP block and JSON reference for 
 3. Go to `Plugins` and activate:
 - `Elementor`
 - `CSA Launch Kit`
+- `Yoast SEO` (`wordpress-seo`)
+- `UpdraftPlus`
+- `WP Mail SMTP`
+- `Fluent Forms`
+- `Solid Security` (`better-wp-security`)
 4. Go to `Tools > CSA Launch Kit` and click `Run Starter Setup`.
 5. Go to `Settings > CSA Business Profile` and fill in verified business details.
 6. Go to `Settings > CSA Tour Form` and set notification email.

@@ -7,6 +7,12 @@ Date: March 21, 2026
 - Hello Elementor theme downloaded into `wp-content/themes/hello-elementor`.
 - Child theme added: `wp-content/themes/hello-elementor-csa`.
 - Launch plugin added: `wp-content/plugins/csa-launch-kit`.
+- Recommended supporting plugins preloaded in `wp-content/plugins`:
+- `wordpress-seo` (Yoast SEO)
+- `updraftplus`
+- `wp-mail-smtp`
+- `fluentform`
+- `better-wp-security` (Solid Security)
 
 ## What the child theme includes
 - Brand color tokens and typography (Fraunces + Nunito Sans).
@@ -56,10 +62,11 @@ Date: March 21, 2026
 1. Activate theme `Hello Elementor CSA`.
 2. Activate plugin `Elementor`.
 3. Activate plugin `CSA Launch Kit`.
-4. Go to `Tools > CSA Launch Kit` and click `Run Starter Setup`.
-5. Go to `Settings > CSA Tour Form` and set notification email + confirmation text.
-6. Open each generated page in Elementor and finalize layout/content.
-7. Run preflight check in `Tools > CSA Launch Kit` until blocking count is `0`.
+4. Activate plugins: `Yoast SEO`, `UpdraftPlus`, `WP Mail SMTP`, `Fluent Forms`, `Solid Security`.
+5. Go to `Tools > CSA Launch Kit` and click `Run Starter Setup`.
+6. Go to `Settings > CSA Tour Form` and set notification email + confirmation text.
+7. Open each generated page in Elementor and finalize layout/content.
+8. Run preflight check in `Tools > CSA Launch Kit` until blocking count is `0`.
 
 ## Required post-setup edits
 - Replace all `[VERIFY]` placeholders.
