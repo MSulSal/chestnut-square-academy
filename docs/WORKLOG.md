@@ -92,3 +92,10 @@
 - feat(typography): switched theme font stack to `Bree Serif + Nunito Sans + Permanent Marker` to better match requested reference composition.
 - feat(css): replaced stylesheet with a stricter structural system for hero stage overlays, academy strip, age/program rail, promo cards, FAQ accordion, find-out conversion block, and responsive breakpoints.
 - docs(overhaul): rewrote `docs/LAYOUT-COMPONENT-MAP.md` to reflect exact-structure pass and final global behavior.
+- chore(runtime): brought Local runtime back online and reapplied seeded templates via `csa_lk_run_setup(true)` for real rendered validation.
+- feat(qa-visual): added Playwright render-pass workflow and generated multi-page screenshots (home/about/programs/gallery/faq/contact) for visual tuning.
+- tweak(layout): fixed full-width rendering by overriding Hello theme `site-main/page-content` width constraints that were forcing narrow center-column behavior.
+- tweak(visual): tightened hero/academy strip/age-panel spacing and card styling to better match requested reference composition.
+- feat(content): injected selective lorem placeholder lines where source-supported details were unavailable.
+- feat(assets): added local stock placeholders (`stock-1.jpg` to `stock-4.jpg`) and local map visual asset (`map-placeholder.png`) for consistent rendering without external dependency.
+- feat(map): upgraded map shortcode to output a reliable local static map preview linked to live directions, with iframe fallback retained.

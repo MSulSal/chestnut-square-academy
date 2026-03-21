@@ -29,7 +29,7 @@ function csa_lk_get_business_defaults() {
 		'csa_lk_business_phone'       => '(972) 369-7512',
 		'csa_lk_business_email'       => get_option( 'admin_email' ),
 		'csa_lk_business_hours'       => 'Monday-Friday, 6:00 AM-6:00 PM',
-		'csa_lk_business_map_embed'   => 'https://www.google.com/maps?q=402+S+Chestnut+St,+McKinney,+TX+75069&output=embed',
+		'csa_lk_business_map_embed'   => 'https://www.openstreetmap.org/export/embed.html?marker=33.1927,-96.6145',
 		'csa_lk_business_description' => 'Chestnut Square Academy is a Texas Rising Star daycare in Downtown McKinney, offering care for children from 6 weeks through age 5/6 in a small, family-focused center.',
 	);
 }
@@ -1298,12 +1298,12 @@ function csa_lk_get_page_blueprints() {
   <div class="csa-news-grid">
     <article class="csa-news-card">
       <h3>Enrollment Tours Available</h3>
-      <p>Families can now request tours for upcoming enrollment. We would love to meet you and answer your questions.</p>
+      <p>Families can now request tours for upcoming enrollment. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
       <p><a class="csa-link-cta" href="/contact-schedule-a-tour/">Read More</a></p>
     </article>
     <article class="csa-news-card">
       <h3>Downtown Community Focus</h3>
-      <p>As a center located in Historic Chestnut Village, we value neighborhood connection and family partnership.</p>
+      <p>As a center located in Historic Chestnut Village, we value neighborhood connection and family partnership. Lorem ipsum dolor sit amet.</p>
       <p><a class="csa-link-cta" href="/about/">Learn More</a></p>
     </article>
   </div>
@@ -1339,15 +1339,15 @@ function csa_lk_get_page_blueprints() {
 <section class="csa-shell csa-testimonial-stage">
   <div class="csa-quote-grid">
     <article class="csa-quote-card">
-      <p>"The staff is warm and welcoming and my child gets so much attention."</p>
+      <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. The staff is warm and welcoming and my child gets so much attention."</p>
       <strong>Chestnut Square Parent</strong>
     </article>
     <article class="csa-quote-card">
-      <p>"Everyone really cares for our children, and we appreciate the communication with families."</p>
+      <p>"Lorem ipsum dolor sit amet, sed do eiusmod tempor. Everyone really cares for our children, and we appreciate the communication."</p>
       <strong>Chestnut Square Parent</strong>
     </article>
     <article class="csa-quote-card">
-      <p>"It is a small center, and that personal attention is exactly what we were looking for."</p>
+      <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. It is a small center, and that personal attention is exactly what we wanted."</p>
       <strong>Chestnut Square Parent</strong>
     </article>
   </div>
@@ -1369,7 +1369,7 @@ function csa_lk_get_page_blueprints() {
 <section class="csa-shell csa-camp-stage">
   <article class="csa-camp-callout">
     <h3>Summer Learning Experiences</h3>
-    <p>Our summer season includes hands-on activities and themed classroom exploration designed for active learners.</p>
+    <p>Our summer season includes hands-on activities and themed classroom exploration designed for active learners. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
     <p><a class="csa-link-cta" href="/programs/">Learn About Summer Programs</a></p>
   </article>
 </section>
@@ -1826,6 +1826,7 @@ function csa_lk_register_shortcodes() {
 	add_shortcode( 'csa_map_embed', 'csa_lk_shortcode_map_embed' );
 	add_shortcode( 'csa_logo', 'csa_lk_shortcode_logo' );
 	add_shortcode( 'csa_vibe_photo', 'csa_lk_shortcode_vibe_photo' );
+	add_shortcode( 'csa_stock_photo', 'csa_lk_shortcode_stock_photo' );
 }
 add_action( 'init', 'csa_lk_register_shortcodes' );
 
@@ -1948,6 +1949,13 @@ function csa_lk_shortcode_email_link() {
  */
 function csa_lk_shortcode_map_embed() {
 	$src = csa_lk_get_business_option( 'csa_lk_business_map_embed' );
+	$address = csa_lk_get_business_option( 'csa_lk_business_address' );
+	$static  = csa_lk_get_theme_image_uri( 'map-placeholder.png' );
+	$link    = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode( $address );
+
+	if ( '' !== $static ) {
+		return '<a class="csa-map-link" href="' . esc_url( $link ) . '" target="_blank" rel="noopener noreferrer"><img class="csa-map-static" src="' . esc_url( $static ) . '" alt="Map showing the location of Chestnut Square Academy in Downtown McKinney" loading="eager" decoding="async" /></a>';
+	}
 
 	if ( empty( $src ) ) {
 		return '';
@@ -2008,6 +2016,41 @@ function csa_lk_shortcode_vibe_photo() {
 	}
 
 	return '<img class="csa-vibe-image" src="' . esc_url( $src ) . '" alt="Teacher and child participating in a hands-on classroom activity" loading="lazy" decoding="async" />';
+}
+
+/**
+ * Shortcode: stock photo placeholder.
+ *
+ * Usage: [csa_stock_photo id="1" alt="Classroom activity"]
+ *
+ * @param array<string,string> $atts Attributes.
+ * @return string
+ */
+function csa_lk_shortcode_stock_photo( $atts ) {
+	$atts = shortcode_atts(
+		array(
+			'id'  => '1',
+			'alt' => 'Classroom stock photo placeholder',
+		),
+		(array) $atts,
+		'csa_stock_photo'
+	);
+
+	$sources = array(
+		'1' => csa_lk_get_theme_image_uri( 'stock-1.jpg' ),
+		'2' => csa_lk_get_theme_image_uri( 'stock-2.jpg' ),
+		'3' => csa_lk_get_theme_image_uri( 'stock-3.jpg' ),
+		'4' => csa_lk_get_theme_image_uri( 'stock-4.jpg' ),
+	);
+
+	$key = isset( $sources[ $atts['id'] ] ) ? $atts['id'] : '1';
+	$src = $sources[ $key ];
+
+	if ( '' === $src ) {
+		$src = csa_lk_get_theme_image_uri( 'vibe.jpg' );
+	}
+
+	return '<img class="csa-stock-image" src="' . esc_url( $src ) . '" alt="' . esc_attr( $atts['alt'] ) . '" loading="eager" decoding="async" />';
 }
 
 /**
