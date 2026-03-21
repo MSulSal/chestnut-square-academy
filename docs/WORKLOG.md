@@ -60,3 +60,6 @@
 - feat(design): rebuilt child-theme CSS with a brighter, softer, more photo-friendly visual style and less template-like card treatment.
 - feat(ux): removed default Hello Elementor page-title output for static pages so duplicate top labels (like "Home") no longer appear above page content.
 - feat(navbar): replaced text-only site title in header with a circular logo treatment using the provided `logo.jpg` asset.
+- feat(design): added fingerpaint/watercolor-style faded background layers for a more playful daycare atmosphere.
+- feat(navbar): switched nav link typography to a thicker playful style (`Baloo 2`) with subtle crayon-like edge shadowing.
+- feat(navbar): adjusted circular logo crop/size positioning so the logo fills the navbar badge more naturally.

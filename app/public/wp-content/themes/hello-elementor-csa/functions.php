@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function csa_theme_enqueue_assets() {
 	wp_enqueue_style(
 		'csa-google-fonts',
-		'https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&family=Quicksand:wght@600;700&display=swap',
+		'https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Nunito+Sans:wght@400;600;700;800&family=Quicksand:wght@600;700&display=swap',
 		array(),
 		null
 	);
