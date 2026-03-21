@@ -1,0 +1,108 @@
+/* Overrides for WordPress/Elementor compatibility and missing icon-font fallbacks. */
+
+.kiddie-mock-site .site-main,
+.kiddie-mock-site .page-content,
+.kiddie-mock-site .entry-content,
+.kiddie-mock-site .elementor,
+.kiddie-mock-site .elementor-section-wrap {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.kiddie-mock-site .page-content p:last-child {
+  margin-bottom: 0;
+}
+
+.kiddie-mock-site main#main-content {
+  display: block;
+}
+
+.kiddie-mock-site body,
+.kiddie-mock-site {
+  background: #fff;
+}
+
+/* Header behavior fallbacks. */
+#header .search-nav {
+  display: none;
+}
+
+#header.search-open .search-nav {
+  display: block;
+}
+
+#header .submenu {
+  display: none;
+}
+
+#header .toplevel.has-child:hover + .submenu,
+#header li:hover > .submenu,
+#header li.submenu-open > .submenu {
+  display: block;
+}
+
+@media screen and (max-width: 1199px) {
+  #header .main-nav {
+    display: none;
+  }
+
+  body.mobile-menu-open #header .main-nav {
+    display: block;
+  }
+
+  body.mobile-menu-open #header .top-menu {
+    display: block;
+  }
+
+  body.mobile-menu-open #header .top-menu > li {
+    margin-bottom: 12px;
+  }
+}
+
+/* Fallback icon mapping when Kiddie icon font is unavailable. */
+.icon-search:before,
+.icon-facebook:before,
+.icon-twitter:before,
+.icon-x:before,
+.icon-youtube:before,
+.icon-instagram:before,
+.icon-map-marker:before,
+.icon-phone:before,
+.icon-calendar:before,
+.icon-chatbox:before,
+.icon-clock-o:before {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+}
+
+.icon-search:before { content: "\f002"; }
+.icon-map-marker:before { content: "\f3c5"; }
+.icon-phone:before { content: "\f095"; }
+.icon-calendar:before { content: "\f133"; }
+.icon-chatbox:before { content: "\f075"; }
+.icon-clock-o:before { content: "\f017"; }
+.icon-x:before { content: "\58"; font-family: inherit !important; font-weight: 900 !important; }
+
+.icon-facebook:before,
+.icon-youtube:before,
+.icon-instagram:before,
+.icon-twitter:before {
+  font-family: "Font Awesome 6 Brands" !important;
+  font-weight: 400 !important;
+}
+
+.icon-facebook:before { content: "\f39e"; }
+.icon-youtube:before { content: "\f167"; }
+.icon-instagram:before { content: "\f16d"; }
+.icon-twitter:before { content: "\e61b"; }
+
+/* Ensure lazy-loaded image placeholders render immediately in mock mode. */
+img.lazy[data-lazy-src]:not([src]) {
+  opacity: 1;
+}
+
+#scroll-top {
+  cursor: pointer;
+}

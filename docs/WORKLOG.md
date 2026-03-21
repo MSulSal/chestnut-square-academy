@@ -99,3 +99,12 @@
 - feat(content): injected selective lorem placeholder lines where source-supported details were unavailable.
 - feat(assets): added local stock placeholders (`stock-1.jpg` to `stock-4.jpg`) and local map visual asset (`map-placeholder.png`) for consistent rendering without external dependency.
 - feat(map): upgraded map shortcode to output a reliable local static map preview linked to live directions, with iframe fallback retained.
+- feat(reset): pivoted to a true scratch implementation path by deactivating `csa-launch-kit` and building in isolated `kiddie-mock` theme/plugin stack.
+- feat(reference): fetched live Kiddie Academy reference captures for Home, Programs, About, Contact, and Approach pages; extracted main/header/footer snippets for structural parity.
+- feat(theme): implemented new child theme `hello-elementor-kiddie-mock` with custom global header/footer, Hello template-part override, and full mock interaction script.
+- feat(theme): imported captured core visual system CSS (`kiddie-core.css`) and added compatibility/fallback overrides (`kiddie-overrides.css`) for icon fonts, menu toggles, and Elementor wrappers.
+- feat(plugin): built new plugin `kiddie-mock-seed` with one-click full-site page seeding, hierarchy routing (`academies/...` tree), and Elementor HTML-widget document generation for editability.
+- feat(content): seeded full multi-page mock tree (home, approach, programs, about, contact, academy/program detail pages, faq, and auxiliary nav/footer destinations) with localized internal links.
+- chore(runtime): activated `hello-elementor-kiddie-mock`, activated `kiddie-mock-seed`, and executed full reseed via WP-CLI under Local run config.
+- chore(qa): added Playwright render-pass captures for key pages (`home`, `our-curriculum`, `company`, `contact-us`, `approach`, `infant`) to validate cross-page structure after activation.
+- chore(repo): updated `.gitignore` to explicitly track the new mock theme/plugin paths and ignore transient `.npm-cache`.

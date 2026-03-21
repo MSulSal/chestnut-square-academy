@@ -1,0 +1,16 @@
+/*
+Theme Name: Hello Elementor Kiddie Mock
+Theme URI: https://example.local/kiddie-mock
+Description: Full-site Kiddie Academy style mock theme for Elementor-based frontend replication.
+Author: CSA Web Team
+Template: hello-elementor
+Version: 1.0.0
+Text Domain: hello-elementor-kiddie-mock
+*/
+
+:root {
+  --kiddie-navy: #1f2e57;
+  --kiddie-blue: #005cc4;
+  --kiddie-gold: #f2c638;
+  --kiddie-tan: #f5f1ec;
+}

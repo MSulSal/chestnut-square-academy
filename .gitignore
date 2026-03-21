@@ -1,6 +1,7 @@
 # LocalWP runtime/config artifacts
 /conf/
 /logs/
+/.npm-cache/
 
 # WordPress core (do not track in this project repo)
 /app/public/*
@@ -20,6 +21,10 @@
 !/app/public/wp-content/plugins/csa-launch-kit/**
 !/app/public/wp-content/themes/hello-elementor-csa/
 !/app/public/wp-content/themes/hello-elementor-csa/**
+!/app/public/wp-content/plugins/kiddie-mock-seed/
+!/app/public/wp-content/plugins/kiddie-mock-seed/**
+!/app/public/wp-content/themes/hello-elementor-kiddie-mock/
+!/app/public/wp-content/themes/hello-elementor-kiddie-mock/**
 
 # Keep docs and root project files
 !/docs/
