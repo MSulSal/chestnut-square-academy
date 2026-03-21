@@ -20,13 +20,14 @@ $realestate_url   = home_url( '/franchising/real-estate/' );
 $contact_url      = home_url( '/contact-us/' );
 $privacy_url      = home_url( '/privacy-policy/' );
 $terms_url        = home_url( '/terms-conditions/' );
+$footer_logo      = apply_filters( 'kms_asset_url', 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/2023-refresh/ka-logo-white-footer.svg', 'footer_logo' );
 ?>
 
 <footer id="footer" class="padding-top padding-bottom clearfix">
 	<div class="content-wrapper">
 		<div class="company-info">
 			<div class="logo">
-				<img src="https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/2023-refresh/ka-logo-white-footer.svg" alt="Kiddie Academy Educational Child Care">
+				<img src="<?php echo esc_url( $footer_logo ); ?>" alt="Kiddie Academy Educational Child Care">
 			</div>
 			<p>
 				<span class="bold">Corporate Headquarters</span><br>

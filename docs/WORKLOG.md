@@ -108,3 +108,7 @@
 - chore(runtime): activated `hello-elementor-kiddie-mock`, activated `kiddie-mock-seed`, and executed full reseed via WP-CLI under Local run config.
 - chore(qa): added Playwright render-pass captures for key pages (`home`, `our-curriculum`, `company`, `contact-us`, `approach`, `infant`) to validate cross-page structure after activation.
 - chore(repo): updated `.gitignore` to explicitly track the new mock theme/plugin paths and ignore transient `.npm-cache`.
+- feat(layout): removed residual Hello singular-content wrapper and reinforced full-width Elementor wrapper overrides to resolve the constrained center-column rendering.
+- feat(asset-manager): added `Appearance > Kiddie Mock Assets` with searchable image-slot table, live previews, media-library picker buttons, save/reset actions, and URL override persistence.
+- feat(asset-pipeline): wired theme header/footer logos into asset-slot filter keys so brand/logo swaps can be done from admin without code edits.
+- chore(qa): reran local Playwright screenshot captures after layout and asset-manager changes to validate render behavior.

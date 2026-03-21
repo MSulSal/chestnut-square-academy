@@ -15,6 +15,236 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Build a stable asset slot key from source URL.
+ *
+ * @param string $url Source URL.
+ * @return string
+ */
+function kms_build_asset_key( $url ) {
+	$path = wp_parse_url( $url, PHP_URL_PATH );
+	$base = is_string( $path ) ? pathinfo( $path, PATHINFO_FILENAME ) : '';
+	$base = sanitize_key( $base );
+
+	if ( '' === $base ) {
+		$base = 'asset';
+	}
+
+	return $base . '-' . substr( md5( $url ), 0, 6 );
+}
+
+/**
+ * Return manual asset slots used outside seeded page markup.
+ *
+ * @return array<string,string>
+ */
+function kms_get_theme_asset_defaults() {
+	return array(
+		'header_logo_desktop' => 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/kiddie-academy-logo.png',
+		'header_logo_mobile'  => 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/2023-refresh/kiddie-academy-logo-stacked.svg',
+		'footer_logo'         => 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/2023-refresh/ka-logo-white-footer.svg',
+	);
+}
+
+/**
+ * Scan seeded HTML templates for image/background URLs and build slot catalog.
+ *
+ * @return array<string,array<string,string>>
+ */
+function kms_get_template_asset_catalog() {
+	$catalog = array();
+	$files   = glob( plugin_dir_path( __FILE__ ) . 'templates/*.html' );
+
+	if ( ! is_array( $files ) ) {
+		return $catalog;
+	}
+
+	foreach ( $files as $file ) {
+		$raw = file_get_contents( $file );
+		if ( ! is_string( $raw ) || '' === $raw ) {
+			continue;
+		}
+
+		$matches = array();
+
+		preg_match_all( '/(?:src|data-lazy-src|data-lazy-srcset)\s*=\s*"([^"]+)"/i', $raw, $matches );
+		if ( ! empty( $matches[1] ) ) {
+			foreach ( $matches[1] as $url ) {
+				if ( ! is_string( $url ) || '' === $url || false === strpos( $url, 'http' ) ) {
+					continue;
+				}
+				$key             = kms_build_asset_key( $url );
+				$catalog[ $key ] = array(
+					'key'         => $key,
+					'default_url' => $url,
+					'label'       => basename( $file ) . ' / ' . $key,
+				);
+			}
+		}
+
+		$style_matches = array();
+		preg_match_all( '/background-image:\s*url\([\'"]([^\'"]+)[\'"]\)/i', $raw, $style_matches );
+		if ( ! empty( $style_matches[1] ) ) {
+			foreach ( $style_matches[1] as $url ) {
+				if ( ! is_string( $url ) || '' === $url || false === strpos( $url, 'http' ) ) {
+					continue;
+				}
+				$key             = kms_build_asset_key( $url );
+				$catalog[ $key ] = array(
+					'key'         => $key,
+					'default_url' => $url,
+					'label'       => basename( $file ) . ' / ' . $key,
+				);
+			}
+		}
+	}
+
+	return $catalog;
+}
+
+/**
+ * Return inline-builder image URLs that do not live in template files.
+ *
+ * @return array<string,array<string,string>>
+ */
+function kms_get_inline_asset_catalog() {
+	$urls = array(
+		'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1400&q=80' => 'Generic section image A',
+		'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1400&q=80' => 'Generic section image B',
+	);
+
+	$catalog = array();
+	foreach ( $urls as $url => $label ) {
+		$key             = kms_build_asset_key( $url );
+		$catalog[ $key ] = array(
+			'key'         => $key,
+			'default_url' => $url,
+			'label'       => $label,
+		);
+	}
+
+	return $catalog;
+}
+
+/**
+ * Return final asset slot catalog (theme + template + inline).
+ *
+ * @return array<string,array<string,string>>
+ */
+function kms_get_asset_catalog() {
+	$catalog = array();
+
+	foreach ( kms_get_theme_asset_defaults() as $key => $url ) {
+		$catalog[ $key ] = array(
+			'key'         => $key,
+			'default_url' => $url,
+			'label'       => 'Theme / ' . $key,
+		);
+	}
+
+	foreach ( kms_get_template_asset_catalog() as $key => $item ) {
+		$catalog[ $key ] = $item;
+	}
+
+	foreach ( kms_get_inline_asset_catalog() as $key => $item ) {
+		$catalog[ $key ] = $item;
+	}
+
+	ksort( $catalog );
+
+	return $catalog;
+}
+
+/**
+ * Get saved asset override map.
+ *
+ * @return array<string,string>
+ */
+function kms_get_asset_overrides() {
+	$value = get_option( 'kms_asset_overrides', array() );
+
+	return is_array( $value ) ? $value : array();
+}
+
+/**
+ * Set asset overrides.
+ *
+ * @param array<string,string> $overrides Override map.
+ */
+function kms_set_asset_overrides( $overrides ) {
+	update_option( 'kms_asset_overrides', $overrides );
+}
+
+/**
+ * Resolve asset URL by key with optional override.
+ *
+ * @param string $default_url Default URL.
+ * @param string $asset_key   Asset slot key.
+ * @return string
+ */
+function kms_resolve_asset_url( $default_url, $asset_key ) {
+	$overrides = kms_get_asset_overrides();
+
+	if ( isset( $overrides[ $asset_key ] ) && '' !== $overrides[ $asset_key ] ) {
+		return esc_url_raw( $overrides[ $asset_key ] );
+	}
+
+	return $default_url;
+}
+add_filter( 'kms_asset_url', 'kms_resolve_asset_url', 10, 2 );
+
+/**
+ * Replace template asset URLs in rendered markup using saved overrides.
+ *
+ * @param string $markup HTML markup.
+ * @return string
+ */
+function kms_replace_asset_urls_in_markup( $markup ) {
+	if ( ! is_string( $markup ) || '' === $markup ) {
+		return $markup;
+	}
+
+	$overrides = kms_get_asset_overrides();
+	if ( empty( $overrides ) ) {
+		return $markup;
+	}
+
+	foreach ( kms_get_asset_catalog() as $key => $item ) {
+		if ( empty( $item['default_url'] ) || empty( $overrides[ $key ] ) ) {
+			continue;
+		}
+
+		$markup = str_replace( $item['default_url'], esc_url_raw( $overrides[ $key ] ), $markup );
+	}
+
+	return $markup;
+}
+
+/**
+ * Filter post content for asset URL overrides.
+ *
+ * @param string $content Content.
+ * @return string
+ */
+function kms_filter_the_content_assets( $content ) {
+	return kms_replace_asset_urls_in_markup( $content );
+}
+add_filter( 'the_content', 'kms_filter_the_content_assets', 25 );
+
+/**
+ * Filter Elementor widget render output for asset URL overrides.
+ *
+ * @param string                    $content Content.
+ * @param \Elementor\Widget_Base    $widget  Widget instance.
+ * @return string
+ */
+function kms_filter_elementor_widget_assets( $content, $widget ) {
+	unset( $widget );
+
+	return kms_replace_asset_urls_in_markup( $content );
+}
+add_filter( 'elementor/widget/render_content', 'kms_filter_elementor_widget_assets', 10, 2 );
+
+/**
  * Return all seeded pages and hierarchy paths.
  *
  * @return array<int,array<string,string>>
@@ -524,9 +754,22 @@ function kms_activate() {
 register_activation_hook( __FILE__, 'kms_activate' );
 
 /**
- * Add tools page.
+ * Render a friendlier slot label for asset manager UI.
+ *
+ * @param string $raw_label Raw slot label.
+ * @return string
  */
-function kms_add_tools_page() {
+function kms_pretty_asset_label( $raw_label ) {
+	$label = str_replace( array( '-', '_', '/' ), ' ', (string) $raw_label );
+	$label = preg_replace( '/\s+/', ' ', $label );
+
+	return ucwords( trim( (string) $label ) );
+}
+
+/**
+ * Add admin pages.
+ */
+function kms_add_admin_pages() {
 	add_management_page(
 		'Kiddie Mock Seed',
 		'Kiddie Mock Seed',
@@ -534,8 +777,37 @@ function kms_add_tools_page() {
 		'kiddie-mock-seed',
 		'kms_render_tools_page'
 	);
+
+	add_theme_page(
+		'Kiddie Mock Assets',
+		'Kiddie Mock Assets',
+		'manage_options',
+		'kiddie-mock-assets',
+		'kms_render_assets_page'
+	);
 }
-add_action( 'admin_menu', 'kms_add_tools_page' );
+add_action( 'admin_menu', 'kms_add_admin_pages' );
+
+/**
+ * Load admin-side scripts for media picker on asset page.
+ *
+ * @param string $hook_suffix Current admin screen hook suffix.
+ */
+function kms_enqueue_admin_assets( $hook_suffix ) {
+	if ( 'appearance_page_kiddie-mock-assets' !== $hook_suffix ) {
+		return;
+	}
+
+	wp_enqueue_media();
+	wp_enqueue_script(
+		'kms-admin-assets',
+		plugin_dir_url( __FILE__ ) . 'assets/js/admin-assets.js',
+		array( 'jquery' ),
+		'1.0.0',
+		true
+	);
+}
+add_action( 'admin_enqueue_scripts', 'kms_enqueue_admin_assets' );
 
 /**
  * Handle tools form submit.
@@ -545,25 +817,88 @@ function kms_handle_tools_actions() {
 		return;
 	}
 
-	if ( ! isset( $_POST['kms_action'] ) || 'run_seed' !== $_POST['kms_action'] ) {
+	if ( ! isset( $_POST['kms_action'] ) ) {
 		return;
 	}
 
-	check_admin_referer( 'kms_run_seed' );
+	$action = sanitize_key( wp_unslash( $_POST['kms_action'] ) );
 
-	$overwrite = isset( $_POST['kms_overwrite'] ) && '1' === $_POST['kms_overwrite'];
-	kms_run_seed( $overwrite );
+	if ( 'run_seed' === $action ) {
+		check_admin_referer( 'kms_run_seed' );
 
-	$redirect = add_query_arg(
-		array(
-			'page'   => 'kiddie-mock-seed',
-			'kms_ok' => '1',
-		),
-		admin_url( 'tools.php' )
-	);
+		$overwrite = isset( $_POST['kms_overwrite'] ) && '1' === $_POST['kms_overwrite'];
+		kms_run_seed( $overwrite );
 
-	wp_safe_redirect( $redirect );
-	exit;
+		$redirect = add_query_arg(
+			array(
+				'page'   => 'kiddie-mock-seed',
+				'kms_ok' => '1',
+			),
+			admin_url( 'tools.php' )
+		);
+
+		wp_safe_redirect( $redirect );
+		exit;
+	}
+
+	if ( 'save_assets' === $action ) {
+		check_admin_referer( 'kms_save_assets' );
+
+		$catalog   = kms_get_asset_catalog();
+		$submitted = array();
+		$overrides = array();
+
+		if ( isset( $_POST['kms_assets'] ) && is_array( $_POST['kms_assets'] ) ) {
+			$submitted = wp_unslash( $_POST['kms_assets'] );
+		}
+
+		foreach ( $catalog as $key => $item ) {
+			unset( $item );
+
+			if ( ! isset( $submitted[ $key ] ) ) {
+				continue;
+			}
+
+			$raw_value = trim( (string) $submitted[ $key ] );
+			if ( '' === $raw_value ) {
+				continue;
+			}
+
+			$url = esc_url_raw( $raw_value );
+			if ( '' !== $url ) {
+				$overrides[ $key ] = $url;
+			}
+		}
+
+		kms_set_asset_overrides( $overrides );
+
+		$redirect = add_query_arg(
+			array(
+				'page'          => 'kiddie-mock-assets',
+				'kms_assets_ok' => '1',
+			),
+			admin_url( 'themes.php' )
+		);
+
+		wp_safe_redirect( $redirect );
+		exit;
+	}
+
+	if ( 'reset_assets' === $action ) {
+		check_admin_referer( 'kms_reset_assets' );
+		kms_set_asset_overrides( array() );
+
+		$redirect = add_query_arg(
+			array(
+				'page'             => 'kiddie-mock-assets',
+				'kms_assets_reset' => '1',
+			),
+			admin_url( 'themes.php' )
+		);
+
+		wp_safe_redirect( $redirect );
+		exit;
+	}
 }
 add_action( 'admin_init', 'kms_handle_tools_actions' );
 
@@ -584,6 +919,119 @@ function kms_render_tools_page() {
 			<input type="hidden" name="kms_action" value="run_seed">
 			<p><label><input type="checkbox" name="kms_overwrite" value="1" checked> Overwrite existing page content</label></p>
 			<p><button type="submit" class="button button-primary">Run Full Mock Seed</button></p>
+		</form>
+	</div>
+	<?php
+}
+
+/**
+ * Render asset replacement page for non-technical client handoff.
+ */
+function kms_render_assets_page() {
+	$catalog   = kms_get_asset_catalog();
+	$overrides = kms_get_asset_overrides();
+	$saved     = isset( $_GET['kms_assets_ok'] ) && '1' === $_GET['kms_assets_ok'];
+	$reset     = isset( $_GET['kms_assets_reset'] ) && '1' === $_GET['kms_assets_reset'];
+	?>
+	<div class="wrap">
+		<h1>Kiddie Mock Assets</h1>
+
+		<?php if ( $saved ) : ?>
+			<div class="notice notice-success"><p>Asset replacements saved.</p></div>
+		<?php endif; ?>
+
+		<?php if ( $reset ) : ?>
+			<div class="notice notice-warning"><p>Asset replacements were reset to defaults.</p></div>
+		<?php endif; ?>
+
+		<p>
+			Use this screen to swap images without touching layout code.
+			Your client can update media here and keep the full mock design intact.
+		</p>
+
+		<p>
+			<input type="search" id="kms-asset-search" class="regular-text" placeholder="Filter assets by name...">
+			<span class="description">Total slots: <?php echo esc_html( (string) count( $catalog ) ); ?></span>
+		</p>
+
+		<form method="post">
+			<?php wp_nonce_field( 'kms_save_assets' ); ?>
+			<input type="hidden" name="kms_action" value="save_assets">
+
+			<table class="widefat striped">
+				<thead>
+					<tr>
+						<th style="width: 20%;">Asset Slot</th>
+						<th style="width: 20%;">Preview</th>
+						<th>Replacement URL (optional)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $catalog as $key => $item ) : ?>
+						<?php
+						$default_url = isset( $item['default_url'] ) ? (string) $item['default_url'] : '';
+						$current_url = isset( $overrides[ $key ] ) ? (string) $overrides[ $key ] : '';
+						$preview_url = '' !== $current_url ? $current_url : $default_url;
+						$label_raw   = isset( $item['label'] ) ? (string) $item['label'] : $key;
+						$label       = kms_pretty_asset_label( $label_raw );
+						$field_id    = 'kms_asset_' . $key;
+						$preview_id  = 'kms_preview_' . $key;
+						?>
+						<tr data-kms-row data-kms-label="<?php echo esc_attr( strtolower( $label . ' ' . $key ) ); ?>">
+							<td>
+								<strong><?php echo esc_html( $label ); ?></strong><br>
+								<code><?php echo esc_html( $key ); ?></code>
+							</td>
+							<td>
+								<img
+									id="<?php echo esc_attr( $preview_id ); ?>"
+									src="<?php echo esc_url( $preview_url ); ?>"
+									alt="<?php echo esc_attr( $label ); ?>"
+									style="width: 160px; height: 100px; object-fit: cover; border: 1px solid #dcdcde; border-radius: 4px; background: #f6f7f7;"
+								>
+							</td>
+							<td>
+								<input
+									type="url"
+									id="<?php echo esc_attr( $field_id ); ?>"
+									name="kms_assets[<?php echo esc_attr( $key ); ?>]"
+									value="<?php echo esc_attr( $current_url ); ?>"
+									placeholder="<?php echo esc_attr( $default_url ); ?>"
+									class="regular-text code"
+									style="width: 100%; max-width: 780px;"
+								>
+								<p class="description">Default source:
+									<a href="<?php echo esc_url( $default_url ); ?>" target="_blank" rel="noopener noreferrer">open</a>
+								</p>
+								<p>
+									<button
+										type="button"
+										class="button kms-select-media"
+										data-target="<?php echo esc_attr( $field_id ); ?>"
+										data-preview="<?php echo esc_attr( $preview_id ); ?>"
+									>Choose from Media Library</button>
+									<button
+										type="button"
+										class="button kms-clear-media"
+										data-target="<?php echo esc_attr( $field_id ); ?>"
+										data-preview="<?php echo esc_attr( $preview_id ); ?>"
+									>Clear</button>
+								</p>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+
+			<p style="margin-top: 16px;">
+				<button type="submit" class="button button-primary">Save Asset Replacements</button>
+			</p>
+		</form>
+
+		<form method="post" style="margin-top: 8px;">
+			<?php wp_nonce_field( 'kms_reset_assets' ); ?>
+			<input type="hidden" name="kms_action" value="reset_assets">
+			<button type="submit" class="button">Reset All to Default Sources</button>
 		</form>
 	</div>
 	<?php

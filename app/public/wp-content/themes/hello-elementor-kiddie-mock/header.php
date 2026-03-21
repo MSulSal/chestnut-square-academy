@@ -44,8 +44,11 @@ $pre_kindergarten_url     = home_url( '/academies/programs/pre-kindergarten/' );
 $kindergarten_url         = home_url( '/academies/programs/kindergarten/' );
 $school_age_url           = home_url( '/academies/programs/school-age-programs/' );
 $summer_camp_url          = home_url( '/academies/programs/summer-camp/' );
-$desktop_logo             = 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/kiddie-academy-logo.png';
-$mobile_logo              = 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/2023-refresh/kiddie-academy-logo-stacked.svg';
+$request_info_url         = home_url( '/contact-us/' );
+$desktop_logo_default     = 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/kiddie-academy-logo.png';
+$mobile_logo_default      = 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/2023-refresh/kiddie-academy-logo-stacked.svg';
+$desktop_logo             = apply_filters( 'kms_asset_url', $desktop_logo_default, 'header_logo_desktop' );
+$mobile_logo              = apply_filters( 'kms_asset_url', $mobile_logo_default, 'header_logo_mobile' );
 ?>
 
 <header id="header" class="">
@@ -125,7 +128,7 @@ $mobile_logo              = 'https://kiddieacademy.com/wp-content/themes/kiddiea
 						</a>
 					</div>
 					<div class="find-button">
-						<a href="<?php echo esc_url( $academies_url ); ?>" class="button-round" aria-label="Find Your Academy - View All Academies">Find Your Academy</a>
+						<a href="<?php echo esc_url( $request_info_url ); ?>" class="button-round" aria-label="Request Info">Request Info</a>
 					</div>
 					<div class="expand-button mobile-button">
 						<span class="toplevel">
@@ -141,7 +144,7 @@ $mobile_logo              = 'https://kiddieacademy.com/wp-content/themes/kiddiea
 
 				<div id="compact-menu">
 					<div class="container">
-						<a href="<?php echo esc_url( $academies_url ); ?>" class="button-round shadow" aria-label="Find Your Academy - View All Academies">Find Your Academy</a>
+						<a href="<?php echo esc_url( $request_info_url ); ?>" class="button-round shadow" aria-label="Request Info">Request Info</a>
 						<div class="expand-button-desktop">
 							<span class="toplevel">
 								<input type="checkbox" id="compact_menu_checkbox">

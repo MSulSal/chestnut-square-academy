@@ -11,6 +11,20 @@
   padding: 0;
 }
 
+.kiddie-mock-site .elementor-section.elementor-section-boxed > .elementor-container,
+.kiddie-mock-site .elementor-top-section > .elementor-container,
+.kiddie-mock-site .elementor-post__content,
+.kiddie-mock-site .elementor-widget-wrap,
+.kiddie-mock-site .elementor-widget-html,
+.kiddie-mock-site .elementor-widget-html .elementor-widget-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+.kiddie-mock-site .elementor-column-gap-default > .elementor-column > .elementor-element-populated {
+  padding: 0;
+}
+
 .kiddie-mock-site .page-content p:last-child {
   margin-bottom: 0;
 }

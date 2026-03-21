@@ -12,8 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 while ( have_posts() ) :
 	the_post();
 	?>
-	<div id="content" <?php post_class( 'site-main' ); ?>>
-		<?php the_content(); ?>
-	</div>
+	<?php the_content(); ?>
 	<?php
 endwhile;
