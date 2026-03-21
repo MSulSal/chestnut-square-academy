@@ -1,0 +1,52 @@
+# Phase 2: Elementor Implementation Setup
+
+Date: March 21, 2026
+
+## What was implemented
+- Elementor plugin downloaded into `wp-content/plugins/elementor`.
+- Hello Elementor theme downloaded into `wp-content/themes/hello-elementor`.
+- Child theme added: `wp-content/themes/hello-elementor-csa`.
+- Launch plugin added: `wp-content/plugins/csa-launch-kit`.
+
+## What the child theme includes
+- Brand color tokens and typography (Fraunces + Nunito Sans).
+- Mobile-first layout utility classes used in starter page content.
+- CTA/button styles, cards, quick-facts grid, notes, map block, and form styling.
+
+## What the launch plugin includes
+- One-click setup tool at `Tools > CSA Launch Kit`.
+- Starter page generation for:
+- Home
+- About
+- Programs
+- Gallery
+- FAQ
+- Contact / Schedule a Tour
+- Menu generation and assignment to Hello Elementor header/footer locations.
+- Homepage assignment to the generated Home page.
+- Built-in shortcode form: `[csa_schedule_tour_form]`.
+- Tour request storage as private admin entries (`Tour Requests` post type).
+- Email notifications for new form submissions.
+- Form settings page at `Settings > CSA Tour Form`.
+
+## Exact activation sequence
+1. Activate theme `Hello Elementor CSA`.
+2. Activate plugin `Elementor`.
+3. Activate plugin `CSA Launch Kit`.
+4. Go to `Tools > CSA Launch Kit` and click `Run Starter Setup`.
+5. Go to `Settings > CSA Tour Form` and set notification email + confirmation text.
+6. Open each generated page in Elementor and finalize layout/content.
+
+## Required post-setup edits
+- Replace all `[VERIFY]` placeholders.
+- Replace all `[DO NOT PUBLISH UNTIL CONFIRMED]` blocks with confirmed facts.
+- Set real phone/email/hours in visible page sections.
+- Replace placeholder media with approved real photos.
+- Test map, links, form submission, and notification inbox delivery.
+
+## Elementor resume notes
+- This implementation is intentionally Elementor-compatible and includes Elementor + Hello Elementor in the stack.
+- Generated pages can be opened directly in Elementor for visual customization and portfolio screenshots.
+
+## Known constraints in this environment
+- WP-CLI and PHP binaries are not available in this shell path, so activation/setup must be run through WordPress Admin UI.

@@ -1,0 +1,170 @@
+/*
+Theme Name: Hello Elementor CSA
+Theme URI: https://chestnutsquareacademy.local
+Description: Chestnut Square Academy child theme for Hello Elementor.
+Author: CSA Web Team
+Template: hello-elementor
+Version: 1.0.0
+Text Domain: hello-elementor-csa
+*/
+
+:root {
+  --csa-chestnut: #7a4b2c;
+  --csa-cream: #fff7ef;
+  --csa-sage: #b8c9b1;
+  --csa-sky: #dceffb;
+  --csa-marigold: #f4c567;
+  --csa-ink: #24313a;
+  --csa-white: #ffffff;
+  --csa-radius-sm: 10px;
+  --csa-radius-md: 16px;
+  --csa-radius-lg: 24px;
+  --csa-shadow: 0 10px 30px rgba(36, 49, 58, 0.08);
+}
+
+body {
+  background: linear-gradient(180deg, var(--csa-cream) 0%, #fffdf9 100%);
+  color: var(--csa-ink);
+  font-family: "Nunito Sans", Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--csa-ink);
+  font-family: "Fraunces", Georgia, serif;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+a {
+  color: var(--csa-chestnut);
+}
+
+a:hover,
+a:focus {
+  color: #5f391f;
+}
+
+.csa-shell {
+  margin: 0 auto;
+  max-width: 1140px;
+  padding: clamp(24px, 4vw, 56px) clamp(16px, 3vw, 24px);
+}
+
+.csa-hero {
+  background:
+    radial-gradient(circle at 85% 15%, rgba(244, 197, 103, 0.35), transparent 45%),
+    radial-gradient(circle at 15% 85%, rgba(184, 201, 177, 0.4), transparent 45%),
+    var(--csa-cream);
+  border-radius: var(--csa-radius-lg);
+  box-shadow: var(--csa-shadow);
+  padding: clamp(20px, 3vw, 36px);
+}
+
+.csa-quickfacts {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  margin: 24px 0;
+}
+
+.csa-fact,
+.csa-card {
+  background: var(--csa-white);
+  border: 1px solid rgba(36, 49, 58, 0.1);
+  border-radius: var(--csa-radius-md);
+  box-shadow: var(--csa-shadow);
+  padding: 18px;
+}
+
+.csa-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.csa-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.csa-btn,
+button,
+input[type="submit"] {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  min-height: 44px;
+  padding: 12px 20px;
+  text-decoration: none;
+}
+
+.csa-btn-primary {
+  background: var(--csa-chestnut);
+  color: var(--csa-white);
+}
+
+.csa-btn-secondary {
+  background: var(--csa-marigold);
+  color: var(--csa-ink);
+}
+
+.csa-note {
+  border-left: 4px solid var(--csa-marigold);
+  margin: 16px 0;
+  padding: 8px 12px;
+  background: #fff9e7;
+}
+
+.csa-map {
+  border: 0;
+  border-radius: var(--csa-radius-md);
+  min-height: 280px;
+  width: 100%;
+}
+
+.csa-form {
+  display: grid;
+  gap: 12px;
+}
+
+.csa-form label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.csa-form input,
+.csa-form select,
+.csa-form textarea {
+  border: 1px solid rgba(36, 49, 58, 0.25);
+  border-radius: 10px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 3px solid var(--csa-sky);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 17px;
+  }
+}
