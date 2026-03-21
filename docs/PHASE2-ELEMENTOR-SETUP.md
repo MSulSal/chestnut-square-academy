@@ -23,6 +23,9 @@ Date: March 21, 2026
 - Gallery
 - FAQ
 - Contact / Schedule a Tour
+- Careers (optional)
+- Parent Resources (optional)
+- Privacy Policy
 - Menu generation and assignment to Hello Elementor header/footer locations.
 - Homepage assignment to the generated Home page.
 - Built-in shortcode form: `[csa_schedule_tour_form]`.

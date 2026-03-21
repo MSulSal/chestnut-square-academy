@@ -9,6 +9,8 @@ Elementor-friendly WordPress build package for Chestnut Square Academy.
 - Hello Elementor child theme: `app/public/wp-content/themes/hello-elementor-csa`
 - Launch/setup plugin: `app/public/wp-content/plugins/csa-launch-kit`
 
+Starter setup now creates required pages plus optional `Careers`, `Parent Resources`, and `Privacy Policy` pages.
+
 ## Quick Start (LocalWP)
 1. Start the site in LocalWP.
 2. In WordPress Admin, go to `Appearance > Themes` and activate `Hello Elementor CSA`.

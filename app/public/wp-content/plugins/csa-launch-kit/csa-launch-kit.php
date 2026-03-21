@@ -285,6 +285,15 @@ function csa_lk_render_tools_page() {
 		<?php endif; ?>
 
 		<h3>Page Placeholder Checks</h3>
+		<?php if ( ! empty( $audit['missing_pages'] ) ) : ?>
+			<p><strong>Missing Required Pages:</strong></p>
+			<ul>
+				<?php foreach ( $audit['missing_pages'] as $missing_page ) : ?>
+					<li><?php echo esc_html( $missing_page ); ?></li>
+				<?php endforeach; ?>
+			</ul>
+		<?php endif; ?>
+
 		<?php if ( empty( $audit['page_issues'] ) ) : ?>
 			<p>No placeholder tokens were found in core pages.</p>
 		<?php else : ?>
@@ -328,6 +337,7 @@ function csa_lk_render_tools_page() {
 function csa_lk_get_publish_audit() {
 	$business_issues = array();
 	$page_issues     = array();
+	$missing_pages   = array();
 	$blocking_count  = 0;
 
 	$required_fields = array(
@@ -358,6 +368,8 @@ function csa_lk_get_publish_audit() {
 	foreach ( $core_slugs as $slug ) {
 		$page = get_page_by_path( $slug, OBJECT, 'page' );
 		if ( ! $page ) {
+			$missing_pages[] = ucfirst( str_replace( '-', ' ', $slug ) );
+			++$blocking_count;
 			continue;
 		}
 
@@ -379,6 +391,7 @@ function csa_lk_get_publish_audit() {
 	return array(
 		'business_issues' => $business_issues,
 		'page_issues'     => $page_issues,
+		'missing_pages'   => $missing_pages,
 		'blocking_count'  => $blocking_count,
 	);
 }
@@ -802,6 +815,39 @@ HTML;
 </section>
 HTML;
 
+	$careers = <<<HTML
+<section class="csa-shell">
+  <h1>Careers</h1>
+  <p>Interested in joining our team? We would love to hear from caring, dependable early childhood professionals.</p>
+  <p>[DO NOT PUBLISH UNTIL CONFIRMED] Add current hiring status, role openings, and application email.</p>
+  <p><strong>Application Contact:</strong> [csa_email_link]</p>
+  <p><strong>Phone:</strong> [csa_phone_link]</p>
+</section>
+HTML;
+
+	$parent_resources = <<<HTML
+<section class="csa-shell">
+  <h1>Parent Resources</h1>
+  <p>This page can be used for calendars, parent reminders, required forms, and policy updates.</p>
+  <ul>
+    <li>[OPTIONAL] Monthly calendar PDF link</li>
+    <li>[OPTIONAL] Parent handbook link</li>
+    <li>[OPTIONAL] Holiday closure schedule</li>
+    <li>[OPTIONAL] Illness policy reminders</li>
+  </ul>
+  <p>[DO NOT PUBLISH UNTIL CONFIRMED] Add only current and approved resources.</p>
+</section>
+HTML;
+
+	$privacy = <<<HTML
+<section class="csa-shell">
+  <h1>Privacy Policy</h1>
+  <p>Chestnut Square Academy respects your privacy. Information submitted through this website is used only to respond to inquiries and tour requests.</p>
+  <p>We do not sell personal information to third parties.</p>
+  <p>[DO NOT PUBLISH UNTIL CONFIRMED] Replace this starter policy with your approved final policy text.</p>
+</section>
+HTML;
+
 	return array(
 		'home'                     => array(
 			'title'   => 'Home',
@@ -826,6 +872,18 @@ HTML;
 		'contact-schedule-a-tour'  => array(
 			'title'   => 'Contact / Schedule a Tour',
 			'content' => $contact,
+		),
+		'careers'                  => array(
+			'title'   => 'Careers',
+			'content' => $careers,
+		),
+		'parent-resources'         => array(
+			'title'   => 'Parent Resources',
+			'content' => $parent_resources,
+		),
+		'privacy-policy'           => array(
+			'title'   => 'Privacy Policy',
+			'content' => $privacy,
 		),
 	);
 }
