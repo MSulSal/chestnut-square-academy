@@ -49,6 +49,23 @@ function csa_lk_get_business_option( $key ) {
 }
 
 /**
+ * Get normalized business profile data.
+ *
+ * @return array<string,string>
+ */
+function csa_lk_get_business_profile_data() {
+	return array(
+		'name'        => csa_lk_get_business_option( 'csa_lk_business_name' ),
+		'address'     => csa_lk_get_business_option( 'csa_lk_business_address' ),
+		'phone'       => csa_lk_get_business_option( 'csa_lk_business_phone' ),
+		'email'       => csa_lk_get_business_option( 'csa_lk_business_email' ),
+		'hours'       => csa_lk_get_business_option( 'csa_lk_business_hours' ),
+		'map_embed'   => csa_lk_get_business_option( 'csa_lk_business_map_embed' ),
+		'description' => csa_lk_get_business_option( 'csa_lk_business_description' ),
+	);
+}
+
+/**
  * Check if value still contains unresolved verification tokens.
  *
  * @param string $value Field value.
@@ -643,6 +660,8 @@ function csa_lk_render_settings_page() {
  * Render business profile settings page.
  */
 function csa_lk_render_business_settings_page() {
+	$profile = csa_lk_get_business_profile_data();
+	$nap     = "Name: {$profile['name']}\nAddress: {$profile['address']}\nPhone: {$profile['phone']}";
 	?>
 	<div class="wrap">
 		<h1>CSA Business Profile</h1>
@@ -681,6 +700,15 @@ function csa_lk_render_business_settings_page() {
 			</table>
 			<?php submit_button(); ?>
 		</form>
+
+		<hr />
+		<h2>Citation Copy Block</h2>
+		<p>Use this exact NAP block for Google Business Profile and directory consistency.</p>
+		<textarea class="large-text code" rows="4" readonly><?php echo esc_textarea( $nap ); ?></textarea>
+
+		<h2>Business Profile JSON (Reference)</h2>
+		<p>Use this for documentation and migration records.</p>
+		<textarea class="large-text code" rows="10" readonly><?php echo esc_textarea( wp_json_encode( $profile, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) ); ?></textarea>
 	</div>
 	<?php
 }
@@ -1323,17 +1351,19 @@ function csa_lk_output_localbusiness_schema() {
 		}
 	}
 
+	$profile = csa_lk_get_business_profile_data();
+
 	$schema = array(
 		'@context'    => 'https://schema.org',
 		'@type'       => 'ChildCare',
-		'name'        => csa_lk_get_business_option( 'csa_lk_business_name' ),
+		'name'        => $profile['name'],
 		'url'         => home_url( '/' ),
-		'telephone'   => csa_lk_get_business_option( 'csa_lk_business_phone' ),
-		'email'       => csa_lk_get_business_option( 'csa_lk_business_email' ),
-		'description' => csa_lk_get_business_option( 'csa_lk_business_description' ),
+		'telephone'   => $profile['phone'],
+		'email'       => $profile['email'],
+		'description' => $profile['description'],
 		'address'     => array(
 			'@type'         => 'PostalAddress',
-			'streetAddress' => csa_lk_get_business_option( 'csa_lk_business_address' ),
+			'streetAddress' => $profile['address'],
 		),
 	);
 

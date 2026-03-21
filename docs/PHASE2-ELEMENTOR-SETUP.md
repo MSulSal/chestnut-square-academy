@@ -39,6 +39,7 @@ Date: March 21, 2026
 - Email notifications for new form submissions.
 - Form settings page at `Settings > CSA Tour Form`.
 - Business profile settings page at `Settings > CSA Business Profile`.
+- Citation copy block + JSON reference on Business Profile settings for consistent NAP updates across directories.
 - Reusable shortcodes for centralized profile fields:
 - `[csa_address]`
 - `[csa_phone_link]`
