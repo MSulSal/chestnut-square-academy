@@ -12,8 +12,8 @@ Use this map to fill in real business data without developer help.
 |---|---|---|---|
 | Business Name | `Chestnut Square Academy` | Schema/citations/profile references | `Settings > CSA Business Profile` |
 | Address | `402 S Chestnut St, McKinney, TX 75069` | Contact page, quick facts, citation block | `Settings > CSA Business Profile` |
-| Phone | `(972) 555-0123` | Call buttons, contact details, phone links | `Settings > CSA Business Profile` |
-| Public Email | `director@example.com` | Contact page and email links | `Settings > CSA Business Profile` |
+| Phone | `(972) 369-7512 [VERIFY]` | Call buttons, contact details, phone links | `Settings > CSA Business Profile` |
+| Public Email | `director@yourdomain.com [VERIFY]` | Contact page and email links | `Settings > CSA Business Profile` |
 | Hours | `Monday-Friday, 6:00 AM-6:00 PM` | Home quick facts, contact page, FAQ references | `Settings > CSA Business Profile` |
 | Map Embed URL | `https://www.google.com/maps?q=...&output=embed` | Contact page map | `Settings > CSA Business Profile` |
 | Business Description | `Trusted early learning...` | LocalBusiness schema description | `Settings > CSA Business Profile` |

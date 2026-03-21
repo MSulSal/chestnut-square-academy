@@ -22,6 +22,7 @@ Date: March 21, 2026
 ## What the launch plugin includes
 - One-click setup tool at `Tools > CSA Launch Kit`.
 - One-click recommended plugin activation button in `Tools > CSA Launch Kit`.
+- Explicit "current phase" note in launch tools so owners know the generated result is scaffold-first, with final visual polish done in Elementor.
 - Owner data entry map table in `Tools > CSA Launch Kit` with examples and edit locations.
 - Preflight audit panel in `Tools > CSA Launch Kit` that counts unresolved `[VERIFY]` and `[DO NOT PUBLISH UNTIL CONFIRMED]` markers.
 - One-click preflight report download (`.txt`) from `Tools > CSA Launch Kit` for owner/client handoff records.
@@ -45,6 +46,7 @@ Date: March 21, 2026
 - Menu generation and assignment to Hello Elementor header/footer locations.
 - Homepage assignment to the generated Home page.
 - Built-in shortcode form: `[csa_schedule_tour_form]`.
+- Seeded draft copy that blends public listing signals with `[VERIFY]` gates for safe owner handoff.
 - Tour request storage as private admin entries (`Tour Requests` post type).
 - Email notifications for new form submissions.
 - Form settings page at `Settings > CSA Tour Form`.
@@ -84,5 +86,5 @@ Date: March 21, 2026
 - This implementation is intentionally Elementor-compatible and includes Elementor + Hello Elementor in the stack.
 - Generated pages can be opened directly in Elementor for visual customization and portfolio screenshots.
 
-## Known constraints in this environment
-- WP-CLI and PHP binaries are not available in this shell path, so activation/setup must be run through WordPress Admin UI.
+## Runtime note
+- Local runtime activation and setup can be executed either in WordPress Admin UI or via Local-bundled WP-CLI/PHP paths.

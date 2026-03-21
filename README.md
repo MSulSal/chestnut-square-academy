@@ -13,6 +13,7 @@ Elementor-friendly WordPress build package for Chestnut Square Academy.
 - Non-technical owner guide: `docs/OWNER-QUICK-GUIDE.md`
 - Owner data entry map: `docs/OWNER-DATA-ENTRY-MAP.md`
 - InstaWP owner rehearsal plan: `docs/INSTAWP-OWNER-TEST-RUN.md`
+- Content source notes for seeded copy: `docs/CONTENT-SOURCE-NOTES.md`
 - Hello Elementor child theme: `app/public/wp-content/themes/hello-elementor-csa`
 - Launch/setup plugin: `app/public/wp-content/plugins/csa-launch-kit`
 - Launch kit release notes: `docs/CSA-LAUNCH-KIT-CHANGELOG.md`
@@ -21,6 +22,11 @@ Starter setup now creates required pages plus optional `Careers`, `Parent Resour
 The launch kit also outputs LocalBusiness + FAQ schema automatically when fields/content are publish-ready.
 Schema output can be toggled in `Settings > CSA Business Profile` to avoid duplicate schema with SEO plugins.
 Business Profile settings include a copy-ready NAP block and JSON reference for citation cleanup.
+
+## Current Build Phase
+- The current generated site is a structured scaffold, not the final visual finish.
+- It now includes richer location-based starter copy seeded from public listing signals and clearly marked `[VERIFY]` gates.
+- Final polished appearance and section composition are completed in Elementor during Phase 2.
 
 ## Quick Start (LocalWP)
 1. Start the site in LocalWP.

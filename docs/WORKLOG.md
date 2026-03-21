@@ -41,3 +41,10 @@
 - chore(runtime): activated theme/plugin stack via Local WP-CLI runtime (Elementor, CSA Launch Kit, Yoast SEO, UpdraftPlus, WP Mail SMTP, Fluent Forms, Solid Security).
 - chore(runtime): executed launch-kit setup seed in WordPress, set permalink structure to `/%postname%/`, set `blog_public=0` (staging noindex), and removed default Sample Page.
 - chore(runtime): verified current launch-kit audit remains non-zero (`blocking=34`), confirming unresolved `[VERIFY]` and factual gates are still correctly enforced.
+- feat(content): upgraded seeded page blueprints with richer location-based draft copy (home/about/programs/gallery/faq/contact) so staging preview feels populated instead of thin placeholder text.
+- feat(guardrails): updated starter business defaults to force public email verification and include a candidate public phone format with `[VERIFY]` token.
+- feat(ux): added explicit launch-tools phase note clarifying that generated output is scaffold-first and final appearance is completed in Elementor.
+- docs(traceability): added `docs/CONTENT-SOURCE-NOTES.md` documenting public source signals and how substitute copy was derived.
+- docs(update): refreshed README and phase-2 setup notes to reflect scaffold-vs-polish workflow and current runtime capabilities.
+- chore(runtime): re-ran starter setup with overwrite to apply upgraded seeded copy directly into existing Local WordPress pages for immediate preview.
+- chore(runtime): confirmed launch preflight blocker count now reflects expanded verification gates (`blocking=47`), indicating unresolved facts are still correctly blocked from publish.

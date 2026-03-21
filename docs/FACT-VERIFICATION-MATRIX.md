@@ -5,7 +5,7 @@ Use this checklist as the final truth gate before turning indexing on in product
 ## Required Verifications
 | Item | Current Placeholder State | Owner Confirmation Needed | Status |
 |---|---|---|---|
-| Public phone number | `[VERIFY PHONE]` | Confirm primary line for website CTA and GBP | Pending |
+| Public phone number | `(972) 369-7512 [VERIFY]` | Confirm primary line for website CTA and GBP | Pending |
 | Public email | `[VERIFY]` | Confirm inbox for tours and parent inquiries | Pending |
 | Address format | `402 S Chestnut St, McKinney, TX 75069 [VERIFY]` | Confirm exact postal format and map pin location | Pending |
 | Hours | `Monday-Friday, 6:00 AM-6:00 PM [VERIFY]` | Confirm operating hours + holiday exceptions | Pending |

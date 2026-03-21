@@ -1,5 +1,12 @@
 # CSA Launch Kit Changelog
 
+## 1.6.0 - 2026-03-21
+- Updated seeded page blueprints (Home/About/Programs/Gallery/FAQ/Contact) with richer draft copy driven by public McKinney listing signals.
+- Added clearer public-signal placeholders (hours, age ranges, program hints, Texas Rising Star wording) while preserving strict `[VERIFY]` gating.
+- Updated default business profile placeholders to include a candidate public phone format with verification token and a forced-verify public email.
+- Added launch-tools phase/status messaging so owners understand the current output is scaffold-first and final visual polish happens in Elementor.
+- Added source-trace documentation in `docs/CONTENT-SOURCE-NOTES.md` for auditability of seeded substitute content.
+
 ## 1.5.0 - 2026-03-21
 - Added owner-facing data entry map in `Tools > CSA Launch Kit` with field examples and edit locations.
 - Added example placeholders and clearer field descriptions in `Settings > CSA Business Profile` and `Settings > CSA Tour Form`.
