@@ -21,6 +21,7 @@ Date: March 21, 2026
 
 ## What the launch plugin includes
 - One-click setup tool at `Tools > CSA Launch Kit`.
+- One-click recommended plugin activation button in `Tools > CSA Launch Kit`.
 - Preflight audit panel in `Tools > CSA Launch Kit` that counts unresolved `[VERIFY]` and `[DO NOT PUBLISH UNTIL CONFIRMED]` markers.
 - One-click preflight report download (`.txt`) from `Tools > CSA Launch Kit` for owner/client handoff records.
 - One-click indexing mode toggles in `Tools > CSA Launch Kit`:

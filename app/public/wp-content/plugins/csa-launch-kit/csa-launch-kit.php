@@ -66,6 +66,20 @@ function csa_lk_get_business_profile_data() {
 }
 
 /**
+ * Get recommended plugin map.
+ *
+ * @return array<string,string>
+ */
+function csa_lk_get_recommended_plugins() {
+	return array(
+		'wordpress-seo/wp-seo.php'                  => 'Yoast SEO',
+		'updraftplus/updraftplus.php'               => 'UpdraftPlus',
+		'wp-mail-smtp/wp_mail_smtp.php'             => 'WP Mail SMTP',
+		'better-wp-security/better-wp-security.php' => 'Solid Security',
+	);
+}
+
+/**
  * Check if value still contains unresolved verification tokens.
  *
  * @param string $value Field value.
@@ -386,6 +400,7 @@ function csa_lk_render_dashboard_widget() {
 function csa_lk_render_tools_page() {
 	$status = isset( $_GET['csa_setup'] ) ? sanitize_text_field( wp_unslash( $_GET['csa_setup'] ) ) : '';
 	$indexing_status = isset( $_GET['csa_indexing'] ) ? sanitize_text_field( wp_unslash( $_GET['csa_indexing'] ) ) : '';
+	$plugin_status = isset( $_GET['csa_plugins'] ) ? sanitize_text_field( wp_unslash( $_GET['csa_plugins'] ) ) : '';
 	$audit  = csa_lk_get_publish_audit();
 	?>
 	<div class="wrap">
@@ -402,6 +417,11 @@ function csa_lk_render_tools_page() {
 			<div class="notice notice-success is-dismissible"><p>Production indexing enabled. Search indexing is now allowed.</p></div>
 		<?php elseif ( 'indexing-error' === $indexing_status ) : ?>
 			<div class="notice notice-error is-dismissible"><p>Could not change indexing mode. Please try again.</p></div>
+		<?php endif; ?>
+		<?php if ( 'activated' === $plugin_status ) : ?>
+			<div class="notice notice-success is-dismissible"><p>Recommended plugins activated (where available).</p></div>
+		<?php elseif ( 'plugin-error' === $plugin_status ) : ?>
+			<div class="notice notice-error is-dismissible"><p>Could not activate one or more recommended plugins. Check plugin list and try again.</p></div>
 		<?php endif; ?>
 
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
@@ -420,6 +440,12 @@ function csa_lk_render_tools_page() {
 			<?php wp_nonce_field( 'csa_lk_download_report' ); ?>
 			<input type="hidden" name="action" value="csa_lk_download_report" />
 			<?php submit_button( 'Download Preflight Report', 'secondary', 'submit', false ); ?>
+		</form>
+
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="margin-top: 8px;">
+			<?php wp_nonce_field( 'csa_lk_activate_recommended_plugins' ); ?>
+			<input type="hidden" name="action" value="csa_lk_activate_recommended_plugins" />
+			<?php submit_button( 'Activate Recommended Plugins', 'secondary', 'submit', false ); ?>
 		</form>
 
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="margin-top: 8px;">
@@ -645,14 +671,7 @@ function csa_lk_get_publish_audit() {
 		$technical_notices[] = 'Search engine visibility is currently discouraged (good for staging, switch for production launch).';
 	}
 
-	$recommended_plugins = array(
-		'wordpress-seo/wp-seo.php'               => 'Yoast SEO',
-		'updraftplus/updraftplus.php'            => 'UpdraftPlus',
-		'wp-mail-smtp/wp_mail_smtp.php'          => 'WP Mail SMTP',
-		'better-wp-security/better-wp-security.php' => 'Solid Security',
-	);
-
-	foreach ( $recommended_plugins as $plugin_file => $label ) {
+	foreach ( csa_lk_get_recommended_plugins() as $plugin_file => $label ) {
 		$is_active         = csa_lk_is_plugin_active( $plugin_file );
 		$plugin_statuses[] = array(
 			'label'  => $label,
@@ -931,6 +950,51 @@ function csa_lk_handle_set_indexing_mode_action() {
 	exit;
 }
 add_action( 'admin_post_csa_lk_set_indexing_mode', 'csa_lk_handle_set_indexing_mode_action' );
+
+/**
+ * Handle one-click activation of recommended plugins.
+ */
+function csa_lk_handle_activate_recommended_plugins_action() {
+	if ( ! current_user_can( 'activate_plugins' ) ) {
+		wp_die( esc_html__( 'You do not have permission to activate plugins.', 'csa-launch-kit' ) );
+	}
+
+	check_admin_referer( 'csa_lk_activate_recommended_plugins' );
+
+	if ( ! function_exists( 'activate_plugin' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	}
+
+	$has_error = false;
+	foreach ( csa_lk_get_recommended_plugins() as $plugin_file => $label ) {
+		if ( csa_lk_is_plugin_active( $plugin_file ) ) {
+			continue;
+		}
+
+		$absolute = WP_PLUGIN_DIR . '/' . $plugin_file;
+		if ( ! file_exists( $absolute ) ) {
+			$has_error = true;
+			continue;
+		}
+
+		$result = activate_plugin( $plugin_file, '', false, true );
+		if ( is_wp_error( $result ) ) {
+			$has_error = true;
+		}
+	}
+
+	wp_safe_redirect(
+		add_query_arg(
+			array(
+				'page'        => 'csa-launch-kit',
+				'csa_plugins' => $has_error ? 'plugin-error' : 'activated',
+			),
+			admin_url( 'tools.php' )
+		)
+	);
+	exit;
+}
+add_action( 'admin_post_csa_lk_activate_recommended_plugins', 'csa_lk_handle_activate_recommended_plugins_action' );
 
 /**
  * One-click setup for pages/menu/homepage.

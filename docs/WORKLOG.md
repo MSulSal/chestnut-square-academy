@@ -35,3 +35,4 @@
 - feat(qa): added recommended plugin activation status checks to preflight UI and exported reports.
 - docs(handoff): added non-technical owner quick guide for routine edits, checks, and monthly maintenance.
 - feat(risk): added explicit domain ownership/DNS verification gate that blocks preflight until confirmed.
+- feat(automation): added one-click activation action for recommended plugins directly from CSA Launch Kit tools page.
