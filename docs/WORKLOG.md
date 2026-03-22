@@ -122,3 +122,7 @@
 - feat(runtime): added legacy snapshot runtime upgrader for generic/program-detail pages to auto-heal older Elementor HTML content and persist refreshed markup without manual editor intervention.
 - chore(qa): added reusable render scripts (`scripts/capture-local-desktop.mjs`, `scripts/capture-local-mobile.mjs`) and excluded screenshot artifacts from git tracking.
 - fix(content): removed remaining lorem from FAQ seeded content and extended runtime upgrader to refresh legacy FAQ snapshots automatically.
+- fix(layout-parity): diagnosed lower-page "disorganized assets" root cause as a missing reference stylesheet (`core-footer-css`) rather than section HTML structure.
+- feat(theme): extracted and added `assets/css/kiddie-core-footer.css` from saved live reference snapshot and enqueued it between `kiddie-core.css` and overrides.
+- refactor(css): removed temporary curriculum/why-kiddie desktop fallback overrides so native reference section styles control layout/visibility.
+- chore(qa): reran full-page and scroll-slice Playwright captures plus desktop DOM checks to confirm `#curriculum` now uses desktop-only rail/image layout and lower sections render in structured composition.

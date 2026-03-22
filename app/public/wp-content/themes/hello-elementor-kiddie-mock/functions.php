@@ -20,9 +20,16 @@ function kiddie_mock_enqueue_assets() {
 	);
 
 	wp_enqueue_style(
+		'kiddie-mock-core-footer',
+		get_stylesheet_directory_uri() . '/assets/css/kiddie-core-footer.css',
+		array( 'kiddie-mock-core' ),
+		$theme_version
+	);
+
+	wp_enqueue_style(
 		'kiddie-mock-overrides',
 		get_stylesheet_directory_uri() . '/assets/css/kiddie-overrides.css',
-		array( 'kiddie-mock-core' ),
+		array( 'kiddie-mock-core-footer' ),
 		$theme_version
 	);
 
