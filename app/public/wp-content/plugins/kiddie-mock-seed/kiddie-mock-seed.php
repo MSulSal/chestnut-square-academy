@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kiddie Mock Seed
  * Description: Builds a full Kiddie Academy style frontend mock across all key pages for WordPress + Elementor testing.
- * Version: 1.2.0
+ * Version: 1.3.1
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: kiddie-mock-seed
@@ -1822,6 +1822,507 @@ function kms_run_owner_edit_seed( $overwrite = true ) {
 }
 
 /**
+ * Check whether a tag should remain a structural Elementor container in native parity mode.
+ *
+ * @param string $tag HTML tag.
+ * @return bool
+ */
+function kms_native_parity_is_structural_tag( $tag ) {
+	return in_array( $tag, array( 'main', 'section', 'div', 'article', 'aside', 'header', 'footer', 'nav', 'ul', 'ol', 'li' ), true );
+}
+
+/**
+ * Read an attribute from a DOM element safely.
+ *
+ * @param DOMNode $node Node.
+ * @param string  $name Attribute name.
+ * @return string
+ */
+function kms_native_dom_get_attr( $node, $name ) {
+	if ( ! $node instanceof DOMElement ) {
+		return '';
+	}
+
+	$value = $node->getAttribute( $name );
+
+	return is_string( $value ) ? trim( $value ) : '';
+}
+
+/**
+ * Serialize DOM node outer HTML safely.
+ *
+ * @param DOMNode $node Node.
+ * @return string
+ */
+function kms_native_dom_outer_html( $node ) {
+	if ( ! $node instanceof DOMNode || ! $node->ownerDocument instanceof DOMDocument ) {
+		return '';
+	}
+
+	$html = $node->ownerDocument->saveHTML( $node );
+
+	return is_string( $html ) ? $html : '';
+}
+
+/**
+ * Serialize DOM node inner HTML safely.
+ *
+ * @param DOMNode $node Node.
+ * @return string
+ */
+function kms_native_dom_inner_html( $node ) {
+	if ( ! $node instanceof DOMNode || ! $node->ownerDocument instanceof DOMDocument ) {
+		return '';
+	}
+
+	$html = '';
+	foreach ( $node->childNodes as $child ) {
+		$part = $node->ownerDocument->saveHTML( $child );
+		if ( is_string( $part ) ) {
+			$html .= $part;
+		}
+	}
+
+	return trim( $html );
+}
+
+/**
+ * Detect whether a DOM element contains unsupported custom data-* attributes.
+ *
+ * @param DOMNode          $node          Node.
+ * @param array<int,string> $allowed_attrs Allow-listed data-* attribute names.
+ * @return bool
+ */
+function kms_native_dom_has_data_attrs( $node, $allowed_attrs = array() ) {
+	if ( ! $node instanceof DOMElement || ! $node->hasAttributes() ) {
+		return false;
+	}
+
+	$allowed = array();
+	if ( is_array( $allowed_attrs ) ) {
+		foreach ( $allowed_attrs as $allowed_attr ) {
+			$name = strtolower( trim( (string) $allowed_attr ) );
+			if ( '' !== $name ) {
+				$allowed[] = $name;
+			}
+		}
+	}
+
+	foreach ( $node->attributes as $attr ) {
+		if ( ! $attr instanceof DOMAttr ) {
+			continue;
+		}
+
+		$name = strtolower( (string) $attr->name );
+		if ( 0 === strpos( $name, 'data-' ) && ! in_array( $name, $allowed, true ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Build a native heading widget from a heading DOM node.
+ *
+ * @param int     $post_id Post ID.
+ * @param int     $counter Running counter.
+ * @param DOMNode $node    Heading node.
+ * @param string  $tag     Heading tag.
+ * @return array<string,mixed>|null
+ */
+function kms_native_parity_heading_widget( $post_id, &$counter, $node, $tag ) {
+	$content = trim( (string) kms_native_dom_inner_html( $node ) );
+	if ( '' === $content ) {
+		$content = trim( (string) $node->textContent );
+	}
+
+	if ( '' === $content ) {
+		return null;
+	}
+
+	return kms_owner_make_widget(
+		$post_id,
+		$counter,
+		'heading',
+		array(
+			'title'       => (string) $content,
+			'header_size' => (string) $tag,
+		),
+		kms_native_dom_get_attr( $node, 'class' ),
+		kms_native_dom_get_attr( $node, 'id' )
+	);
+}
+
+/**
+ * Build a native image widget from an image DOM node when safe.
+ *
+ * @param int     $post_id Post ID.
+ * @param int     $counter Running counter.
+ * @param DOMNode $node    Image node.
+ * @return array<string,mixed>|null
+ */
+function kms_native_parity_image_widget( $post_id, &$counter, $node ) {
+	if (
+		! $node instanceof DOMElement ||
+		kms_native_dom_has_data_attrs(
+			$node,
+			array(
+				'data-lazy-src',
+				'data-lazy-srcset',
+				'data-src',
+				'data-srcset',
+			)
+		)
+	) {
+		return null;
+	}
+
+	$src = trim( (string) kms_native_dom_get_attr( $node, 'src' ) );
+	if ( '' === $src ) {
+		$src = trim( (string) kms_native_dom_get_attr( $node, 'data-lazy-src' ) );
+	}
+
+	if ( '' === $src ) {
+		return null;
+	}
+
+	$settings = array(
+		'image'      => array(
+			'id'  => 0,
+			'url' => esc_url_raw( (string) $src ),
+		),
+		'image_size' => 'full',
+	);
+
+	$alt = trim( (string) kms_native_dom_get_attr( $node, 'alt' ) );
+	if ( '' !== $alt ) {
+		$settings['alt'] = $alt;
+	}
+
+	return kms_owner_make_widget(
+		$post_id,
+		$counter,
+		'image',
+		$settings,
+		kms_native_dom_get_attr( $node, 'class' ),
+		kms_native_dom_get_attr( $node, 'id' )
+	);
+}
+
+/**
+ * Determine whether an anchor tag should be converted to a native button widget.
+ *
+ * @param DOMNode $node Anchor node.
+ * @return bool
+ */
+function kms_native_parity_is_button_anchor( $node ) {
+	if ( ! $node instanceof DOMElement ) {
+		return false;
+	}
+
+	$class = strtolower( (string) kms_native_dom_get_attr( $node, 'class' ) );
+	if ( '' === $class ) {
+		return false;
+	}
+
+	return false !== strpos( $class, 'button' ) || false !== strpos( $class, 'btn' ) || false !== strpos( $class, 'cta' );
+}
+
+/**
+ * Build a native button widget from an anchor DOM node when safe.
+ *
+ * @param int     $post_id Post ID.
+ * @param int     $counter Running counter.
+ * @param DOMNode $node    Anchor node.
+ * @return array<string,mixed>|null
+ */
+function kms_native_parity_button_widget( $post_id, &$counter, $node ) {
+	if ( ! $node instanceof DOMElement || kms_native_dom_has_data_attrs( $node ) ) {
+		return null;
+	}
+
+	if ( (int) $node->childElementCount > 0 ) {
+		return null;
+	}
+
+	$href = trim( (string) kms_native_dom_get_attr( $node, 'href' ) );
+	$text = trim( (string) $node->textContent );
+
+	if ( '' === $href || '' === $text ) {
+		return null;
+	}
+
+	return kms_owner_make_widget(
+		$post_id,
+		$counter,
+		'button',
+		array(
+			'text' => $text,
+			'size' => 'md',
+			'link' => array(
+				'url' => (string) $href,
+			),
+		),
+		kms_native_dom_get_attr( $node, 'class' ),
+		kms_native_dom_get_attr( $node, 'id' )
+	);
+}
+
+/**
+ * Build a native text-editor widget for parity mode.
+ *
+ * @param int    $post_id Post ID.
+ * @param int    $counter Running counter.
+ * @param string $html    HTML content.
+ * @return array<string,mixed>
+ */
+function kms_native_parity_text_widget( $post_id, &$counter, $html ) {
+	return kms_owner_make_widget(
+		$post_id,
+		$counter,
+		'text-editor',
+		array(
+			'editor' => (string) $html,
+		)
+	);
+}
+
+/**
+ * Convert one DOM node into a native parity Elementor element.
+ *
+ * @param DOMNode $node     Node.
+ * @param int     $post_id  Post ID.
+ * @param int     $counter  Running counter.
+ * @param bool    $is_inner Is inner container.
+ * @return array<string,mixed>|null
+ */
+function kms_native_parity_dom_to_element( $node, $post_id, &$counter, $is_inner ) {
+	if ( ! $node instanceof DOMNode ) {
+		return null;
+	}
+
+	if ( XML_COMMENT_NODE === $node->nodeType ) {
+		return null;
+	}
+
+	if ( XML_TEXT_NODE === $node->nodeType ) {
+		$text = trim( (string) $node->nodeValue );
+
+		if ( '' === $text ) {
+			return null;
+		}
+
+		return kms_native_parity_text_widget( $post_id, $counter, '<p>' . esc_html( $text ) . '</p>' );
+	}
+
+	if ( XML_ELEMENT_NODE !== $node->nodeType ) {
+		return null;
+	}
+
+	$tag = strtolower( (string) $node->nodeName );
+
+	// Script tags are moved to the theme/plugin JS layer where needed.
+	if ( 'script' === $tag ) {
+		return null;
+	}
+
+	$outer_html = trim( (string) kms_native_dom_outer_html( $node ) );
+	if ( '' === $outer_html ) {
+		return null;
+	}
+
+	if ( in_array( $tag, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ), true ) ) {
+		$heading_widget = kms_native_parity_heading_widget( $post_id, $counter, $node, $tag );
+		if ( is_array( $heading_widget ) ) {
+			return $heading_widget;
+		}
+	}
+
+	if ( 'img' === $tag ) {
+		$image_widget = kms_native_parity_image_widget( $post_id, $counter, $node );
+		if ( is_array( $image_widget ) ) {
+			return $image_widget;
+		}
+	}
+
+	if ( 'a' === $tag && kms_native_parity_is_button_anchor( $node ) ) {
+		$button_widget = kms_native_parity_button_widget( $post_id, $counter, $node );
+		if ( is_array( $button_widget ) ) {
+			return $button_widget;
+		}
+	}
+
+	if ( ! kms_native_parity_is_structural_tag( $tag ) ) {
+		return kms_native_parity_text_widget( $post_id, $counter, $outer_html );
+	}
+
+	$children = array();
+	foreach ( $node->childNodes as $child ) {
+		$child_element = kms_native_parity_dom_to_element( $child, $post_id, $counter, true );
+		if ( is_array( $child_element ) ) {
+			$children[] = $child_element;
+		}
+	}
+
+	if ( empty( $children ) ) {
+		return kms_native_parity_text_widget( $post_id, $counter, $outer_html );
+	}
+
+	return kms_owner_make_container(
+		$post_id,
+		$counter,
+		$children,
+		kms_native_dom_get_attr( $node, 'class' ),
+		kms_native_dom_get_attr( $node, 'id' ),
+		(bool) $is_inner,
+		$tag
+	);
+}
+
+/**
+ * Build native parity Elementor data from page HTML.
+ *
+ * @param string $html    HTML source.
+ * @param int    $post_id Post ID.
+ * @return array<int,mixed>
+ */
+function kms_build_native_parity_data( $html, $post_id ) {
+	$markup = trim( (string) $html );
+	$counter = 0;
+
+	if ( '' === $markup || ! class_exists( 'DOMDocument' ) || ! class_exists( 'DOMXPath' ) ) {
+		return array(
+			kms_native_parity_text_widget( $post_id, $counter, $markup ),
+		);
+	}
+
+	$doc        = new DOMDocument();
+	$wrapped    = '<?xml encoding="utf-8" ?><div id="kms-native-root">' . $markup . '</div>';
+	$libxml_old = libxml_use_internal_errors( true );
+	$loaded     = $doc->loadHTML( $wrapped, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
+	libxml_clear_errors();
+	libxml_use_internal_errors( $libxml_old );
+
+	if ( ! $loaded ) {
+		return array(
+			kms_native_parity_text_widget( $post_id, $counter, $markup ),
+		);
+	}
+
+	$xpath   = new DOMXPath( $doc );
+	$nodes   = $xpath->query( '//*[@id="kms-native-root"]/*|//*[@id="kms-native-root"]/text()|//*[@id="kms-native-root"]/comment()' );
+
+	$data = array();
+
+	if ( $nodes instanceof DOMNodeList ) {
+		foreach ( $nodes as $node ) {
+			$element = kms_native_parity_dom_to_element( $node, $post_id, $counter, false );
+			if ( is_array( $element ) ) {
+				$data[] = $element;
+			}
+		}
+	}
+
+	if ( empty( $data ) ) {
+		return array(
+			kms_native_parity_text_widget( $post_id, $counter, $markup ),
+		);
+	}
+
+	return $data;
+}
+
+/**
+ * Upsert one page using native parity Elementor data.
+ *
+ * @param array<string,string> $blueprint Page blueprint.
+ * @param bool                 $overwrite Overwrite content.
+ * @return int
+ */
+function kms_upsert_native_parity_page( $blueprint, $overwrite ) {
+	$path      = $blueprint['path'];
+	$title     = $blueprint['title'];
+	$template  = $blueprint['template'];
+	$slug      = basename( $path );
+	$parent_id = 0;
+
+	if ( false !== strpos( $path, '/' ) ) {
+		$parent_path = dirname( $path );
+		$parent_page = get_page_by_path( $parent_path, OBJECT, 'page' );
+		if ( $parent_page instanceof WP_Post ) {
+			$parent_id = (int) $parent_page->ID;
+		}
+	}
+
+	$page = get_page_by_path( $path, OBJECT, 'page' );
+
+	$postarr = array(
+		'post_title'     => $title,
+		'post_name'      => $slug,
+		'post_type'      => 'page',
+		'post_status'    => 'publish',
+		'post_parent'    => $parent_id,
+		'comment_status' => 'closed',
+	);
+
+	if ( $page instanceof WP_Post ) {
+		$postarr['ID'] = (int) $page->ID;
+	} else {
+		$postarr['post_content'] = '';
+	}
+
+	$page_html = '';
+	if ( $overwrite || ! isset( $postarr['ID'] ) ) {
+		$page_html               = kms_get_page_html( $template, $title, $path );
+		$page_html               = kms_localize_internal_links( $page_html );
+		$page_html               = kms_replace_asset_urls_in_markup( $page_html );
+		$postarr['post_content'] = wp_strip_all_tags( (string) $title );
+	}
+
+	$page_id = wp_insert_post( wp_slash( $postarr ), true );
+
+	if ( is_wp_error( $page_id ) ) {
+		return 0;
+	}
+
+	update_post_meta( $page_id, '_wp_page_template', 'default' );
+
+	if ( $overwrite || ! $page instanceof WP_Post ) {
+		kms_store_elementor_document( $page_id, kms_build_native_parity_data( $page_html, $page_id ) );
+	}
+
+	return (int) $page_id;
+}
+
+/**
+ * Run native parity seed (fully native Elementor widgets + maximum Kiddie parity).
+ *
+ * @param bool $overwrite Overwrite content.
+ */
+function kms_run_native_parity_seed( $overwrite = true ) {
+	$blueprints = kms_sort_blueprints_by_depth( kms_get_page_blueprints() );
+
+	foreach ( $blueprints as $blueprint ) {
+		kms_upsert_native_parity_page( $blueprint, $overwrite );
+	}
+
+	$home = get_page_by_path( 'home', OBJECT, 'page' );
+	if ( $home instanceof WP_Post ) {
+		update_option( 'show_on_front', 'page' );
+		update_option( 'page_on_front', (int) $home->ID );
+	}
+
+	$blog = get_page_by_path( 'newsroom', OBJECT, 'page' );
+	if ( $blog instanceof WP_Post ) {
+		update_option( 'page_for_posts', (int) $blog->ID );
+	}
+
+	kms_set_seed_profile( 'native-parity' );
+	flush_rewrite_rules();
+}
+
+/**
  * One-time safety sync: mirror post_content into Elementor document meta.
  *
  * This keeps frontend rendering aligned even when page content was updated
@@ -2036,6 +2537,10 @@ function kms_add_frontend_body_classes( $classes ) {
 		$classes[] = 'kms-owner-mode';
 	}
 
+	if ( 'native-parity' === kms_get_seed_profile() ) {
+		$classes[] = 'kms-native-parity-mode';
+	}
+
 	return $classes;
 }
 add_filter( 'body_class', 'kms_add_frontend_body_classes' );
@@ -2044,16 +2549,32 @@ add_filter( 'body_class', 'kms_add_frontend_body_classes' );
  * Enqueue owner-edit mode styles when active.
  */
 function kms_enqueue_owner_edit_styles() {
-	if ( 'owner-edit' !== kms_get_seed_profile() ) {
-		return;
+	$profile = kms_get_seed_profile();
+
+	if ( 'owner-edit' === $profile ) {
+		wp_enqueue_style(
+			'kms-owner-edit-mode',
+			plugin_dir_url( __FILE__ ) . 'assets/css/owner-edit-mode.css',
+			array(),
+			'1.0.0'
+		);
 	}
 
-	wp_enqueue_style(
-		'kms-owner-edit-mode',
-		plugin_dir_url( __FILE__ ) . 'assets/css/owner-edit-mode.css',
-		array(),
-		'1.0.0'
-	);
+	if ( 'native-parity' === $profile ) {
+		wp_enqueue_style(
+			'kms-native-parity-mode',
+			plugin_dir_url( __FILE__ ) . 'assets/css/native-parity-mode.css',
+			array(),
+			'1.1.0'
+		);
+		wp_enqueue_script(
+			'kms-native-parity-front',
+			plugin_dir_url( __FILE__ ) . 'assets/js/native-parity-front.js',
+			array(),
+			'1.1.0',
+			true
+		);
+	}
 }
 add_action( 'wp_enqueue_scripts', 'kms_enqueue_owner_edit_styles', 40 );
 
@@ -2099,6 +2620,24 @@ function kms_handle_tools_actions() {
 			array(
 				'page'         => 'kiddie-mock-seed',
 				'kms_owner_ok' => '1',
+			),
+			admin_url( 'tools.php' )
+		);
+
+		wp_safe_redirect( $redirect );
+		exit;
+	}
+
+	if ( 'run_native_seed' === $action ) {
+		check_admin_referer( 'kms_run_native_seed' );
+
+		$overwrite = isset( $_POST['kms_overwrite'] ) && '1' === $_POST['kms_overwrite'];
+		kms_run_native_parity_seed( $overwrite );
+
+		$redirect = add_query_arg(
+			array(
+				'page'          => 'kiddie-mock-seed',
+				'kms_native_ok' => '1',
 			),
 			admin_url( 'tools.php' )
 		);
@@ -2172,9 +2711,10 @@ add_action( 'admin_init', 'kms_handle_tools_actions' );
  * Render admin tools page.
  */
 function kms_render_tools_page() {
-	$done       = isset( $_GET['kms_ok'] ) && '1' === $_GET['kms_ok'];
-	$owner_done = isset( $_GET['kms_owner_ok'] ) && '1' === $_GET['kms_owner_ok'];
-	$profile    = kms_get_seed_profile();
+	$done        = isset( $_GET['kms_ok'] ) && '1' === $_GET['kms_ok'];
+	$owner_done  = isset( $_GET['kms_owner_ok'] ) && '1' === $_GET['kms_owner_ok'];
+	$native_done = isset( $_GET['kms_native_ok'] ) && '1' === $_GET['kms_native_ok'];
+	$profile     = kms_get_seed_profile();
 	?>
 	<div class="wrap">
 		<h1>Kiddie Mock Seed</h1>
@@ -2183,6 +2723,9 @@ function kms_render_tools_page() {
 		<?php endif; ?>
 		<?php if ( $owner_done ) : ?>
 			<div class="notice notice-success"><p>Owner Edit Mode seed completed successfully.</p></div>
+		<?php endif; ?>
+		<?php if ( $native_done ) : ?>
+			<div class="notice notice-success"><p>Native Parity Mode seed completed successfully.</p></div>
 		<?php endif; ?>
 
 		<p><strong>Active profile:</strong> <code><?php echo esc_html( $profile ); ?></code></p>
@@ -2205,6 +2748,16 @@ function kms_render_tools_page() {
 			<input type="hidden" name="kms_action" value="run_owner_seed">
 			<p><label><input type="checkbox" name="kms_overwrite" value="1" checked> Overwrite existing page content</label></p>
 			<p><button type="submit" class="button">Run Owner Edit Mode Seed</button></p>
+		</form>
+
+		<hr>
+		<h2>Native Parity Mode</h2>
+		<p>Seed all pages with fully native Elementor widgets while preserving Kiddie Academy structure/content as closely as possible.</p>
+		<form method="post">
+			<?php wp_nonce_field( 'kms_run_native_seed' ); ?>
+			<input type="hidden" name="kms_action" value="run_native_seed">
+			<p><label><input type="checkbox" name="kms_overwrite" value="1" checked> Overwrite existing page content</label></p>
+			<p><button type="submit" class="button">Run Native Parity Seed</button></p>
 		</form>
 	</div>
 	<?php

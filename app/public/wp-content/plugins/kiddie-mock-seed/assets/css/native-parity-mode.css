@@ -1,0 +1,25 @@
+.kms-native-parity-mode .elementor .elementor-widget-text-editor {
+  margin: 0;
+}
+
+.kms-native-parity-mode .elementor .elementor-widget-text-editor > .elementor-widget-container {
+  margin: 0;
+  padding: 0;
+}
+
+.kms-native-parity-mode .elementor .elementor-widget-text-editor p:last-child {
+  margin-bottom: 0;
+}
+
+.kms-native-parity-mode .elementor .elementor-widget-heading,
+.kms-native-parity-mode .elementor .elementor-widget-image,
+.kms-native-parity-mode .elementor .elementor-widget-button {
+  margin: 0;
+}
+
+.kms-native-parity-mode .elementor .elementor-widget-heading > .elementor-widget-container,
+.kms-native-parity-mode .elementor .elementor-widget-image > .elementor-widget-container,
+.kms-native-parity-mode .elementor .elementor-widget-button > .elementor-widget-container {
+  margin: 0;
+  padding: 0;
+}

@@ -138,3 +138,13 @@
 - feat(owner-edit-style): added frontend owner-mode class + stylesheet (`assets/css/owner-edit-mode.css`) for stable open layout and predictable editing behavior.
 - docs(owner-edit): added `docs/OWNER-EDIT-MODE.md` with switching instructions and widget-level behavior for handoff.
 - chore(versioning): bumped `kiddie-mock-seed` plugin metadata to `1.2.0` for owner-edit mode release.
+- feat(native-parity): added a new `Native Parity Mode` seed flow in `Tools > Kiddie Mock Seed` with its own action/notice and profile state (`native-parity`).
+- feat(native-parity): implemented a DOM-to-native conversion pipeline that seeds full Kiddie blueprint pages into native Elementor containers + `text-editor` widgets (no `html` widget fallback).
+- feat(native-parity): added frontend helper assets (`assets/css/native-parity-mode.css`, `assets/js/native-parity-front.js`) to maximize rendered parity while keeping native editability.
+- docs(native-parity): added `docs/NATIVE-PARITY-MODE.md` and README mode documentation updates.
+- chore(versioning): bumped `kiddie-mock-seed` plugin metadata to `1.3.0` for native-parity mode release.
+- feat(native-parity): upgraded DOM-to-native conversion to emit `heading`, `image`, and `button` widgets (where safe) in addition to `text-editor`, keeping `html` widget usage at zero.
+- fix(native-parity): extended frontend unwrapping to support Elementor markup variants (with and without `.elementor-widget-container`) so live pages strip widget wrappers reliably for closer visual parity.
+- fix(native-parity): added safe image conversion rules (allow lazy-load attributes, skip unsupported `data-*` patterns like program toggles) to preserve interactions while improving asset-level editability.
+- chore(qa): validated native seed + widget composition across full page tree via WP-CLI audit scripts and confirmed frontend wrapper-removal behavior on key routes with headless checks.
+- chore(versioning): bumped `kiddie-mock-seed` to `1.3.1` and bumped native parity asset versions for cache-safe rollout.
