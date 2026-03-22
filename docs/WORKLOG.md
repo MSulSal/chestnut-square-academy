@@ -151,3 +151,15 @@
 - fix(editor-safety): added Elementor editor/preview context guards to both theme/runtime parity layer and native parity frontend JS so DOM rewrites do not run during widget editing.
 - fix(editor-safety): restricted theme runtime content sync and render-time parity overrides to `mock-parity` profile only, preventing HTML-widget rewrites from clashing with owner/native profiles.
 - chore(versioning): bumped `kiddie-mock-seed` to `1.3.2` and native parity assets to `1.2.0` for safe cache invalidation after guardrail updates.
+
+## 2026-03-22
+- fix(native-parity): preserved source DOM identity in native conversion by carrying source IDs/classes into tokens and restoring true DOM `id` values on frontend render.
+- fix(native-parity): preserved interaction-critical data attributes (`data-program`, `data-question`, `data-answer`) through conversion and restored them on frontend render.
+- feat(native-parity-js): added parity-side interaction bindings for curriculum desktop switcher and FAQ toggles after native unwrapping.
+- fix(native-parity-js): removed Elementor utility classes from frontend parity render (including `elementor-*`, `e-con*`, `e-parent`, `e-child`, `e-flex`, `e-grid`) to reduce layout drift while keeping editor safety guards.
+- fix(theme-js): aligned curriculum active-state class usage with reference CSS (`.slide.hover`) to keep first-card highlight and hover transitions consistent.
+- feat(header): set primary header CTA parity to `Find Your Academy` (`/academies/`) with matching aria label behavior.
+- chore(versioning): bumped `kiddie-mock-seed` to `1.3.8` and native parity frontend asset versions to `1.4.4` for cache-safe rollout.
+- chore(qa): re-ran headless parity checks (top-fold + full-page captures on Home/Programs/About/Contact/Approach) and verified curriculum hover image swapping works in native parity mode.
+- chore(qa): confirmed editor safety behavior remains intact (`native-parity-front.js` loads on public pages and is suppressed in Elementor preview/edit contexts).
+- chore(qa): validated key routes remain fully native-component based (`elementor-widget-html` count = `0`) with widget-level Elementor structures preserved for owner editing.

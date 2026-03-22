@@ -14,6 +14,181 @@
     return !!document.body && document.body.classList.contains("kms-native-parity-mode");
   }
 
+  function restoreDomIdsFromClasses() {
+    var nodes = document.querySelectorAll('.kms-native-parity-mode [class*="kms-dom-id-"]');
+    nodes.forEach(function (node) {
+      if (node.id) {
+        return;
+      }
+      var token = Array.from(node.classList).find(function (cls) {
+        return cls.indexOf("kms-dom-id-") === 0;
+      });
+      if (!token) {
+        return;
+      }
+      var domId = token.replace("kms-dom-id-", "").trim();
+      if (!domId) {
+        return;
+      }
+      node.id = domId;
+    });
+  }
+
+  function restoreDataAttrsFromClasses() {
+    var nodes = document.querySelectorAll('.kms-native-parity-mode [class*="kms-data-"]');
+    nodes.forEach(function (node) {
+      Array.from(node.classList).forEach(function (cls) {
+        if (!cls || cls.indexOf("kms-data-") !== 0) {
+          return;
+        }
+
+        var match = cls.match(/^kms-data-([a-z0-9]+)-(.+)$/i);
+        if (!match || match.length < 3) {
+          return;
+        }
+
+        var key = (match[1] || "").trim().toLowerCase();
+        var value = (match[2] || "").trim();
+        if (!key || !value) {
+          return;
+        }
+
+        var attrName = "data-" + key;
+        if (!node.hasAttribute(attrName)) {
+          node.setAttribute(attrName, value);
+        }
+      });
+    });
+  }
+
+  function stripElementorClassesForParity() {
+    var removableExact = {
+      "e-con": true,
+      "e-con-full": true,
+      "e-con-boxed": true,
+      "e-parent": true,
+      "e-child": true,
+      "e-flex": true,
+      "e-grid": true,
+      "e-lazyloaded": true,
+    };
+
+    var nodes = document.querySelectorAll(
+      ".kms-native-parity-mode main#main-content, .kms-native-parity-mode main#main-content [class]"
+    );
+    nodes.forEach(function (node) {
+      var retained = [];
+
+      Array.from(node.classList).forEach(function (cls) {
+        if (!cls) {
+          return;
+        }
+
+        if (removableExact[cls]) {
+          return;
+        }
+
+        if (cls.indexOf("e-con") === 0) {
+          return;
+        }
+
+        if (cls !== "elementor" && cls.indexOf("elementor-") === 0) {
+          return;
+        }
+
+        if (cls.indexOf("e--") === 0) {
+          return;
+        }
+
+        retained.push(cls);
+      });
+
+      var nextClass = retained.join(" ").trim();
+      if (node.className !== nextClass) {
+        node.className = nextClass;
+      }
+    });
+  }
+
+  function bindCurriculumDesktopSwitcher() {
+    var curriculum = document.getElementById("curriculum");
+    if (!curriculum) {
+      return;
+    }
+
+    var slides = curriculum.querySelectorAll(".programs-list .slide[data-program]");
+    var images = curriculum.querySelectorAll(".programs-image img[data-program]");
+
+    if (!slides.length || !images.length) {
+      return;
+    }
+
+    function activate(program) {
+      if (!program) {
+        return;
+      }
+
+      slides.forEach(function (slide) {
+        var active = slide.getAttribute("data-program") === program;
+        slide.classList.toggle("hover", active);
+      });
+
+      images.forEach(function (image) {
+        var active = image.getAttribute("data-program") === program;
+        image.style.display = active ? "block" : "none";
+      });
+    }
+
+    slides.forEach(function (slide) {
+      if (!slide.dataset.kmsBoundProgram) {
+        slide.addEventListener("mouseenter", function () {
+          activate(slide.getAttribute("data-program"));
+        });
+        slide.addEventListener("focusin", function () {
+          activate(slide.getAttribute("data-program"));
+        });
+        slide.dataset.kmsBoundProgram = "1";
+      }
+    });
+
+    activate(slides[0].getAttribute("data-program"));
+  }
+
+  function bindFaqToggle() {
+    var questions = document.querySelectorAll("[data-question]");
+    if (!questions.length) {
+      return;
+    }
+
+    questions.forEach(function (question) {
+      if (question.dataset.kmsBoundFaq) {
+        return;
+      }
+
+      question.addEventListener("click", function () {
+        question.classList.toggle("open");
+
+        var answerId = question.getAttribute("data-question");
+        if (!answerId) {
+          return;
+        }
+
+        var answer = document.querySelector('[data-answer="' + answerId + '"]');
+        if (!answer) {
+          return;
+        }
+
+        if (answer.hasAttribute("hidden")) {
+          answer.removeAttribute("hidden");
+        } else {
+          answer.setAttribute("hidden", "hidden");
+        }
+      });
+
+      question.dataset.kmsBoundFaq = "1";
+    });
+  }
+
   function getTransferClasses(widget) {
     return Array.from(widget.classList).filter(function (cls) {
       return cls && cls.indexOf("elementor-") !== 0;
@@ -107,6 +282,9 @@
       return;
     }
 
+    restoreDomIdsFromClasses();
+    restoreDataAttrsFromClasses();
+
     var textWidgets = document.querySelectorAll(".kms-native-parity-mode .elementor-widget-text-editor");
     textWidgets.forEach(unwrapTextEditorWidget);
 
@@ -124,6 +302,10 @@
     buttonWidgets.forEach(function (widget) {
       unwrapSingleChildWidget(widget, "a.elementor-button-link, button");
     });
+
+    stripElementorClassesForParity();
+    bindCurriculumDesktopSwitcher();
+    bindFaqToggle();
   }
 
   if (document.readyState === "loading") {

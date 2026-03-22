@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kiddie Mock Seed
  * Description: Builds a full Kiddie Academy style frontend mock across all key pages for WordPress + Elementor testing.
- * Version: 1.3.2
+ * Version: 1.3.8
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: kiddie-mock-seed
@@ -1865,6 +1865,47 @@ function kms_native_dom_outer_html( $node ) {
 }
 
 /**
+ * Build native parity class string, preserving source classes and carrying source IDs via class token.
+ *
+ * @param DOMNode $node Node.
+ * @return string
+ */
+function kms_native_parity_node_classes( $node ) {
+	$classes = trim( (string) kms_native_dom_get_attr( $node, 'class' ) );
+	$dom_id  = trim( (string) kms_native_dom_get_attr( $node, 'id' ) );
+
+	if ( '' !== $dom_id ) {
+		$classes .= ' kms-dom-id-' . sanitize_html_class( $dom_id );
+	}
+
+	if ( $node instanceof DOMElement && $node->hasAttributes() ) {
+		$allowed_data_attrs = array( 'data-program', 'data-question', 'data-answer' );
+
+		foreach ( $node->attributes as $attr ) {
+			if ( ! $attr instanceof DOMAttr ) {
+				continue;
+			}
+
+			$name  = strtolower( trim( (string) $attr->name ) );
+			$value = trim( (string) $attr->value );
+
+			if ( '' === $value || ! in_array( $name, $allowed_data_attrs, true ) ) {
+				continue;
+			}
+
+			$key = substr( $name, 5 );
+			if ( '' === $key ) {
+				continue;
+			}
+
+			$classes .= ' kms-data-' . sanitize_html_class( $key ) . '-' . sanitize_html_class( $value );
+		}
+	}
+
+	return trim( preg_replace( '/\s+/', ' ', (string) $classes ) );
+}
+
+/**
  * Serialize DOM node inner HTML safely.
  *
  * @param DOMNode $node Node.
@@ -1949,7 +1990,7 @@ function kms_native_parity_heading_widget( $post_id, &$counter, $node, $tag ) {
 			'title'       => (string) $content,
 			'header_size' => (string) $tag,
 		),
-		kms_native_dom_get_attr( $node, 'class' ),
+		kms_native_parity_node_classes( $node ),
 		kms_native_dom_get_attr( $node, 'id' )
 	);
 }
@@ -2005,7 +2046,7 @@ function kms_native_parity_image_widget( $post_id, &$counter, $node ) {
 		$counter,
 		'image',
 		$settings,
-		kms_native_dom_get_attr( $node, 'class' ),
+		kms_native_parity_node_classes( $node ),
 		kms_native_dom_get_attr( $node, 'id' )
 	);
 }
@@ -2064,7 +2105,7 @@ function kms_native_parity_button_widget( $post_id, &$counter, $node ) {
 				'url' => (string) $href,
 			),
 		),
-		kms_native_dom_get_attr( $node, 'class' ),
+		kms_native_parity_node_classes( $node ),
 		kms_native_dom_get_attr( $node, 'id' )
 	);
 }
@@ -2173,7 +2214,7 @@ function kms_native_parity_dom_to_element( $node, $post_id, &$counter, $is_inner
 		$post_id,
 		$counter,
 		$children,
-		kms_native_dom_get_attr( $node, 'class' ),
+		kms_native_parity_node_classes( $node ),
 		kms_native_dom_get_attr( $node, 'id' ),
 		(bool) $is_inner,
 		$tag
@@ -2593,14 +2634,14 @@ function kms_enqueue_owner_edit_styles() {
 			'kms-native-parity-mode',
 			plugin_dir_url( __FILE__ ) . 'assets/css/native-parity-mode.css',
 			array(),
-			'1.2.0'
+			'1.4.4'
 		);
 		if ( ! kms_is_elementor_editor_context() ) {
 			wp_enqueue_script(
 				'kms-native-parity-front',
 				plugin_dir_url( __FILE__ ) . 'assets/js/native-parity-front.js',
 				array(),
-				'1.2.0',
+				'1.4.4',
 				true
 			);
 		}

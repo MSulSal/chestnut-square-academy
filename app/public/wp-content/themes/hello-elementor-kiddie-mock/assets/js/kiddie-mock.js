@@ -103,7 +103,7 @@
     function activate(program) {
       slides.forEach(function (slide) {
         var active = slide.getAttribute("data-program") === program;
-        slide.classList.toggle("active", active);
+        slide.classList.toggle("hover", active);
       });
 
       images.forEach(function (image) {
