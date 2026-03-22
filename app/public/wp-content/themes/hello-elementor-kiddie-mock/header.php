@@ -27,9 +27,6 @@ $programs_url             = home_url( '/our-curriculum/' );
 $company_url              = home_url( '/company/' );
 $faq_url                  = home_url( '/faq/' );
 $contact_url              = home_url( '/contact-us/' );
-$header_cta_url           = $contact_url;
-$header_cta_label         = 'Schedule a Tour';
-$header_cta_aria          = 'Schedule a Tour - Contact Us';
 $desktop_logo_default     = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa.png';
 $mobile_logo_default      = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa.png';
 $elementor_site_logo      = function_exists( 'kiddie_mock_get_elementor_site_logo_url' ) ? trim( (string) kiddie_mock_get_elementor_site_logo_url() ) : '';
@@ -55,25 +52,6 @@ if ( '' !== $elementor_site_logo ) {
 
 		<div class="nav-right">
 			<div class="link-menu">
-				<div class="support-nav">
-					<div class="top-quicklinks one-row-flex">
-						<div class="links-for-parents">
-							<a href="<?php echo esc_url( $programs_url ); ?>">Programs</a>
-							<a href="<?php echo esc_url( $faq_url ); ?>">FAQ</a>
-							<a href="<?php echo esc_url( $contact_url ); ?>">Contact Us</a>
-						</div>
-						<div class="header-search" tabindex="0"><span class="toplevel icon-search"></span></div>
-						<div class="search-nav">
-							<div class="site-search">
-								<form action="<?php echo esc_url( $home_url ); ?>" method="get">
-									<input type="text" name="s" id="searchBox" value="" placeholder="Search our site" class="search-input">
-									<button type="submit" class="search-button" id="searchButton"><span class="icon-search"></span></button>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-
 				<div class="main-nav">
 					<ul class="one-row-flex top-menu">
 						<li><span class="toplevel"><a href="<?php echo esc_url( $company_url ); ?>">About Us</a></span></li>
@@ -89,9 +67,6 @@ if ( '' !== $elementor_site_logo ) {
 							<img src="<?php echo esc_url( $mobile_logo ); ?>" alt="Chestnut Square Academy logo for mobile" />
 						</a>
 					</div>
-					<div class="find-button">
-						<a href="<?php echo esc_url( $header_cta_url ); ?>" class="button-round" aria-label="<?php echo esc_attr( $header_cta_aria ); ?>"><?php echo esc_html( $header_cta_label ); ?></a>
-					</div>
 					<div class="expand-button mobile-button">
 						<span class="toplevel">
 							<input type="checkbox" id="menu_checkbox">
@@ -106,7 +81,6 @@ if ( '' !== $elementor_site_logo ) {
 
 				<div id="compact-menu">
 					<div class="container">
-						<a href="<?php echo esc_url( $header_cta_url ); ?>" class="button-round shadow" aria-label="<?php echo esc_attr( $header_cta_aria ); ?>"><?php echo esc_html( $header_cta_label ); ?></a>
 						<div class="expand-button-desktop">
 							<span class="toplevel">
 								<input type="checkbox" id="compact_menu_checkbox">

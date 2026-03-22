@@ -217,3 +217,9 @@
 - feat(asset-migration): added one-time legacy asset-override migration to auto-rewrite saved old logo overrides (`ka-logo-white-footer.svg`, prior navbar logo variants) to current CSA defaults without manual DB edits.
 - chore(runtime-refresh): bumped small-business simplification guard version to `1.0.7` to force a clean reseed/update pass on next load after logo/copy fixes.
 - chore(qa-copy): verified rendered core routes (`/`, `/company/`, `/our-curriculum/`, `/faq/`, `/contact-us/`, `/privacy-policy/`) contain zero visible `Kiddie` text and confirmed footer logo no longer resolves to Kiddie CDN.
+- feat(nav-trim): removed the header top utility strip (`support-nav` / `top-quicklinks`) to simplify the navbar for single-location daycare use.
+- feat(nav-trim): removed header `Schedule a Tour` CTA button from both primary function-nav and compact-menu variants, keeping clean tab-first navigation.
+- style(nav-spacing): added desktop header layout overrides to rebalance main menu tab spacing/alignment after utility-strip and CTA removal.
+- feat(footer-logo): switched footer logo default to `assets/images/new-logo-csa-tree.png` in both theme footer fallback and seed asset defaults.
+- fix(asset-migration): bumped asset migration to `1.0.3` and force-aligned saved `footer_logo` override to tree logo for this rollout so live footer updates without manual DB edits.
+- chore(qa-header-footer): validated rendered header no longer contains `support-nav`, `top-quicklinks`, or header CTA button; validated footer logo now renders `new-logo-csa-tree.png`.

@@ -43,7 +43,7 @@ function kms_get_theme_asset_defaults() {
 	return array(
 		'header_logo_desktop' => $theme_base . 'new-logo-csa.png',
 		'header_logo_mobile'  => $theme_base . 'new-logo-csa.png',
-		'footer_logo'         => $theme_base . 'new-logo-csa.png',
+		'footer_logo'         => $theme_base . 'new-logo-csa-tree.png',
 	);
 }
 
@@ -2778,7 +2778,7 @@ add_action( 'init', 'kms_apply_small_business_simplification_once', 50 );
  * Migrate legacy Kiddie/old-logo asset overrides to current CSA defaults.
  */
 function kms_migrate_legacy_asset_overrides_once() {
-	if ( '1.0.1' === (string) get_option( 'kms_asset_override_migration_ver', '' ) ) {
+	if ( '1.0.3' === (string) get_option( 'kms_asset_override_migration_ver', '' ) ) {
 		return;
 	}
 
@@ -2795,7 +2795,7 @@ function kms_migrate_legacy_asset_overrides_once() {
 			continue;
 		}
 
-		if ( 'footer_logo' === $slot && false !== stripos( $current, 'ka-logo-white-footer.svg' ) ) {
+		if ( 'footer_logo' === $slot && $current !== $defaults[ $slot ] ) {
 			$overrides[ $slot ] = $defaults[ $slot ];
 			$changed            = true;
 			continue;
@@ -2819,7 +2819,7 @@ function kms_migrate_legacy_asset_overrides_once() {
 		kms_set_asset_overrides( $overrides );
 	}
 
-	update_option( 'kms_asset_override_migration_ver', '1.0.1' );
+	update_option( 'kms_asset_override_migration_ver', '1.0.3' );
 }
 add_action( 'init', 'kms_migrate_legacy_asset_overrides_once', 45 );
 

@@ -15,7 +15,7 @@ $programs_url     = home_url( '/our-curriculum/' );
 $faq_url          = home_url( '/faq/' );
 $contact_url      = home_url( '/contact-us/' );
 $privacy_url      = home_url( '/privacy-policy/' );
-$footer_logo_default = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa.png';
+$footer_logo_default = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa-tree.png';
 $footer_logo         = apply_filters( 'kms_asset_url', $footer_logo_default, 'footer_logo' );
 ?>
 
