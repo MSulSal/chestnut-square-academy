@@ -655,3 +655,158 @@ body.kiddie-mock-site #scroll-top:hover {
   background: var(--csa-white);
   color: var(--csa-primary-green);
 }
+
+/* ===== Header + Hero refinement (no-code handoff safe) ===== */
+:root {
+  --csa-crayon-cyan: #18aeea;
+  --csa-crayon-magenta: #d94aa7;
+  --csa-crayon-yellow: #b68a00;
+  --csa-crayon-key: #2b2b2b;
+}
+
+/* Hide accessibility bubble if any legacy markup remains cached. */
+#accessibility-widget,
+.accessibility-widget {
+  display: none !important;
+}
+
+/* Crayon-style nav typography and CMYK tab color sequence. */
+body.kiddie-mock-site #header .main-nav .top-menu > li > .toplevel > a {
+  font-family: "Childhood", "Permanent Marker", "Comic Sans MS", cursive !important;
+  font-size: clamp(1.25rem, 1.55vw, 1.9rem);
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  text-decoration: none !important;
+  text-transform: none;
+}
+
+body.kiddie-mock-site #header .main-nav .top-menu > li:nth-child(1) > .toplevel > a {
+  color: var(--csa-crayon-cyan) !important;
+}
+
+body.kiddie-mock-site #header .main-nav .top-menu > li:nth-child(2) > .toplevel > a {
+  color: var(--csa-crayon-magenta) !important;
+}
+
+body.kiddie-mock-site #header .main-nav .top-menu > li:nth-child(3) > .toplevel > a {
+  color: var(--csa-crayon-yellow) !important;
+  text-shadow: 0 1px 0 rgba(43, 43, 43, 0.18);
+}
+
+body.kiddie-mock-site #header .main-nav .top-menu > li:nth-child(4) > .toplevel > a {
+  color: var(--csa-crayon-key) !important;
+}
+
+body.kiddie-mock-site #header .main-nav .top-menu > li > .toplevel > a:hover,
+body.kiddie-mock-site #header .main-nav .top-menu > li.active > .toplevel > a {
+  filter: brightness(0.9);
+}
+
+@media only screen and (min-width: 1200px) {
+  body.kiddie-mock-site #header .nav-left {
+    width: 296px;
+    min-width: 296px;
+  }
+
+  body.kiddie-mock-site #header .nav-left .logo {
+    height: 142px;
+  }
+
+  body.kiddie-mock-site #header .main-nav .top-menu {
+    gap: clamp(28px, 4vw, 84px);
+  }
+
+  body.kiddie-mock-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa.png"],
+  body.kiddie-mock-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa-tree.png"] {
+    width: 274px;
+    height: 136px;
+    max-width: 274px;
+    max-height: 136px;
+    object-fit: contain;
+  }
+}
+
+body.kiddie-mock-site #header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa.png"],
+body.kiddie-mock-site #header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa-tree.png"] {
+  width: 132px;
+  height: 72px;
+  max-width: none;
+  object-fit: contain;
+}
+
+/* Hero cleanup: remove location finder and rebalance tagline placement. */
+body.kiddie-mock-site #hero .locator,
+body.kiddie-mock-site #hero .sub_content {
+  display: none !important;
+}
+
+body.kiddie-mock-site #hero {
+  min-height: clamp(520px, 74vh, 760px);
+}
+
+body.kiddie-mock-site #hero .copy {
+  min-height: inherit;
+  display: flex;
+  align-items: center;
+}
+
+body.kiddie-mock-site #hero .copy .container {
+  width: min(1180px, 92vw);
+  margin-inline: auto;
+}
+
+body.kiddie-mock-site #hero .copy .headline,
+body.kiddie-mock-site #hero .copy h1.headline {
+  font-family: "Childhood", "Permanent Marker", "Comic Sans MS", cursive !important;
+  font-size: clamp(2.3rem, 6.2vw, 6.1rem);
+  line-height: 0.95;
+  letter-spacing: 0.012em;
+  max-width: 10.8ch;
+  margin: 0;
+  text-wrap: balance;
+}
+
+body.kiddie-mock-site #hero .copy .headline .headline-highlight {
+  display: block;
+  margin-top: 8px;
+}
+
+@media screen and (max-width: 991px) {
+  body.kiddie-mock-site #hero .copy {
+    align-items: flex-end;
+    padding-bottom: 56px;
+  }
+
+  body.kiddie-mock-site #hero .copy .headline,
+  body.kiddie-mock-site #hero .copy h1.headline {
+    font-size: clamp(2.1rem, 10.6vw, 4rem);
+    line-height: 0.98;
+    max-width: 12ch;
+  }
+}
+
+/* Footer logo alignment and sizing. */
+body.kiddie-mock-site #footer .company-info .logo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 18px;
+}
+
+body.kiddie-mock-site #footer .company-info .logo img {
+  display: block;
+  width: min(260px, 72vw);
+  height: auto;
+  max-height: 132px;
+  object-fit: contain;
+  object-position: center;
+}
+
+@media screen and (min-width: 1200px) {
+  body.kiddie-mock-site #footer .company-info .logo {
+    justify-content: flex-start;
+    margin-bottom: 14px;
+  }
+}

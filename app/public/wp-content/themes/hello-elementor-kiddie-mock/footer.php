@@ -78,16 +78,6 @@ $footer_logo         = apply_filters( 'kms_asset_url', $footer_logo_default, 'fo
 	</div>
 </footer>
 
-<a
-	id="accessibility-widget"
-	class="accessibility-widget"
-	href="#main-content"
-	aria-label="Accessibility options"
-	title="Accessibility options"
->
-	<i class="fa-solid fa-universal-access" aria-hidden="true"></i>
-</a>
-
 <?php wp_footer(); ?>
 </body>
 </html>

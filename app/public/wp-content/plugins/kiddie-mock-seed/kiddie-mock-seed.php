@@ -2466,6 +2466,7 @@ function kms_trim_small_business_html( $path, $html ) {
 
 	$queries_map = array(
 		'home'           => array(
+			"//*[@id='hero']//*[contains(concat(' ', normalize-space(@class), ' '), ' locator ')]",
 			"//*[@id='join-us']",
 			"//*[@id='start-your-career']",
 			"//*[@id='testimonial']",
@@ -2558,10 +2559,14 @@ function kms_trim_small_business_html( $path, $html ) {
 	libxml_clear_errors();
 	libxml_use_internal_errors( $internal_errors );
 
+	$hero_tagline_html = 'Rooted in Care.<br><span class="headline-highlight">Growing Together.</span>';
+
 	$text_replacements = array(
-		'Where <span class="headline-highlight">LEARNING</span> Grows' => 'Rooted in Care. Growing Together.',
-		'Where <span class="headline-highlight">Learning</span> Grows' => 'Rooted in Care. Growing Together.',
-		'Where <span>Learning</span> Grows' => 'Rooted in Care. Growing Together.',
+		'Where <span class="headline-highlight">LEARNING</span> Grows' => $hero_tagline_html,
+		'Where <span class="headline-highlight">Learning</span> Grows' => $hero_tagline_html,
+		'Where <span>Learning</span> Grows' => $hero_tagline_html,
+		'Rooted in Care. Growing Together.' => $hero_tagline_html,
+		'Rooted in Care.<br>Growing Together.' => $hero_tagline_html,
 		'https://kiddieacademy.com/wp-content/uploads/2024/09/landing-hero-jpg.avif' => trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/cover.png',
 		'https://kiddieacademy.com/wp-content/uploads/2024/09/landing-hero-mobile-updated2-jpg.avif' => trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/cover.png',
 		'alt="Kiddie Academy"' => 'alt="Chestnut Square Academy"',
@@ -2786,7 +2791,7 @@ add_action( 'init', 'kms_apply_small_business_simplification_once', 50 );
  * One-time refresh of Home hero text/image after branding updates.
  */
 function kms_refresh_home_hero_once() {
-	if ( '1.0.1' === (string) get_option( 'kms_home_hero_refresh_ver', '' ) ) {
+	if ( '1.0.2' === (string) get_option( 'kms_home_hero_refresh_ver', '' ) ) {
 		return;
 	}
 
@@ -2798,7 +2803,7 @@ function kms_refresh_home_hero_once() {
 		}
 	}
 
-	update_option( 'kms_home_hero_refresh_ver', '1.0.1' );
+	update_option( 'kms_home_hero_refresh_ver', '1.0.2' );
 }
 add_action( 'init', 'kms_refresh_home_hero_once', 52 );
 

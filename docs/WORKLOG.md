@@ -230,3 +230,13 @@
 - feat(runtime-refresh): added one-time `kms_refresh_home_hero_once` init hook to re-upsert only the Home page with updated hero text/image while preserving native Elementor component-level editability.
 - fix(owner-edit-defaults): updated owner-edit shared hero image default to local `cover.png` so future owner-mode rebuilds keep the same hero media.
 - chore(qa-hero): verified live homepage now contains the new tagline and `cover.png` references, with no remaining `landing-hero-*.avif` strings.
+- feat(hero-copy): updated Home hero headline markup to `Rooted in Care.<br><span class="headline-highlight">Growing Together.</span>` for stronger visual hierarchy.
+- feat(hero-cleanup): removed the hero location finder/input block (`.locator`) and associated “Use your current location” text from the Home landing section.
+- feat(hero-image): kept Home hero background and picture sources on local `assets/images/cover.png` and added refresh-path replacements so legacy hero URLs are normalized on update.
+- style(nav-crayon): switched navbar tab typography to crayon-style (`Childhood`/`Permanent Marker`) and applied CMYK-inspired per-tab colors (cyan, magenta, yellow, key/black) via ordered tab selectors.
+- style(nav-logo): increased desktop/mobile navbar logo display sizing for `new-logo-csa*.png` assets while preserving centered alignment.
+- style(hero-layout): increased hero tagline size and rebalanced copy placement for desktop/mobile so headline reads clearly without the removed locator block.
+- fix(accessibility-widget): removed the bottom-left accessibility icon markup from footer template and added CSS fallback hide for any cached legacy markup.
+- style(footer-logo): refined footer logo container/image alignment and sizing to improve placement with `new-logo-csa-tree.png`.
+- feat(runtime-refresh): bumped `kms_home_hero_refresh_ver` to `1.0.2` and re-upserted Home once so existing live native-Elementor page reflects the new hero markup/structure.
+- chore(qa): verified live Home has no hero locator input/text, no accessibility icon markup, hero headline updated, footer tree logo source intact, and `elementor-widget-html` remains `0`.
