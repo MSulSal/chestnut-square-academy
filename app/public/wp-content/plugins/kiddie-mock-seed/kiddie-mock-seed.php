@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kiddie Mock Seed
  * Description: Builds a full Kiddie Academy style frontend mock across all key pages for WordPress + Elementor testing.
- * Version: 1.0.1
+ * Version: 1.0.3
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: kiddie-mock-seed
@@ -747,6 +747,66 @@ function kms_localize_internal_links( $html ) {
 }
 
 /**
+ * Split full HTML markup into top-level blocks for Elementor editing.
+ *
+ * @param string $html HTML block.
+ * @return array<int,string>
+ */
+function kms_split_html_for_elementor( $html ) {
+	$markup = trim( (string) $html );
+
+	if ( '' === $markup ) {
+		return array();
+	}
+
+	// Strip a single outer <main> wrapper so each top-level section/div can be
+	// represented as an independent Elementor section.
+	$markup = (string) preg_replace( '/^\s*<main\b[^>]*>/i', '', $markup );
+	$markup = (string) preg_replace( '/<\/main>\s*$/i', '', $markup );
+	$markup = trim( $markup );
+
+	if ( '' === $markup ) {
+		return array();
+	}
+
+	if ( ! class_exists( 'DOMDocument' ) || ! class_exists( 'DOMXPath' ) ) {
+		return array( $markup );
+	}
+
+	$doc        = new DOMDocument();
+	$wrapped    = '<?xml encoding="utf-8" ?><div id="kms-root">' . $markup . '</div>';
+	$libxml_old = libxml_use_internal_errors( true );
+	$loaded     = $doc->loadHTML( $wrapped, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
+	libxml_clear_errors();
+	libxml_use_internal_errors( $libxml_old );
+
+	if ( ! $loaded ) {
+		return array( $markup );
+	}
+
+	$xpath = new DOMXPath( $doc );
+	$nodes = $xpath->query( '//*[@id="kms-root"]/*|//*[@id="kms-root"]/comment()' );
+
+	$chunks = array();
+
+	if ( $nodes instanceof DOMNodeList ) {
+		foreach ( $nodes as $node ) {
+			$chunk = trim( (string) $doc->saveHTML( $node ) );
+
+			if ( '' !== $chunk ) {
+				$chunks[] = $chunk;
+			}
+		}
+	}
+
+	if ( empty( $chunks ) ) {
+		return array( $markup );
+	}
+
+	return $chunks;
+}
+
+/**
  * Apply Elementor document data for editable page content.
  *
  * @param int    $post_id Post ID.
@@ -757,12 +817,21 @@ function kms_set_elementor_document( $post_id, $html ) {
 		return;
 	}
 
-	$section_id = substr( md5( 'sec-' . $post_id ), 0, 8 );
-	$column_id  = substr( md5( 'col-' . $post_id ), 0, 8 );
-	$widget_id  = substr( md5( 'wid-' . $post_id ), 0, 8 );
+	$chunks = kms_split_html_for_elementor( $html );
 
-	$data = array(
-		array(
+	if ( empty( $chunks ) ) {
+		$chunks = array( (string) $html );
+	}
+
+	$data = array();
+
+	foreach ( $chunks as $index => $chunk_html ) {
+		$seed       = $post_id . '-' . $index;
+		$section_id = substr( md5( 'sec-' . $seed ), 0, 8 );
+		$column_id  = substr( md5( 'col-' . $seed ), 0, 8 );
+		$widget_id  = substr( md5( 'wid-' . $seed ), 0, 8 );
+
+		$data[] = array(
 			'id'       => $section_id,
 			'elType'   => 'section',
 			'settings' => array(),
@@ -779,7 +848,7 @@ function kms_set_elementor_document( $post_id, $html ) {
 							'elType'     => 'widget',
 							'widgetType' => 'html',
 							'settings'   => array(
-								'html' => $html,
+								'html' => $chunk_html,
 							),
 							'elements'   => array(),
 						),
@@ -788,8 +857,8 @@ function kms_set_elementor_document( $post_id, $html ) {
 				),
 			),
 			'isInner'  => false,
-		),
-	);
+		);
+	}
 
 	update_post_meta( $post_id, '_elementor_edit_mode', 'builder' );
 	update_post_meta( $post_id, '_elementor_template_type', 'wp-page' );
@@ -889,7 +958,7 @@ function kms_run_seed( $overwrite = true ) {
  * but cached/stale Elementor document data remained behind.
  */
 function kms_sync_elementor_documents_once() {
-	if ( get_option( 'kms_elementor_sync_version' ) === '1.0.3' ) {
+	if ( get_option( 'kms_elementor_sync_version' ) === '1.0.4' ) {
 		return;
 	}
 
@@ -904,7 +973,7 @@ function kms_sync_elementor_documents_once() {
 		kms_set_elementor_document( (int) $page->ID, (string) $page->post_content );
 	}
 
-	update_option( 'kms_elementor_sync_version', '1.0.3' );
+	update_option( 'kms_elementor_sync_version', '1.0.4' );
 }
 add_action( 'init', 'kms_sync_elementor_documents_once', 25 );
 
@@ -983,6 +1052,17 @@ function kms_upgrade_legacy_seeded_content( $content ) {
 
 		if ( $needs_upgrade ) {
 			$new_content = kms_localize_internal_links( kms_get_faq_html() );
+		}
+	} elseif ( 'home' === $template ) {
+		$has_escaped_hero_css = false !== strpos( $content, '#hero .background-image {<br />' ) || false !== strpos( $content, '&#8216;https://kiddieacademy.com/wp-content/uploads/2024/09/landing-hero' );
+
+		if ( $has_escaped_hero_css ) {
+			$needs_upgrade = true;
+			$new_content   = kms_localize_internal_links( kms_get_template_file_html( 'home' ) );
+
+			if ( '' === $new_content ) {
+				$new_content = kms_localize_internal_links( kms_get_page_html( 'home', (string) $page->post_title, $path ) );
+			}
 		}
 	}
 

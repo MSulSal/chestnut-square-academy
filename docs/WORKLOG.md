@@ -126,3 +126,8 @@
 - feat(theme): extracted and added `assets/css/kiddie-core-footer.css` from saved live reference snapshot and enqueued it between `kiddie-core.css` and overrides.
 - refactor(css): removed temporary curriculum/why-kiddie desktop fallback overrides so native reference section styles control layout/visibility.
 - chore(qa): reran full-page and scroll-slice Playwright captures plus desktop DOM checks to confirm `#curriculum` now uses desktop-only rail/image layout and lower sections render in structured composition.
+- fix(runtime-home): added automatic self-heal for malformed home hero content when `#hero .background-image` style is escaped into paragraph text (the root cause of shifted/blank hero image).
+- chore(guardrail): bumped `kiddie-mock-seed` plugin metadata to `1.0.2` to mark the runtime repair patch level.
+- feat(elementor-editability): replaced single-widget Elementor document generation with multi-section chunk generation (top-level page blocks become draggable/reorderable sections in Navigator).
+- feat(elementor-migration): bumped one-time Elementor document sync gate to `1.0.4` so existing seeded pages auto-convert to the new multi-section editable structure on next init.
+- chore(versioning): bumped `kiddie-mock-seed` plugin metadata to `1.0.3` for the drag-and-drop structure pass.
