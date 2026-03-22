@@ -9,6 +9,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Detect Elementor editor/preview contexts to avoid frontend script/filter clashes.
+ *
+ * @return bool
+ */
+function kiddie_mock_is_elementor_editor_context() {
+	if ( is_admin() ) {
+		return true;
+	}
+
+	if ( isset( $_GET['elementor-preview'] ) ) {
+		return true;
+	}
+
+	if ( isset( $_GET['action'] ) && 'elementor' === sanitize_key( (string) wp_unslash( $_GET['action'] ) ) ) {
+		return true;
+	}
+
+	if ( class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance->editor ) ) {
+		$editor = \Elementor\Plugin::$instance->editor;
+		if ( is_object( $editor ) && method_exists( $editor, 'is_edit_mode' ) && $editor->is_edit_mode() ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 function kiddie_mock_enqueue_assets() {
 	$theme_version = wp_get_theme()->get( 'Version' );
 
@@ -40,13 +68,15 @@ function kiddie_mock_enqueue_assets() {
 		$theme_version
 	);
 
-	wp_enqueue_script(
-		'kiddie-mock-js',
-		get_stylesheet_directory_uri() . '/assets/js/kiddie-mock.js',
-		array(),
-		$theme_version,
-		true
-	);
+	if ( ! kiddie_mock_is_elementor_editor_context() ) {
+		wp_enqueue_script(
+			'kiddie-mock-js',
+			get_stylesheet_directory_uri() . '/assets/js/kiddie-mock.js',
+			array(),
+			$theme_version,
+			true
+		);
+	}
 }
 add_action( 'wp_enqueue_scripts', 'kiddie_mock_enqueue_assets', 20 );
 
@@ -197,7 +227,11 @@ function kiddie_mock_set_elementor_html( $post_id, $html ) {
 function kiddie_mock_runtime_page_sync() {
 	global $wpdb;
 
-	if ( get_option( 'kiddie_mock_runtime_sync_ver' ) === '1.0.2' ) {
+	if ( function_exists( 'kms_get_seed_profile' ) && 'mock-parity' !== kms_get_seed_profile() ) {
+		return;
+	}
+
+	if ( get_option( 'kiddie_mock_runtime_sync_ver' ) === '1.0.3' ) {
 		return;
 	}
 
@@ -251,7 +285,7 @@ function kiddie_mock_runtime_page_sync() {
 		kiddie_mock_set_elementor_html( (int) $academies_page->ID, $academies_markup );
 	}
 
-	update_option( 'kiddie_mock_runtime_sync_ver', '1.0.2' );
+	update_option( 'kiddie_mock_runtime_sync_ver', '1.0.3' );
 }
 add_action( 'init', 'kiddie_mock_runtime_page_sync', 35 );
 
@@ -262,7 +296,15 @@ add_action( 'init', 'kiddie_mock_runtime_page_sync', 35 );
  * @return string
  */
 function kiddie_mock_render_parity_overrides( $content ) {
-	if ( is_admin() || ! is_string( $content ) ) {
+	if ( ! is_string( $content ) ) {
+		return $content;
+	}
+
+	if ( function_exists( 'kms_get_seed_profile' ) && 'mock-parity' !== kms_get_seed_profile() ) {
+		return $content;
+	}
+
+	if ( kiddie_mock_is_elementor_editor_context() ) {
 		return $content;
 	}
 

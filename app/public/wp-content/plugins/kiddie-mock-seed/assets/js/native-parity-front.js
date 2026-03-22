@@ -3,6 +3,13 @@
     return !!document.body && document.body.classList.contains("elementor-editor-active");
   }
 
+  function isEditorPreviewQuery() {
+    if (!window.location || !window.location.search) {
+      return false;
+    }
+    return /(?:^|[?&])(elementor-preview=|action=elementor(?:&|$))/i.test(window.location.search);
+  }
+
   function isParityMode() {
     return !!document.body && document.body.classList.contains("kms-native-parity-mode");
   }
@@ -96,7 +103,7 @@
       return;
     }
 
-    if (isEditorActive()) {
+    if (isEditorActive() || isEditorPreviewQuery()) {
       return;
     }
 

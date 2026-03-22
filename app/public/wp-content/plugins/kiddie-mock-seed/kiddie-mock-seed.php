@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kiddie Mock Seed
  * Description: Builds a full Kiddie Academy style frontend mock across all key pages for WordPress + Elementor testing.
- * Version: 1.3.1
+ * Version: 1.3.2
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: kiddie-mock-seed
@@ -2546,6 +2546,34 @@ function kms_add_frontend_body_classes( $classes ) {
 add_filter( 'body_class', 'kms_add_frontend_body_classes' );
 
 /**
+ * Detect Elementor editor/preview context.
+ *
+ * @return bool
+ */
+function kms_is_elementor_editor_context() {
+	if ( is_admin() ) {
+		return true;
+	}
+
+	if ( isset( $_GET['elementor-preview'] ) ) {
+		return true;
+	}
+
+	if ( isset( $_GET['action'] ) && 'elementor' === sanitize_key( (string) wp_unslash( $_GET['action'] ) ) ) {
+		return true;
+	}
+
+	if ( class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance->editor ) ) {
+		$editor = \Elementor\Plugin::$instance->editor;
+		if ( is_object( $editor ) && method_exists( $editor, 'is_edit_mode' ) && $editor->is_edit_mode() ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
  * Enqueue owner-edit mode styles when active.
  */
 function kms_enqueue_owner_edit_styles() {
@@ -2565,15 +2593,17 @@ function kms_enqueue_owner_edit_styles() {
 			'kms-native-parity-mode',
 			plugin_dir_url( __FILE__ ) . 'assets/css/native-parity-mode.css',
 			array(),
-			'1.1.0'
+			'1.2.0'
 		);
-		wp_enqueue_script(
-			'kms-native-parity-front',
-			plugin_dir_url( __FILE__ ) . 'assets/js/native-parity-front.js',
-			array(),
-			'1.1.0',
-			true
-		);
+		if ( ! kms_is_elementor_editor_context() ) {
+			wp_enqueue_script(
+				'kms-native-parity-front',
+				plugin_dir_url( __FILE__ ) . 'assets/js/native-parity-front.js',
+				array(),
+				'1.2.0',
+				true
+			);
+		}
 	}
 }
 add_action( 'wp_enqueue_scripts', 'kms_enqueue_owner_edit_styles', 40 );

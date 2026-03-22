@@ -148,3 +148,6 @@
 - fix(native-parity): added safe image conversion rules (allow lazy-load attributes, skip unsupported `data-*` patterns like program toggles) to preserve interactions while improving asset-level editability.
 - chore(qa): validated native seed + widget composition across full page tree via WP-CLI audit scripts and confirmed frontend wrapper-removal behavior on key routes with headless checks.
 - chore(versioning): bumped `kiddie-mock-seed` to `1.3.1` and bumped native parity asset versions for cache-safe rollout.
+- fix(editor-safety): added Elementor editor/preview context guards to both theme/runtime parity layer and native parity frontend JS so DOM rewrites do not run during widget editing.
+- fix(editor-safety): restricted theme runtime content sync and render-time parity overrides to `mock-parity` profile only, preventing HTML-widget rewrites from clashing with owner/native profiles.
+- chore(versioning): bumped `kiddie-mock-seed` to `1.3.2` and native parity assets to `1.2.0` for safe cache invalidation after guardrail updates.
