@@ -1259,8 +1259,10 @@ function kms_owner_shortcode_widget( $post_id, &$counter, $shortcode, $classes =
  * @return array<string,string>
  */
 function kms_owner_shared_images() {
+	$theme_base = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/';
+
 	return array(
-		'hero'      => 'https://kiddieacademy.com/wp-content/uploads/2024/09/landing-hero-jpg.avif',
+		'hero'      => $theme_base . 'cover.png',
 		'classroom' => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Preschool.jpg',
 		'infant'    => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg',
 		'toddler'   => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg',
@@ -2557,6 +2559,12 @@ function kms_trim_small_business_html( $path, $html ) {
 	libxml_use_internal_errors( $internal_errors );
 
 	$text_replacements = array(
+		'Where <span class="headline-highlight">LEARNING</span> Grows' => 'Rooted in Care. Growing Together.',
+		'Where <span class="headline-highlight">Learning</span> Grows' => 'Rooted in Care. Growing Together.',
+		'Where <span>Learning</span> Grows' => 'Rooted in Care. Growing Together.',
+		'https://kiddieacademy.com/wp-content/uploads/2024/09/landing-hero-jpg.avif' => trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/cover.png',
+		'https://kiddieacademy.com/wp-content/uploads/2024/09/landing-hero-mobile-updated2-jpg.avif' => trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/cover.png',
+		'alt="Kiddie Academy"' => 'alt="Chestnut Square Academy"',
 		'Find an Academy Near You'             => 'Schedule a Tour',
 		'Find Your Academy'                    => 'Schedule a Tour',
 		'View All Academies'                   => 'Schedule a Tour',
@@ -2773,6 +2781,26 @@ function kms_apply_small_business_simplification_once() {
 	kms_run_small_business_simplification( true );
 }
 add_action( 'init', 'kms_apply_small_business_simplification_once', 50 );
+
+/**
+ * One-time refresh of Home hero text/image after branding updates.
+ */
+function kms_refresh_home_hero_once() {
+	if ( '1.0.1' === (string) get_option( 'kms_home_hero_refresh_ver', '' ) ) {
+		return;
+	}
+
+	$blueprints = kms_get_small_business_blueprints();
+	foreach ( $blueprints as $blueprint ) {
+		if ( isset( $blueprint['path'] ) && 'home' === (string) $blueprint['path'] ) {
+			kms_upsert_small_business_page( $blueprint, true );
+			break;
+		}
+	}
+
+	update_option( 'kms_home_hero_refresh_ver', '1.0.1' );
+}
+add_action( 'init', 'kms_refresh_home_hero_once', 52 );
 
 /**
  * Migrate legacy Kiddie/old-logo asset overrides to current CSA defaults.

@@ -223,3 +223,10 @@
 - feat(footer-logo): switched footer logo default to `assets/images/new-logo-csa-tree.png` in both theme footer fallback and seed asset defaults.
 - fix(asset-migration): bumped asset migration to `1.0.3` and force-aligned saved `footer_logo` override to tree logo for this rollout so live footer updates without manual DB edits.
 - chore(qa-header-footer): validated rendered header no longer contains `support-nav`, `top-quicklinks`, or header CTA button; validated footer logo now renders `new-logo-csa-tree.png`.
+- chore(asset-sync): replaced theme `assets/images/new-logo-csa-tree.png` with the newly provided `docs/new-logo-csa-tree.png` (same filename, updated binary) so footer now renders the latest tree logo without code-path changes.
+- feat(home-hero): updated Home hero tagline to `Rooted in Care. Growing Together.` across the small-business trim pipeline and live rendered homepage output.
+- feat(home-hero-image): switched Home hero image sources from legacy Kiddie AVIF URLs to local theme asset `/wp-content/themes/hello-elementor-kiddie-mock/assets/images/cover.png` (CSS background + picture/srcset + fallback img).
+- chore(asset-sync): copied latest user-provided `docs/cover.png` into theme assets as `assets/images/cover.png` for stable local/production portability.
+- feat(runtime-refresh): added one-time `kms_refresh_home_hero_once` init hook to re-upsert only the Home page with updated hero text/image while preserving native Elementor component-level editability.
+- fix(owner-edit-defaults): updated owner-edit shared hero image default to local `cover.png` so future owner-mode rebuilds keep the same hero media.
+- chore(qa-hero): verified live homepage now contains the new tagline and `cover.png` references, with no remaining `landing-hero-*.avif` strings.
