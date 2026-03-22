@@ -48,7 +48,7 @@ if ( '' !== $elementor_site_logo ) {
 		<div class="nav-left">
 			<div class="logo">
 				<a href="<?php echo esc_url( $home_url ); ?>">
-					<img src="<?php echo esc_url( $desktop_logo ); ?>" alt="Kiddie academy header logo for desktop" />
+					<img src="<?php echo esc_url( $desktop_logo ); ?>" alt="Chestnut Square Academy logo for desktop" />
 				</a>
 			</div>
 		</div>
@@ -86,7 +86,7 @@ if ( '' !== $elementor_site_logo ) {
 				<div class="function-nav">
 					<div class="mobile-logo">
 						<a href="<?php echo esc_url( $home_url ); ?>">
-							<img src="<?php echo esc_url( $mobile_logo ); ?>" alt="Kiddie academy header logo for mobile" />
+							<img src="<?php echo esc_url( $mobile_logo ); ?>" alt="Chestnut Square Academy logo for mobile" />
 						</a>
 					</div>
 					<div class="find-button">

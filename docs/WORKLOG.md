@@ -206,3 +206,9 @@
 - feat(nav-trim): reduced header navigation to small-center essentials (About, Programs, FAQ, Contact) and switched header CTA to `Schedule a Tour`.
 - feat(footer-trim): replaced corporate/franchise footer destinations with local-only quick links and contact actions for single-location operation.
 - chore(runtime): triggered simplification rollout via local HTTP request and verified published pages now include only the six core routes.
+- feat(copy-pass): replaced remaining Kiddie-branded user-facing copy across core pages with Chestnut Square Academy wording while preserving layout/styling.
+- feat(copy-pass): updated FAQ/public generic page copy to local single-center messaging and removed franchise/corporate references.
+- feat(program-scope): removed school-age and summer-camp curriculum items from Home/Programs sections to match the smaller single-location age scope.
+- feat(contact-copy): converted contact-page corporate copy blocks to local Downtown McKinney wording (address/hours and tour-focused CTA language).
+- fix(a11y-copy): updated header/mobile and footer logo alt text from Kiddie branding to Chestnut Square Academy branding.
+- chore(qa-copy): re-ran simplification rollout and verified `Kiddie` mentions in `<main>` content are now `0` on Home/About/Programs/FAQ/Contact/Privacy pages, with `elementor-widget-html` still `0` (native widget editability preserved).

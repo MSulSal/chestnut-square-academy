@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kiddie Mock Seed
  * Description: Builds a full Kiddie Academy style frontend mock across all key pages for WordPress + Elementor testing.
- * Version: 1.3.18
+ * Version: 1.3.22
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: kiddie-mock-seed
@@ -448,10 +448,10 @@ function kms_get_generic_html( $title, $path ) {
 				<img data-lazy-src="{$image_main}" class="lazy fill-container" alt="{$image_alt}">
 			</div>
 			<div class="text">
-				<h4>Community Begins Here</h4>
-				<p>Kiddie Academy focuses on helping children learn through curiosity, confidence, and meaningful day-to-day experiences.</p>
-				<p>Families can explore programs, connect with local Academies, and learn how educators support growth at each stage.</p>
-				<a class="button-round" href="/contact-us/">Request Information</a>
+				<h4>Rooted in Downtown McKinney</h4>
+				<p>Chestnut Square Academy supports early learners with warm care, structured routines, and joyful classroom experiences.</p>
+				<p>Families can explore programs, ask enrollment questions, and schedule a tour to see daily life in action.</p>
+				<a class="button-round" href="/contact-us/">Schedule a Tour</a>
 			</div>
 		</div>
 	</section>
@@ -462,8 +462,8 @@ function kms_get_generic_html( $title, $path ) {
 			</div>
 			<div class="text">
 				<h4>Learning Moments That Matter</h4>
-				<p>Every Academy environment is designed to support age-appropriate learning, social development, and strong family partnership.</p>
-				<p>Use the main navigation to explore approach, programs, enrollment pathways, and frequently asked questions.</p>
+				<p>Our classrooms are designed to support age-appropriate learning, social growth, and strong family partnership.</p>
+				<p>Use the main navigation to explore our programs, frequently asked questions, and next steps for enrollment.</p>
 			</div>
 		</div>
 	</section>
@@ -483,7 +483,7 @@ function kms_get_faq_html() {
 		<div class="breadcrumbs">
 			<a href="/">Home</a>
 			<span> / </span>
-			<span class="current-page">Kiddie Academy FAQs</span>
+			<span class="current-page">Chestnut Square Academy FAQs</span>
 		</div>
 	</div>
 	<section class="subpage-hero padding-bottom padding-top offset-bg-parent">
@@ -501,19 +501,19 @@ function kms_get_faq_html() {
 		<div class="links">
 			<div>
 				<p data-question="q1"><strong>What ages do you serve?</strong><i class="fa-solid fa-chevron-down"></i></p>
-				<div data-answer="q1" hidden><p>Programs vary by Academy location, with options organized by age and developmental stage from infants through school-age programs.</p></div>
+				<div data-answer="q1" hidden><p>Chestnut Square Academy serves children from 6 weeks through 5/6 years with age-based classrooms and routines.</p></div>
 			</div>
 			<div>
 				<p data-question="q2"><strong>Do you offer full-day and part-day options?</strong><i class="fa-solid fa-chevron-down"></i></p>
-				<div data-answer="q2" hidden><p>Scheduling options can differ by location and classroom availability. Contact your preferred Academy to review current enrollment options.</p></div>
+				<div data-answer="q2" hidden><p>Scheduling options depend on classroom availability. Contact us to review current openings and daily schedule options.</p></div>
 			</div>
 			<div>
 				<p data-question="q3"><strong>How do we schedule a tour?</strong><i class="fa-solid fa-chevron-down"></i></p>
-				<div data-answer="q3" hidden><p>Use our contact page and submit your preferred day/time.</p></div>
+				<div data-answer="q3" hidden><p>Use the contact page to send your preferred day and time, and our team will follow up to confirm.</p></div>
 			</div>
 			<div>
-				<p data-question="q4"><strong>What should we bring on the first day?</strong><i class="fa-solid fa-chevron-down"></i></p>
-				<div data-answer="q4" hidden><p>Your Academy will share a classroom-specific checklist before start date, including required forms, comfort items, and daily essentials.</p></div>
+				<p data-question="q4"><strong>How can I learn about tuition and enrollment?</strong><i class="fa-solid fa-chevron-down"></i></p>
+				<div data-answer="q4" hidden><p>Tuition depends on your child&rsquo;s age and weekly schedule. Contact us directly for current enrollment details.</p></div>
 			</div>
 		</div>
 	</section>
@@ -2468,6 +2468,15 @@ function kms_trim_small_business_html( $path, $html ) {
 			"//*[@id='start-your-career']",
 			"//*[@id='testimonial']",
 			"//*[@id='contact-us-academy']",
+			"//*[@id='faqs']",
+			"//*[contains(concat(' ', normalize-space(@class), ' '), ' featured-blogs ')]",
+			"//*[contains(concat(' ', normalize-space(@class), ' '), ' curated-blog-posts ')]",
+			"//*[contains(concat(' ', normalize-space(@class), ' '), ' blog-search ')]/ancestor::section[1]",
+			"//*[contains(concat(' ', normalize-space(@class), ' '), ' blog-preview-section ')]",
+			"//*[@data-program='school-age']",
+			"//*[@data-program='summer-camp-program']",
+			"//*[contains(@href,'school-age-programs')]/ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' slide ')][1]",
+			"//*[contains(@href,'summer-camp')]/ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' slide ')][1]",
 		),
 		'company'        => array(
 			"//*[@id='experts']",
@@ -2481,9 +2490,12 @@ function kms_trim_small_business_html( $path, $html ) {
 			"//*[self::section and contains(concat(' ', normalize-space(@class), ' '), ' image-text ')]",
 			"//*[@id='testimonial']",
 			"//*[@id='contact-us-academy']",
+			"//*[@data-program='school-age']",
+			"//*[@data-program='summer-camp-program']",
+			"//*[contains(@href,'school-age-programs')]/ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' slide ')][1]",
+			"//*[contains(@href,'summer-camp')]/ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' slide ')][1]",
 		),
 		'contact-us'     => array(
-			"//*[self::section and contains(concat(' ', normalize-space(@class), ' '), ' text-image ')]",
 			"//*[@id='contact-us-academy']",
 		),
 	);
@@ -2548,15 +2560,65 @@ function kms_trim_small_business_html( $path, $html ) {
 		'Find an Academy Near You'             => 'Schedule a Tour',
 		'Find Your Academy'                    => 'Schedule a Tour',
 		'View All Academies'                   => 'Schedule a Tour',
+		'Why Parents Love Kiddie Academy<sup>Â®</sup>' => 'Why Families Choose Chestnut Square Academy',
+		'Why Parents Love Kiddie Academy<sup>®</sup>' => 'Why Families Choose Chestnut Square Academy',
+		'The Kiddie Academy Difference'        => 'The Chestnut Square Academy Difference',
+		'A Curriculum Focused on Outcomes'     => 'A Care-and-Learning Approach',
+		'Our educators nurture, educate, and inspire your child through our proprietary <em>Life Essentials<sup>Â®</sup></em> curriculum, which is designed to focus on the six outcomes that prepare children for life.' => 'Our teachers create calm, nurturing classrooms where children build confidence, routines, and early learning skills every day.',
+		'About Life Essentials'                => 'Our Approach',
+		'Your childâ€™s safety is our first priority. Every Kiddie Academy Educational Child Care features secure, restricted entries and employees are trained on health and safety protocols.' => 'Your child&rsquo;s safety is our first priority. Our team follows classroom safety procedures and daily supervision practices designed for young learners.',
+		'About Health & Safety'                => 'Health & Safety',
+		'We are a community where lifelong friendships and lasting memories are formed.' => 'As a small Downtown McKinney center, we build close relationships with children and families.',
+		'Community Begins Here<sup>Â®</sup>'    => 'A Neighborhood School Community',
+		'Making the Most of Every Learning Moment, from Day One' => 'Care, Learning, and Family Partnership in Downtown McKinney',
+		'Weâ€™ve been shaping, fueling, and nurturing childrenâ€™s natural curiosity since we opened our first Academy over 40 years ago. Weâ€™re driven to prepare children for life. Through our passion for early childhood education, community commitment, and our <em>Life Essentials</em><sup>Â®</sup> curriculum, weâ€™re here to educate and encourage your child to do more and be moreâ€”not just while theyâ€™re with us, but outside the classroom as well.' => 'Chestnut Square Academy is a small childcare center in Historic Downtown McKinney serving children from 6 weeks through 5/6 years. As a Texas Rising Star participant, we focus on warm relationships, reliable care, and strong early-learning foundations.',
+		'Explore Our History'                  => 'Schedule a Tour',
+		'href="/about-us/timeline/"'          => 'href="/contact-us/"',
+		'Care and curriculum go hand in hand. We nurture and guide children, inspiring them to develop a life-long love of learning. Our proprietary curriculum, <em>Life Essentials</em>, was crafted to focus on <a href="/contact-us/" aria-label="Outcomes for Life - six key outcomes">six key outcomes</a>, preparing your child for life.' => 'Care and learning go hand in hand. We guide children with age-appropriate activities, supportive routines, and family communication that helps each child grow with confidence.',
+		'We are a community that nurtures, educates, and inspires children for the future in Kiddie Academy locations across the country.' => 'We are a close-knit school community that nurtures, educates, and inspires children in the heart of Downtown McKinney.',
+		'Founded in 1981, George and Pauline Miller combined their passion to create an educational child care brand that creates lasting memories. The Miller family continues to own and operate Kiddie Academy to this day. Over the years, they have empowered other families to own and operate Academies in their communities.' => 'Chestnut Square Academy is family-focused and community-centered, with a small enrollment that allows personal attention and strong relationships.',
+		'What are your teacher qualifications and training requirements?' => 'What are your teacher qualifications and training requirements?',
+		'All Kiddie Academy educators must meet or exceed the state requirements for child care providers, including background clearance, education qualifications, and ongoing professional development.' => 'Our educators meet Texas licensing requirements, including background checks, required training, and ongoing professional development.',
+		'How much is tuition at Kiddie Academy ?' => 'How can I learn about tuition and enrollment?',
+		'Tuition at Kiddie Academy is affected by your child&rsquo;s age, programs, days and hours your child attends, and location. Contact your local Academy for specific costs.' => 'Tuition depends on your child&rsquo;s age and weekly schedule. Contact us directly for current enrollment details.',
+		'Focused on six key outcomes for your child, our proprietary, developmentally-appropriate' => 'Our age-appropriate lessons combine teacher guidance, hands-on play, and social-emotional growth throughout the day.',
+		'Life Essentials'                      => 'daily learning',
+		'Kiddie Academy FAQs'                 => 'Chestnut Square Academy FAQs',
+		'Programs vary by Academy location, with options organized by age and developmental stage from infants through school-age programs.' => 'Programs are organized by age and developmental stage from infancy through pre-kindergarten.',
+		'Scheduling options can differ by location and classroom availability. Contact your preferred Academy to review current enrollment options.' => 'Scheduling options depend on classroom availability. Contact us to review current openings and tour times.',
+		'What should we bring on the first day?' => 'What should we bring on the first day?',
+		'Your Academy will share a classroom-specific checklist before start date, including required forms, comfort items, and daily essentials.' => 'Our team will share a classroom checklist before your start date, including required forms and daily comfort items.',
+		'Learning with momentum'               => 'Schedule a Tour',
+		'Our approach to early education is to capture the momentum of curiosity and involve parents in every minute of it.' => 'We would love to meet your family, answer your questions, and help you explore the best classroom fit for your child.',
 		'Contact <br>Kiddie Academy Corporate' => 'Contact <br>Chestnut Square Academy',
 		'Kiddie Academy Corporate'             => 'Chestnut Square Academy',
 		'3415 Box Hill Corporate Center Drive' => '402 S. Chestnut St.',
 		'Abingdon, MD 21009'                   => 'McKinney, TX',
+		'Kiddie Academy<sup>Â®</sup>'          => 'Chestnut Square Academy',
+		'Kiddie Academy<sup>®</sup>'           => 'Chestnut Square Academy',
+		'Local: <a href="tel:410-515-0788"><b>410-515-0788</b></a>' => 'Hours: Monday-Friday, 6:00 AM-6:00 PM',
 		'Toll-free: <a href="tel:800-554-3343"><b>800-554-3343</b></a>' => '',
 		'To contact your local Kiddie Academy, <a href="/contact-us/"><b>find our nearest location here</b></a>.' => 'Schedule a tour and our team will contact you with current availability.',
+		'Kiddie Academy Educational Child Care' => 'Chestnut Square Academy',
+		'Kiddie Academy Parent'                => 'Chestnut Square Academy Family',
+		'Every Academy environment is designed to support age-appropriate learning, social development, and strong family partnership.' => 'Our classrooms support age-appropriate learning, social growth, and strong family partnership.',
 	);
 
-	return str_replace( array_keys( $text_replacements ), array_values( $text_replacements ), $html );
+	$html = str_replace( array_keys( $text_replacements ), array_values( $text_replacements ), $html );
+
+	$html = preg_replace(
+		'/To contact your local Kiddie Academy,\s*<a[^>]*>\s*<b>find our nearest location here<\/b>\s*<\/a>\s*\.?/i',
+		'Schedule a tour and our team will contact you with current availability.',
+		$html
+	);
+
+	$html = preg_replace(
+		'/Kiddie Academy<sup>\s*(?:Â)?®\s*<\/sup>/i',
+		'Chestnut Square Academy',
+		$html
+	);
+
+	return $html;
 }
 
 /**
@@ -2696,7 +2758,7 @@ function kms_run_small_business_simplification( $overwrite = true ) {
 	update_option( 'page_for_posts', 0 );
 	kms_archive_non_small_business_pages( $keep_paths );
 	kms_set_seed_profile( 'native-parity' );
-	update_option( 'kms_small_business_simplify_ver', '1.0.2' );
+	update_option( 'kms_small_business_simplify_ver', '1.0.6' );
 	flush_rewrite_rules();
 }
 
@@ -2704,7 +2766,7 @@ function kms_run_small_business_simplification( $overwrite = true ) {
  * Apply small-business simplification once after plugin/theme updates.
  */
 function kms_apply_small_business_simplification_once() {
-	if ( '1.0.2' === (string) get_option( 'kms_small_business_simplify_ver', '' ) ) {
+	if ( '1.0.6' === (string) get_option( 'kms_small_business_simplify_ver', '' ) ) {
 		return;
 	}
 

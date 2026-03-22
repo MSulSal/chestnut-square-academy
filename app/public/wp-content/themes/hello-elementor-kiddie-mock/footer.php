@@ -22,7 +22,7 @@ $footer_logo      = apply_filters( 'kms_asset_url', 'https://kiddieacademy.com/w
 	<div class="content-wrapper">
 		<div class="company-info">
 			<div class="logo">
-				<img src="<?php echo esc_url( $footer_logo ); ?>" alt="Kiddie Academy Educational Child Care">
+				<img src="<?php echo esc_url( $footer_logo ); ?>" alt="Chestnut Square Academy">
 			</div>
 			<p>
 				<span class="bold">Chestnut Square Academy</span><br>
