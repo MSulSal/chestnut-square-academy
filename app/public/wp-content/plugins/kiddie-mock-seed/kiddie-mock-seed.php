@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kiddie Mock Seed
  * Description: Builds a full Kiddie Academy style frontend mock across all key pages for WordPress + Elementor testing.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: kiddie-mock-seed
@@ -326,6 +326,86 @@ function kms_get_template_file_html( $template ) {
 }
 
 /**
+ * Return display copy + image defaults for generic seeded pages.
+ *
+ * @param string $path  Page path.
+ * @param string $title Page title.
+ * @return array<string,string>
+ */
+function kms_get_generic_page_profile( $path, $title ) {
+	$profiles = array(
+		'for-parents'                      => array(
+			'eyebrow' => 'Parent Resources',
+			'subhead' => 'Family guidance, developmental insights, and practical tips from early learning experts.',
+		),
+		'franchising'                      => array(
+			'eyebrow' => 'Business Opportunity',
+			'subhead' => 'Explore franchise ownership with a mission-focused early childhood education brand.',
+		),
+		'careers'                          => array(
+			'eyebrow' => 'Join Our Team',
+			'subhead' => 'Grow your career in a supportive environment that helps children and families thrive.',
+		),
+		'academies/enrollment-and-tuition' => array(
+			'eyebrow' => 'Enrollment Journey',
+			'subhead' => 'Learn what enrollment can include and how to connect with a local Academy for availability details.',
+		),
+		'parent-testimonials'              => array(
+			'eyebrow' => 'Family Voices',
+			'subhead' => 'Hear what parents value most about safety, communication, and everyday learning moments.',
+		),
+		'newsroom'                         => array(
+			'eyebrow' => 'Latest Updates',
+			'subhead' => 'Explore news, announcements, and community stories from across the Kiddie Academy network.',
+		),
+		'academic-leadership'              => array(
+			'eyebrow' => 'Leadership',
+			'subhead' => 'Meet the leaders shaping strategy, curriculum quality, and educator development.',
+		),
+		'community-essentials'             => array(
+			'eyebrow' => 'Social Responsibility',
+			'subhead' => 'Learn how community engagement and service are woven into the Academy experience.',
+		),
+		'corporate-careers'                => array(
+			'eyebrow' => 'Corporate Team',
+			'subhead' => 'Find opportunities to support families, franchisees, and educators behind the scenes.',
+		),
+		'franchising/real-estate'          => array(
+			'eyebrow' => 'Real Estate',
+			'subhead' => 'Review location strategy and site criteria supporting successful Academy development.',
+		),
+		'privacy-policy'                   => array(
+			'eyebrow' => 'Privacy',
+			'subhead' => 'Understand how data is handled, protected, and used across digital experiences.',
+		),
+		'terms-conditions'                 => array(
+			'eyebrow' => 'Terms',
+			'subhead' => 'Review terms and conditions associated with use of this site and related services.',
+		),
+		'store'                            => array(
+			'eyebrow' => 'Academy Store',
+			'subhead' => 'Explore branded resources and items that support family and classroom engagement.',
+		),
+	);
+
+	$defaults = array(
+		'eyebrow' => 'Kiddie Academy',
+		'subhead' => 'Explore information and resources tailored for families, educators, and community partners.',
+	);
+
+	$profile = isset( $profiles[ $path ] ) ? $profiles[ $path ] : $defaults;
+
+	return array(
+		'title'      => $title,
+		'eyebrow'    => $profile['eyebrow'],
+		'subhead'    => $profile['subhead'],
+		'image_main' => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg',
+		'image_alt'  => 'Children engaged in classroom learning at Kiddie Academy',
+		'image_side' => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg',
+	);
+}
+
+/**
  * Build generic subpage HTML.
  *
  * @param string $title Page title.
@@ -333,8 +413,13 @@ function kms_get_template_file_html( $template ) {
  * @return string
  */
 function kms_get_generic_html( $title, $path ) {
-	$title_html = esc_html( $title );
-	$path_html  = esc_html( strtoupper( str_replace( '/', ' / ', $path ) ) );
+	$profile      = kms_get_generic_page_profile( $path, $title );
+	$title_html   = esc_html( $profile['title'] );
+	$eyebrow_html = esc_html( $profile['eyebrow'] );
+	$subhead_html = esc_html( $profile['subhead'] );
+	$image_main   = esc_url( $profile['image_main'] );
+	$image_side   = esc_url( $profile['image_side'] );
+	$image_alt    = esc_attr( $profile['image_alt'] );
 
 	return <<<HTML
 <main id="main-content">
@@ -349,33 +434,34 @@ function kms_get_generic_html( $title, $path ) {
 		<div class="offset-bg tan extend-left round-bottom-right no-media"></div>
 		<div class="text-and-image content-wrapper no-media">
 			<div class="text-left">
+				<p class="eyebrow">{$eyebrow_html}</p>
 				<h1>{$title_html}</h1>
-				<p>{$path_html}</p>
+				<p>{$subhead_html}</p>
 			</div>
 		</div>
 	</section>
 	<section class="image-text padding-bottom margin-top overlapping image-text media-image media-cover">
 		<div class="content-wrapper">
 			<div class="image">
-				<img data-lazy-src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1400&q=80" class="lazy fill-container" alt="Children learning in classroom">
+				<img data-lazy-src="{$image_main}" class="lazy fill-container" alt="{$image_alt}">
 			</div>
 			<div class="text">
-				<h4>Learning with momentum</h4>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum bibendum, turpis non feugiat feugiat, enim nisl ultricies lacus, vitae posuere ex neque at sem.</p>
-				<p>Phasellus posuere justo ac odio tristique, in malesuada ligula vulputate. Curabitur ultrices eros at lectus facilisis, ac sodales felis gravida.</p>
-				<a class="button-round" href="/contact-us/">Contact Us</a>
+				<h4>Community Begins Here</h4>
+				<p>Kiddie Academy focuses on helping children learn through curiosity, confidence, and meaningful day-to-day experiences.</p>
+				<p>Families can explore programs, connect with local Academies, and learn how educators support growth at each stage.</p>
+				<a class="button-round" href="/contact-us/">Request Information</a>
 			</div>
 		</div>
 	</section>
 	<section class="image-text margin-bottom overlapping text-image media-image media-cover">
 		<div class="content-wrapper">
 			<div class="image">
-				<img data-lazy-src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1400&q=80" class="lazy fill-container" alt="Teacher and child reading">
+				<img data-lazy-src="{$image_side}" class="lazy fill-container" alt="Teacher supporting learning activities in classroom">
 			</div>
 			<div class="text">
-				<h4>Built for Parent-Friendly Scanning</h4>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis finibus convallis. Proin malesuada, nisi in viverra pulvinar, sem augue euismod velit, et elementum justo nibh vitae est.</p>
-				<p>Integer sagittis sollicitudin ullamcorper. Curabitur pretium dictum purus, in luctus risus pharetra a.</p>
+				<h4>Learning Moments That Matter</h4>
+				<p>Every Academy environment is designed to support age-appropriate learning, social development, and strong family partnership.</p>
+				<p>Use the main navigation to explore approach, programs, enrollment pathways, and frequently asked questions.</p>
 			</div>
 		</div>
 	</section>
@@ -413,11 +499,11 @@ function kms_get_faq_html() {
 		<div class="links">
 			<div>
 				<p data-question="q1"><strong>What ages do you serve?</strong><i class="fa-solid fa-chevron-down"></i></p>
-				<div data-answer="q1" hidden><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>
+				<div data-answer="q1" hidden><p>Programs vary by Academy location, with options organized by age and developmental stage from infants through school-age programs.</p></div>
 			</div>
 			<div>
 				<p data-question="q2"><strong>Do you offer full-day and part-day options?</strong><i class="fa-solid fa-chevron-down"></i></p>
-				<div data-answer="q2" hidden><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>
+				<div data-answer="q2" hidden><p>Scheduling options can differ by location and classroom availability. Contact your preferred Academy to review current enrollment options.</p></div>
 			</div>
 			<div>
 				<p data-question="q3"><strong>How do we schedule a tour?</strong><i class="fa-solid fa-chevron-down"></i></p>
@@ -425,7 +511,7 @@ function kms_get_faq_html() {
 			</div>
 			<div>
 				<p data-question="q4"><strong>What should we bring on the first day?</strong><i class="fa-solid fa-chevron-down"></i></p>
-				<div data-answer="q4" hidden><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>
+				<div data-answer="q4" hidden><p>Your Academy will share a classroom-specific checklist before start date, including required forms, comfort items, and daily essentials.</p></div>
 			</div>
 		</div>
 	</section>
@@ -550,6 +636,25 @@ HTML;
  */
 function kms_get_program_detail_html( $title ) {
 	$title_html = esc_html( $title );
+	$image_url  = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg';
+
+	if ( 'Toddler' === $title ) {
+		$image_url = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg';
+	} elseif ( 'Early Preschool' === $title ) {
+		$image_url = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Early-Preschool.jpg';
+	} elseif ( 'Preschool' === $title ) {
+		$image_url = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Preschool.jpg';
+	} elseif ( 'Pre-Kindergarten' === $title ) {
+		$image_url = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-PreK.jpg';
+	} elseif ( 'Kindergarten' === $title ) {
+		$image_url = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Kindergarten.jpg';
+	} elseif ( 'School Age' === $title ) {
+		$image_url = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-School-Aged.jpg';
+	} elseif ( 'Summer Camp' === $title ) {
+		$image_url = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Summer-updated.jpg';
+	}
+
+	$image_url = esc_url( $image_url );
 
 	return <<<HTML
 <main id="main-content">
@@ -565,12 +670,12 @@ function kms_get_program_detail_html( $title ) {
 	<section class="image-text padding-bottom margin-top overlapping image-text media-image media-cover">
 		<div class="content-wrapper">
 			<div class="image">
-				<img data-lazy-src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1400&q=80" class="lazy fill-container" alt="{$title_html} classroom">
+				<img data-lazy-src="{$image_url}" class="lazy fill-container" alt="{$title_html} classroom">
 			</div>
 			<div class="text">
 				<h4>{$title_html} Program Overview</h4>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Nunc feugiat, mauris et commodo tincidunt, erat nisi varius est, non efficitur arcu erat vitae augue.</p>
-				<p>Donec sollicitudin lorem at nibh suscipit, vitae convallis arcu placerat.</p>
+				<p>Our teachers support developmental milestones through guided play, structured routines, and responsive care.</p>
+				<p>Each classroom experience is designed to help children build confidence, communication skills, and curiosity.</p>
 				<a class="button-round" href="/contact-us/">Schedule a Tour</a>
 			</div>
 		</div>
@@ -784,7 +889,7 @@ function kms_run_seed( $overwrite = true ) {
  * but cached/stale Elementor document data remained behind.
  */
 function kms_sync_elementor_documents_once() {
-	if ( get_option( 'kms_elementor_sync_version' ) === '1.0.1' ) {
+	if ( get_option( 'kms_elementor_sync_version' ) === '1.0.3' ) {
 		return;
 	}
 
@@ -799,7 +904,7 @@ function kms_sync_elementor_documents_once() {
 		kms_set_elementor_document( (int) $page->ID, (string) $page->post_content );
 	}
 
-	update_option( 'kms_elementor_sync_version', '1.0.1' );
+	update_option( 'kms_elementor_sync_version', '1.0.3' );
 }
 add_action( 'init', 'kms_sync_elementor_documents_once', 25 );
 
@@ -807,14 +912,96 @@ add_action( 'init', 'kms_sync_elementor_documents_once', 25 );
  * One-time runtime reseed to guarantee current templates are reflected on site.
  */
 function kms_runtime_reseed_once() {
-	if ( get_option( 'kms_runtime_seed_version' ) === '1.0.1' ) {
+	if ( get_option( 'kms_runtime_seed_version' ) === '1.0.3' ) {
 		return;
 	}
 
 	kms_run_seed( true );
-	update_option( 'kms_runtime_seed_version', '1.0.1' );
+	update_option( 'kms_runtime_seed_version', '1.0.3' );
 }
 add_action( 'init', 'kms_runtime_reseed_once', 30 );
+
+/**
+ * Get blueprint template key for a seeded page path.
+ *
+ * @param string $path Page path.
+ * @return string
+ */
+function kms_get_template_for_path( $path ) {
+	foreach ( kms_get_page_blueprints() as $blueprint ) {
+		if ( isset( $blueprint['path'], $blueprint['template'] ) && $blueprint['path'] === $path ) {
+			return (string) $blueprint['template'];
+		}
+	}
+
+	return '';
+}
+
+/**
+ * Runtime upgrade for legacy generic/program-detail content snapshots.
+ *
+ * Keeps frontend output aligned with latest seeded templates and updates
+ * post content + Elementor document data so subsequent edits stay in sync.
+ *
+ * @param string $content Rendered content.
+ * @return string
+ */
+function kms_upgrade_legacy_seeded_content( $content ) {
+	if ( is_admin() || ! is_singular( 'page' ) || ! is_string( $content ) ) {
+		return $content;
+	}
+
+	$page = get_queried_object();
+	if ( ! $page instanceof WP_Post ) {
+		return $content;
+	}
+
+	$path     = (string) get_page_uri( $page );
+	$template = kms_get_template_for_path( $path );
+
+	if ( '' === $template ) {
+		return $content;
+	}
+
+	$needs_upgrade = false;
+	$new_content   = '';
+
+	if ( 'generic' === $template ) {
+		$needs_upgrade = false !== strpos( $content, 'Learning with momentum' ) || false !== strpos( $content, 'Lorem ipsum' );
+
+		if ( $needs_upgrade ) {
+			$new_content = kms_localize_internal_links( kms_get_generic_html( (string) $page->post_title, $path ) );
+		}
+	} elseif ( 'program-detail' === $template ) {
+		$needs_upgrade = false !== strpos( $content, 'Lorem ipsum' );
+
+		if ( $needs_upgrade ) {
+			$new_content = kms_localize_internal_links( kms_get_program_detail_html( (string) $page->post_title ) );
+		}
+	} elseif ( 'faq' === $template ) {
+		$needs_upgrade = false !== strpos( $content, 'Lorem ipsum' );
+
+		if ( $needs_upgrade ) {
+			$new_content = kms_localize_internal_links( kms_get_faq_html() );
+		}
+	}
+
+	if ( ! $needs_upgrade || '' === $new_content ) {
+		return $content;
+	}
+
+	wp_update_post(
+		array(
+			'ID'           => (int) $page->ID,
+			'post_content' => $new_content,
+		)
+	);
+
+	kms_set_elementor_document( (int) $page->ID, $new_content );
+
+	return $new_content;
+}
+add_filter( 'the_content', 'kms_upgrade_legacy_seeded_content', 96 );
 
 /**
  * Activation callback.

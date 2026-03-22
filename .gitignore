@@ -31,3 +31,8 @@
 !/docs/**
 !/README.md
 !/.gitignore
+
+# Visual QA artifacts (keep render-pass screenshots local only)
+/docs/local-*.png
+/docs/live-*.png
+/docs/compare-*.png

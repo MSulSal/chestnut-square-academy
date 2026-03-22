@@ -117,3 +117,8 @@
 - feat(accessibility-ui): added floating bottom-left accessibility icon treatment to better mirror live reference behavior.
 - feat(sync): added runtime content/meta sync safeguards so legacy Elementor snapshots can be auto-upgraded while keeping future edits dashboard-friendly.
 - chore(qa): added iterative pass screenshots (`pass3`-`pass6`) for home/academies/approach parity checks.
+- feat(mock-step1): completed final parity pass across all major routes and validated desktop/mobile renders against Kiddie-style structure with automated Playwright capture scripts.
+- feat(content): replaced legacy generic/program-detail lorem snapshots with cleaned production-style copy profiles and Kiddie-hosted image sources to remove thin placeholder feel on secondary routes.
+- feat(runtime): added legacy snapshot runtime upgrader for generic/program-detail pages to auto-heal older Elementor HTML content and persist refreshed markup without manual editor intervention.
+- chore(qa): added reusable render scripts (`scripts/capture-local-desktop.mjs`, `scripts/capture-local-mobile.mjs`) and excluded screenshot artifacts from git tracking.
+- fix(content): removed remaining lorem from FAQ seeded content and extended runtime upgrader to refresh legacy FAQ snapshots automatically.
