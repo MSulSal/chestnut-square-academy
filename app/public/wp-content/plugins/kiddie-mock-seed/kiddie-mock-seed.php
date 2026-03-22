@@ -2478,6 +2478,8 @@ function kms_trim_small_business_html( $path, $html ) {
 			"//*[contains(concat(' ', normalize-space(@class), ' '), ' blog-preview-section ')]",
 			"//*[@data-program='school-age']",
 			"//*[@data-program='summer-camp-program']",
+			"//*[@data-program='kindergarten']",
+			"//*[contains(@href,'/kindergarten/')]/ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' slide ')][1]",
 			"//*[contains(@href,'school-age-programs')]/ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' slide ')][1]",
 			"//*[contains(@href,'summer-camp')]/ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' slide ')][1]",
 		),
@@ -2495,6 +2497,8 @@ function kms_trim_small_business_html( $path, $html ) {
 			"//*[@id='contact-us-academy']",
 			"//*[@data-program='school-age']",
 			"//*[@data-program='summer-camp-program']",
+			"//*[@data-program='kindergarten']",
+			"//*[contains(@href,'/kindergarten/')]/ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' slide ')][1]",
 			"//*[contains(@href,'school-age-programs')]/ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' slide ')][1]",
 			"//*[contains(@href,'summer-camp')]/ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' slide ')][1]",
 		),
@@ -2567,6 +2571,10 @@ function kms_trim_small_business_html( $path, $html ) {
 		'Where <span>Learning</span> Grows' => $hero_tagline_html,
 		'Rooted in Care. Growing Together.' => $hero_tagline_html,
 		'Rooted in Care.<br>Growing Together.' => $hero_tagline_html,
+		'<p class="program-title">Pre-Kindergarten</p>' => '<p class="program-title">Pre-K</p>',
+		'aria-label="Pre-Kindergarten 4-Year-Olds"' => 'aria-label="Pre-K 4 to 5-Year-Olds"',
+		'alt="Pre-Kindergarten Program (mobile)"' => 'alt="Pre-K Program (mobile)"',
+		'alt="Pre-Kindergarten Program"' => 'alt="Pre-K Program"',
 		'https://kiddieacademy.com/wp-content/uploads/2024/09/landing-hero-jpg.avif' => trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/cover.png',
 		'https://kiddieacademy.com/wp-content/uploads/2024/09/landing-hero-mobile-updated2-jpg.avif' => trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/cover.png',
 		'alt="Kiddie Academy"' => 'alt="Chestnut Square Academy"',
@@ -2597,7 +2605,7 @@ function kms_trim_small_business_html( $path, $html ) {
 		'Focused on six key outcomes for your child, our proprietary, developmentally-appropriate' => 'Our age-appropriate lessons combine teacher guidance, hands-on play, and social-emotional growth throughout the day.',
 		'Life Essentials'                      => 'daily learning',
 		'Kiddie Academy FAQs'                 => 'Chestnut Square Academy FAQs',
-		'Programs vary by Academy location, with options organized by age and developmental stage from infants through school-age programs.' => 'Programs are organized by age and developmental stage from infancy through pre-kindergarten.',
+		'Programs vary by Academy location, with options organized by age and developmental stage from infants through school-age programs.' => 'Programs are organized by age and developmental stage from infancy through pre-k.',
 		'Scheduling options can differ by location and classroom availability. Contact your preferred Academy to review current enrollment options.' => 'Scheduling options depend on classroom availability. Contact us to review current openings and tour times.',
 		'What should we bring on the first day?' => 'What should we bring on the first day?',
 		'Your Academy will share a classroom-specific checklist before start date, including required forms, comfort items, and daily essentials.' => 'Our team will share a classroom checklist before your start date, including required forms and daily comfort items.',
@@ -2791,19 +2799,18 @@ add_action( 'init', 'kms_apply_small_business_simplification_once', 50 );
  * One-time refresh of Home hero text/image after branding updates.
  */
 function kms_refresh_home_hero_once() {
-	if ( '1.0.2' === (string) get_option( 'kms_home_hero_refresh_ver', '' ) ) {
+	if ( '1.0.3' === (string) get_option( 'kms_home_hero_refresh_ver', '' ) ) {
 		return;
 	}
 
 	$blueprints = kms_get_small_business_blueprints();
 	foreach ( $blueprints as $blueprint ) {
-		if ( isset( $blueprint['path'] ) && 'home' === (string) $blueprint['path'] ) {
+		if ( isset( $blueprint['path'] ) && in_array( (string) $blueprint['path'], array( 'home', 'our-curriculum' ), true ) ) {
 			kms_upsert_small_business_page( $blueprint, true );
-			break;
 		}
 	}
 
-	update_option( 'kms_home_hero_refresh_ver', '1.0.2' );
+	update_option( 'kms_home_hero_refresh_ver', '1.0.3' );
 }
 add_action( 'init', 'kms_refresh_home_hero_once', 52 );
 

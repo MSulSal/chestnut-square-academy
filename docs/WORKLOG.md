@@ -240,3 +240,11 @@
 - style(footer-logo): refined footer logo container/image alignment and sizing to improve placement with `new-logo-csa-tree.png`.
 - feat(runtime-refresh): bumped `kms_home_hero_refresh_ver` to `1.0.2` and re-upserted Home once so existing live native-Elementor page reflects the new hero markup/structure.
 - chore(qa): verified live Home has no hero locator input/text, no accessibility icon markup, hero headline updated, footer tree logo source intact, and `elementor-widget-html` remains `0`.
+- feat(hero-layout): increased Home hero tagline size and forced left alignment for both desktop/mobile headline rendering.
+- feat(nav-logo): enlarged navbar logo footprint again (desktop + mobile) with updated left brand lane sizing.
+- feat(program-scope): removed kindergarten program nodes from Home/Programs trims and refreshed page upserts so live content scope now ends at Pre-K (4 to 5).
+- fix(program-labels): normalized Pre-K labels/ARIA/alt text away from "Pre-Kindergarten" wording.
+- cleanup(footer): removed stale footer blocks/links (`Social` placeholder and `Also of Interest` rail) and tightened footer link set for the small single-location site.
+- style(footer-logo): refined footer logo sizing/alignment and link-column layout to improve logo placement on desktop/mobile.
+- feat(runtime-refresh): bumped hero refresh version to `1.0.3` and re-upserted Home + Programs once to apply new trims without breaking Elementor native editing.
+- chore(qa): verified core pages report `kindergarten-hits:0` in rendered main text, hero remains left-aligned/updated, and stale footer blocks are absent.

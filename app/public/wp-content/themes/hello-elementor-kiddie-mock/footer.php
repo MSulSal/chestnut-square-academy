@@ -55,25 +55,8 @@ $footer_logo         = apply_filters( 'kms_asset_url', $footer_logo_default, 'fo
 				<ul id="menu-footer-contact" class="menu">
 					<li><a href="<?php echo esc_url( $contact_url ); ?>">Schedule a Tour</a></li>
 					<li><a href="https://maps.google.com/?q=402+S+Chestnut+St,+McKinney,+TX" target="_blank" rel="noopener noreferrer">Get Directions</a></li>
-					<li><a href="<?php echo esc_url( $privacy_url ); ?>">Privacy Policy</a></li>
 				</ul>
 			</div>
-			<div class="social">
-				<p class="eyebrow">Social</p>
-				<ul id="menu-footer-social" class="menu">
-					<li><a href="https://www.facebook.com/" aria-label="Facebook - opens in a new tab" target="_blank" rel="noopener noreferrer"><i class="icon-facebook"></i></a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class="be-ix-link-block content-wrapper">
-		<div class="be-related-link-container">
-			<div class="be-label">Also of Interest</div>
-			<ul class="be-list">
-				<li class="be-list-item"><a class="be-related-link" href="<?php echo esc_url( $programs_url ); ?>">Programs Overview</a></li>
-				<li class="be-list-item"><a class="be-related-link" href="<?php echo esc_url( $faq_url ); ?>">Parent FAQs</a></li>
-				<li class="be-list-item"><a class="be-related-link" href="<?php echo esc_url( $contact_url ); ?>">Schedule a Tour</a></li>
-			</ul>
 		</div>
 	</div>
 </footer>
