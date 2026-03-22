@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kiddie Mock Seed
  * Description: Builds a full Kiddie Academy style frontend mock across all key pages for WordPress + Elementor testing.
- * Version: 1.1.1
+ * Version: 1.0.3
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: kiddie-mock-seed
@@ -807,378 +807,6 @@ function kms_split_html_for_elementor( $html ) {
 }
 
 /**
- * Build stable Elementor node ID.
- *
- * @param int    $post_id Post ID.
- * @param int    $counter Counter.
- * @param string $prefix  Prefix.
- * @return string
- */
-function kms_elementor_make_node_id( $post_id, &$counter, $prefix ) {
-	$counter++;
-
-	return substr( md5( $prefix . '-' . $post_id . '-' . $counter ), 0, 8 );
-}
-
-/**
- * Get a DOM attribute value.
- *
- * @param DOMNode $node Node.
- * @param string  $name Attribute name.
- * @return string
- */
-function kms_dom_get_attr( $node, $name ) {
-	if ( ! $node instanceof DOMElement ) {
-		return '';
-	}
-
-	$value = $node->getAttribute( $name );
-
-	return is_string( $value ) ? trim( $value ) : '';
-}
-
-/**
- * Serialize DOM node outer HTML.
- *
- * @param DOMNode $node Node.
- * @return string
- */
-function kms_dom_outer_html( $node ) {
-	if ( ! $node instanceof DOMNode || ! $node->ownerDocument instanceof DOMDocument ) {
-		return '';
-	}
-
-	$html = $node->ownerDocument->saveHTML( $node );
-
-	return is_string( $html ) ? $html : '';
-}
-
-/**
- * Serialize DOM node inner HTML.
- *
- * @param DOMNode $node Node.
- * @return string
- */
-function kms_dom_inner_html( $node ) {
-	if ( ! $node instanceof DOMNode || ! $node->ownerDocument instanceof DOMDocument ) {
-		return '';
-	}
-
-	$html = '';
-	foreach ( $node->childNodes as $child ) {
-		$fragment = $node->ownerDocument->saveHTML( $child );
-		if ( is_string( $fragment ) ) {
-			$html .= $fragment;
-		}
-	}
-
-	return $html;
-}
-
-/**
- * Build Elementor widget payload.
- *
- * @param int                 $post_id     Post ID.
- * @param int                 $counter     Counter.
- * @param string              $widget_type Widget type.
- * @param array<string,mixed> $settings    Widget settings.
- * @param string              $classes     Optional CSS classes.
- * @param string              $css_id      Optional CSS ID.
- * @return array<string,mixed>
- */
-function kms_elementor_make_widget( $post_id, &$counter, $widget_type, $settings, $classes = '', $css_id = '' ) {
-	if ( '' !== $classes ) {
-		$settings['css_classes']  = $classes;
-		$settings['_css_classes'] = $classes;
-	}
-
-	if ( '' !== $css_id ) {
-		$settings['css_id']  = $css_id;
-		$settings['_css_id'] = $css_id;
-	}
-
-	return array(
-		'id'         => kms_elementor_make_node_id( $post_id, $counter, 'wid' ),
-		'elType'     => 'widget',
-		'widgetType' => $widget_type,
-		'settings'   => $settings,
-		'elements'   => array(),
-	);
-}
-
-/**
- * Build Elementor HTML widget.
- *
- * @param int    $post_id Post ID.
- * @param int    $counter Counter.
- * @param string $html    Markup.
- * @param string $classes Optional CSS classes.
- * @param string $css_id  Optional CSS ID.
- * @return array<string,mixed>
- */
-function kms_elementor_make_html_widget( $post_id, &$counter, $html, $classes = '', $css_id = '' ) {
-	return kms_elementor_make_widget(
-		$post_id,
-		$counter,
-		'html',
-		array(
-			'html' => (string) $html,
-		),
-		$classes,
-		$css_id
-	);
-}
-
-/**
- * Build Elementor text-editor widget.
- *
- * @param int    $post_id Post ID.
- * @param int    $counter Counter.
- * @param string $html    Markup.
- * @param string $classes Optional CSS classes.
- * @param string $css_id  Optional CSS ID.
- * @return array<string,mixed>
- */
-function kms_elementor_make_text_widget( $post_id, &$counter, $html, $classes = '', $css_id = '' ) {
-	return kms_elementor_make_widget(
-		$post_id,
-		$counter,
-		'text-editor',
-		array(
-			'editor' => (string) $html,
-		),
-		$classes,
-		$css_id
-	);
-}
-
-/**
- * Build Elementor heading widget.
- *
- * @param int    $post_id Post ID.
- * @param int    $counter Counter.
- * @param string $title   Heading HTML.
- * @param string $tag     Heading tag.
- * @param string $classes Optional CSS classes.
- * @param string $css_id  Optional CSS ID.
- * @return array<string,mixed>
- */
-function kms_elementor_make_heading_widget( $post_id, &$counter, $title, $tag, $classes = '', $css_id = '' ) {
-	return kms_elementor_make_widget(
-		$post_id,
-		$counter,
-		'heading',
-		array(
-			'title'       => (string) $title,
-			'header_size' => (string) $tag,
-		),
-		$classes,
-		$css_id
-	);
-}
-
-/**
- * Build Elementor image widget.
- *
- * @param int    $post_id Post ID.
- * @param int    $counter Counter.
- * @param string $src     Image source URL.
- * @param string $classes Optional CSS classes.
- * @param string $css_id  Optional CSS ID.
- * @return array<string,mixed>
- */
-function kms_elementor_make_image_widget( $post_id, &$counter, $src, $classes = '', $css_id = '' ) {
-	return kms_elementor_make_widget(
-		$post_id,
-		$counter,
-		'image',
-		array(
-			'image'      => array(
-				'id'  => 0,
-				'url' => (string) $src,
-			),
-			'image_size' => 'full',
-		),
-		$classes,
-		$css_id
-	);
-}
-
-/**
- * Convert DOM node recursively to Elementor element.
- *
- * @param DOMNode $node     DOM node.
- * @param int     $post_id  Post ID.
- * @param int     $counter  Counter.
- * @param bool    $is_inner Inner container flag.
- * @return array<string,mixed>|null
- */
-function kms_dom_node_to_elementor( $node, $post_id, &$counter, $is_inner ) {
-	if ( ! $node instanceof DOMNode ) {
-		return null;
-	}
-
-	if ( XML_COMMENT_NODE === $node->nodeType ) {
-		return null;
-	}
-
-	if ( XML_TEXT_NODE === $node->nodeType ) {
-		$text = trim( (string) $node->nodeValue );
-
-		if ( '' === $text ) {
-			return null;
-		}
-
-		return kms_elementor_make_text_widget( $post_id, $counter, '<p>' . esc_html( $text ) . '</p>' );
-	}
-
-	if ( XML_ELEMENT_NODE !== $node->nodeType ) {
-		return null;
-	}
-
-	$tag     = strtolower( (string) $node->nodeName );
-	$classes = kms_dom_get_attr( $node, 'class' );
-	$css_id  = kms_dom_get_attr( $node, 'id' );
-
-	if ( in_array( $tag, array( 'style', 'script', 'noscript', 'iframe', 'svg', 'form', 'input', 'select', 'option', 'textarea', 'button', 'picture', 'video', 'audio', 'canvas', 'table', 'thead', 'tbody', 'tr', 'td', 'th' ), true ) ) {
-		return kms_elementor_make_html_widget( $post_id, $counter, kms_dom_outer_html( $node ), $classes, $css_id );
-	}
-
-	if ( in_array( $tag, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ), true ) ) {
-		$title_html = trim( kms_dom_inner_html( $node ) );
-		if ( '' === $title_html ) {
-			$title_html = esc_html( trim( (string) $node->textContent ) );
-		}
-
-		return kms_elementor_make_heading_widget( $post_id, $counter, $title_html, $tag, $classes, $css_id );
-	}
-
-	if ( 'img' === $tag ) {
-		$src = kms_dom_get_attr( $node, 'src' );
-
-		if ( '' === $src ) {
-			$src = kms_dom_get_attr( $node, 'data-lazy-src' );
-		}
-
-		if ( '' === $src ) {
-			$srcset = kms_dom_get_attr( $node, 'srcset' );
-
-			if ( '' === $srcset ) {
-				$srcset = kms_dom_get_attr( $node, 'data-lazy-srcset' );
-			}
-
-			if ( '' !== $srcset ) {
-				$parts = preg_split( '/\s*,\s*/', $srcset );
-
-				if ( is_array( $parts ) && ! empty( $parts[0] ) ) {
-					$candidate = preg_split( '/\s+/', trim( (string) $parts[0] ) );
-					$src       = is_array( $candidate ) && ! empty( $candidate[0] ) ? (string) $candidate[0] : '';
-				}
-			}
-		}
-
-		if ( '' !== $src ) {
-			return kms_elementor_make_image_widget( $post_id, $counter, $src, $classes, $css_id );
-		}
-
-		return kms_elementor_make_html_widget( $post_id, $counter, kms_dom_outer_html( $node ), $classes, $css_id );
-	}
-
-	if ( in_array( $tag, array( 'p', 'ul', 'ol', 'li', 'blockquote', 'a' ), true ) ) {
-		return kms_elementor_make_text_widget( $post_id, $counter, kms_dom_outer_html( $node ), $classes, $css_id );
-	}
-
-	if ( in_array( $tag, array( 'section', 'div', 'article', 'aside', 'header', 'footer', 'main', 'nav' ), true ) ) {
-		$children = array();
-
-		foreach ( $node->childNodes as $child_node ) {
-			$child_element = kms_dom_node_to_elementor( $child_node, $post_id, $counter, true );
-
-			if ( is_array( $child_element ) ) {
-				$children[] = $child_element;
-			}
-		}
-
-		if ( empty( $children ) ) {
-			return kms_elementor_make_html_widget( $post_id, $counter, kms_dom_outer_html( $node ), $classes, $css_id );
-		}
-
-		$settings = array(
-			'content_width'  => 'full',
-			'flex_direction' => 'column',
-		);
-
-		if ( '' !== $classes ) {
-			$settings['css_classes']  = $classes;
-			$settings['_css_classes'] = $classes;
-		}
-
-		if ( '' !== $css_id ) {
-			$settings['css_id']  = $css_id;
-			$settings['_css_id'] = $css_id;
-		}
-
-		if ( 'div' !== $tag ) {
-			$settings['html_tag'] = $tag;
-		}
-
-		return array(
-			'id'       => kms_elementor_make_node_id( $post_id, $counter, 'con' ),
-			'elType'   => 'container',
-			'settings' => $settings,
-			'elements' => $children,
-			'isInner'  => (bool) $is_inner,
-		);
-	}
-
-	return kms_elementor_make_html_widget( $post_id, $counter, kms_dom_outer_html( $node ), $classes, $css_id );
-}
-
-/**
- * Convert one HTML chunk into Elementor elements.
- *
- * @param string $chunk_html Chunk markup.
- * @param int    $post_id    Post ID.
- * @param int    $counter    Counter.
- * @return array<int,array<string,mixed>>
- */
-function kms_convert_chunk_to_elementor_elements( $chunk_html, $post_id, &$counter ) {
-	$markup = trim( (string) $chunk_html );
-
-	if ( '' === $markup || ! class_exists( 'DOMDocument' ) || ! class_exists( 'DOMXPath' ) ) {
-		return array();
-	}
-
-	$doc        = new DOMDocument();
-	$wrapped    = '<?xml encoding="utf-8" ?><div id="kms-chunk-root">' . $markup . '</div>';
-	$libxml_old = libxml_use_internal_errors( true );
-	$loaded     = $doc->loadHTML( $wrapped, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
-	libxml_clear_errors();
-	libxml_use_internal_errors( $libxml_old );
-
-	if ( ! $loaded ) {
-		return array();
-	}
-
-	$xpath = new DOMXPath( $doc );
-	$nodes = $xpath->query( '//*[@id="kms-chunk-root"]/*|//*[@id="kms-chunk-root"]/text()|//*[@id="kms-chunk-root"]/comment()' );
-
-	$elements = array();
-
-	if ( $nodes instanceof DOMNodeList ) {
-		foreach ( $nodes as $node ) {
-			$element = kms_dom_node_to_elementor( $node, $post_id, $counter, false );
-
-			if ( is_array( $element ) ) {
-				$elements[] = $element;
-			}
-		}
-	}
-
-	return $elements;
-}
-
-/**
  * Apply Elementor document data for editable page content.
  *
  * @param int    $post_id Post ID.
@@ -1195,48 +823,40 @@ function kms_set_elementor_document( $post_id, $html ) {
 		$chunks = array( (string) $html );
 	}
 
-	$data    = array();
-	$counter = 0;
+	$data = array();
 
-	foreach ( $chunks as $chunk_html ) {
-		$elements = kms_convert_chunk_to_elementor_elements( $chunk_html, $post_id, $counter );
+	foreach ( $chunks as $index => $chunk_html ) {
+		$seed       = $post_id . '-' . $index;
+		$section_id = substr( md5( 'sec-' . $seed ), 0, 8 );
+		$column_id  = substr( md5( 'col-' . $seed ), 0, 8 );
+		$widget_id  = substr( md5( 'wid-' . $seed ), 0, 8 );
 
-		if ( empty( $elements ) ) {
-			$elements = array(
+		$data[] = array(
+			'id'       => $section_id,
+			'elType'   => 'section',
+			'settings' => array(),
+			'elements' => array(
 				array(
-					'id'       => kms_elementor_make_node_id( $post_id, $counter, 'con' ),
-					'elType'   => 'container',
+					'id'       => $column_id,
+					'elType'   => 'column',
 					'settings' => array(
-						'content_width'  => 'full',
-						'flex_direction' => 'column',
+						'_column_size' => 100,
 					),
 					'elements' => array(
-						kms_elementor_make_html_widget( $post_id, $counter, (string) $chunk_html ),
+						array(
+							'id'         => $widget_id,
+							'elType'     => 'widget',
+							'widgetType' => 'html',
+							'settings'   => array(
+								'html' => $chunk_html,
+							),
+							'elements'   => array(),
+						),
 					),
 					'isInner'  => false,
 				),
-			);
-		}
-
-		foreach ( $elements as $element ) {
-			$data[] = $element;
-		}
-	}
-
-	if ( empty( $data ) ) {
-		$data = array(
-			array(
-				'id'       => kms_elementor_make_node_id( $post_id, $counter, 'con' ),
-				'elType'   => 'container',
-				'settings' => array(
-					'content_width'  => 'full',
-					'flex_direction' => 'column',
-				),
-				'elements' => array(
-					kms_elementor_make_html_widget( $post_id, $counter, (string) $html ),
-				),
-				'isInner'  => false,
 			),
+			'isInner'  => false,
 		);
 	}
 
@@ -1244,8 +864,6 @@ function kms_set_elementor_document( $post_id, $html ) {
 	update_post_meta( $post_id, '_elementor_template_type', 'wp-page' );
 	update_post_meta( $post_id, '_elementor_version', defined( 'ELEMENTOR_VERSION' ) ? ELEMENTOR_VERSION : '3.0.0' );
 	update_post_meta( $post_id, '_elementor_data', wp_slash( wp_json_encode( $data ) ) );
-	delete_post_meta( $post_id, '_elementor_element_cache' );
-	delete_post_meta( $post_id, '_elementor_css' );
 }
 
 /**
@@ -1340,11 +958,7 @@ function kms_run_seed( $overwrite = true ) {
  * but cached/stale Elementor document data remained behind.
  */
 function kms_sync_elementor_documents_once() {
-	if ( ! class_exists( '\\Elementor\\Plugin' ) ) {
-		return;
-	}
-
-	if ( get_option( 'kms_elementor_sync_version' ) === '1.1.1' ) {
+	if ( get_option( 'kms_elementor_sync_version' ) === '1.0.4' ) {
 		return;
 	}
 
@@ -1359,9 +973,9 @@ function kms_sync_elementor_documents_once() {
 		kms_set_elementor_document( (int) $page->ID, (string) $page->post_content );
 	}
 
-	update_option( 'kms_elementor_sync_version', '1.1.1' );
+	update_option( 'kms_elementor_sync_version', '1.0.4' );
 }
-add_action( 'wp_loaded', 'kms_sync_elementor_documents_once', 25 );
+add_action( 'init', 'kms_sync_elementor_documents_once', 25 );
 
 /**
  * One-time runtime reseed to guarantee current templates are reflected on site.
@@ -1375,23 +989,6 @@ function kms_runtime_reseed_once() {
 	update_option( 'kms_runtime_seed_version', '1.0.3' );
 }
 add_action( 'init', 'kms_runtime_reseed_once', 30 );
-
-/**
- * One-time component-editability reseed after Elementor document schema upgrade.
- */
-function kms_component_reseed_once() {
-	if ( ! class_exists( '\\Elementor\\Plugin' ) ) {
-		return;
-	}
-
-	if ( get_option( 'kms_component_reseed_version' ) === '1.1.1' ) {
-		return;
-	}
-
-	kms_run_seed( true );
-	update_option( 'kms_component_reseed_version', '1.1.1' );
-}
-add_action( 'wp_loaded', 'kms_component_reseed_once', 35 );
 
 /**
  * Get blueprint template key for a seeded page path.
