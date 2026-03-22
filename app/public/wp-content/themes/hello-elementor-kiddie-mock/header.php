@@ -48,10 +48,17 @@ $is_academies_index       = is_page( 'academies' );
 $header_cta_url           = $academies_url;
 $header_cta_label         = 'Find Your Academy';
 $header_cta_aria          = 'Find Your Academy - View All Academies';
-$desktop_logo_default     = 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/kiddie-academy-logo.png';
-$mobile_logo_default      = 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/2023-refresh/kiddie-academy-logo-stacked.svg';
-$desktop_logo             = apply_filters( 'kms_asset_url', $desktop_logo_default, 'header_logo_desktop' );
-$mobile_logo              = apply_filters( 'kms_asset_url', $mobile_logo_default, 'header_logo_mobile' );
+$desktop_logo_default     = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa-navbar.png';
+$mobile_logo_default      = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa-navbar.png';
+$elementor_site_logo      = function_exists( 'kiddie_mock_get_elementor_site_logo_url' ) ? trim( (string) kiddie_mock_get_elementor_site_logo_url() ) : '';
+
+if ( '' !== $elementor_site_logo ) {
+	$desktop_logo = $elementor_site_logo;
+	$mobile_logo  = $elementor_site_logo;
+} else {
+	$desktop_logo = apply_filters( 'kms_asset_url', $desktop_logo_default, 'header_logo_desktop' );
+	$mobile_logo  = apply_filters( 'kms_asset_url', $mobile_logo_default, 'header_logo_mobile' );
+}
 ?>
 
 <header id="header" class="">

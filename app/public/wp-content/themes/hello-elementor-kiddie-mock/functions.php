@@ -101,6 +101,41 @@ function kiddie_mock_add_body_classes( $classes ) {
 add_filter( 'body_class', 'kiddie_mock_add_body_classes' );
 
 /**
+ * Resolve site logo URL from Elementor Site Settings (fallback: WP custom logo).
+ *
+ * @return string
+ */
+function kiddie_mock_get_elementor_site_logo_url() {
+	$logo_id = 0;
+
+	if ( class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance->kits_manager ) ) {
+		$kit = \Elementor\Plugin::$instance->kits_manager->get_active_kit_for_frontend();
+
+		if ( is_object( $kit ) && method_exists( $kit, 'get_settings' ) ) {
+			$site_logo = $kit->get_settings( 'site_logo' );
+
+			if ( is_array( $site_logo ) && isset( $site_logo['id'] ) ) {
+				$logo_id = (int) $site_logo['id'];
+			} elseif ( is_numeric( $site_logo ) ) {
+				$logo_id = (int) $site_logo;
+			}
+		}
+	}
+
+	if ( $logo_id <= 0 ) {
+		$logo_id = (int) get_theme_mod( 'custom_logo' );
+	}
+
+	if ( $logo_id <= 0 ) {
+		return '';
+	}
+
+	$url = wp_get_attachment_image_url( $logo_id, 'full' );
+
+	return is_string( $url ) ? $url : '';
+}
+
+/**
  * Return the academies page markup used for runtime sync.
  *
  * @return string

@@ -163,3 +163,40 @@
 - chore(qa): re-ran headless parity checks (top-fold + full-page captures on Home/Programs/About/Contact/Approach) and verified curriculum hover image swapping works in native parity mode.
 - chore(qa): confirmed editor safety behavior remains intact (`native-parity-front.js` loads on public pages and is suppressed in Elementor preview/edit contexts).
 - chore(qa): validated key routes remain fully native-component based (`elementor-widget-html` count = `0`) with widget-level Elementor structures preserved for owner editing.
+- feat(branding-logo): replaced navbar fallback logos with Chestnut assets (`assets/images/logo.jpg`, `assets/images/logo-square.png`) and updated plugin theme-asset defaults to local logo paths.
+- feat(elementor-readiness): wired header logo resolution to Elementor Site Settings (Site Identity `site_logo`) with fallback to WordPress custom logo and local Chestnut assets.
+- tweak(header-logo-fit): added targeted header logo crop/fit overrides for the fallback Chestnut file to keep nav height stable while preserving Elementor-driven logo override behavior.
+- chore(versioning): bumped `kiddie-mock-seed` plugin metadata to `1.3.9` and theme version to `1.0.2` for traceable rollout.
+- tweak(branding-logo): switched desktop navbar fallback logo to `logo-square.png` (mobile already `logo-square.png`) and tuned desktop header fit scaling for this asset profile.
+- chore(versioning): bumped `kiddie-mock-seed` plugin metadata to `1.3.10` and theme version to `1.0.3` for cache-safe logo-square testing.
+- tweak(navbar-brand-column): updated desktop header brand-column layout so the logo is centered within the left viewport lane and scaled to fill navbar height (`135px`) for stronger alignment with top-nav tabs.
+- chore(versioning): bumped theme version to `1.0.4` for cache-safe navbar-logo alignment rollout.
+- tweak(navbar-logo-fill): switched desktop `logo-square` rendering to an overflow-clipped fill strategy (larger image inside fixed-height logo container) so visible logo area covers full navbar height while remaining centered.
+- chore(versioning): bumped theme version to `1.0.5` for cache-safe logo fill update.
+- fix(navbar-logo-centering): applied desktop adaptive brand-lane offset and fixed `135x135` logo sizing so the logo center aligns exactly halfway between viewport left edge and nav tabs start, with full navbar-height occupancy.
+- chore(versioning): bumped theme version to `1.0.6` for cache-safe centering/fill correction.
+- tweak(navbar-logo-size): restored a slightly smaller desktop logo-square visual size (`124x124`) while preserving corrected centering between viewport left and nav tabs.
+- chore(versioning): bumped theme version to `1.0.7` for cache-safe size correction.
+- fix(navbar-logo-height): restored full-height desktop logo behavior with centered placement by using `135px` header-fit defaults and fallback logo-square scaling; retained adaptive left-lane centering.
+- feat(no-code-logo-ready): made desktop logo fit rule generic for `#header .nav-left .logo img` so Elementor Site Identity logo swaps remain no-code and still align to navbar height.
+- chore(versioning): bumped theme version to `1.0.8` for cache-safe full-height logo correction.
+- tweak(navbar-logo-square-fill): increased desktop `logo-square.png` scale to make the square portion visually span the full navbar height while preserving centered placement in the left brand lane.
+- chore(versioning): bumped theme version to `1.0.9` for cache-safe square-fill update.
+- tweak(navbar-logo-vertical-center): refined desktop `logo-square` transform from `2.72` to `2.56` and reset vertical offset to `top: 0` so the square fills header height without drifting above/below center.
+- chore(versioning): bumped theme version to `1.0.11` for cache-safe navbar vertical-centering tweak.
+- revert(navbar-logo-choice): reverted desktop navbar fallback back to `logo.jpg` (preferred visual) while preserving the corrected left-lane centering/layout behavior.
+- chore(versioning): bumped `kiddie-mock-seed` plugin metadata to `1.3.12` for traceable desktop-logo fallback reversion.
+- feat(branding-logo): switched desktop navbar fallback to the user-provided `new-logo-csa-tree` asset and copied it into theme images for local/runtime portability.
+- feat(branding-logo): generated a trimmed navbar-ready derivative from the pasted image to remove excess transparent margins so it renders at intended navbar size.
+- chore(versioning): bumped `kiddie-mock-seed` plugin metadata to `1.3.14` and theme version to `1.0.14` for cache-safe rollout of the new desktop logo asset.
+- feat(theme-colors): replaced legacy blue/yellow root tokens in `hello-elementor-kiddie-mock/style.css` with the requested green/tan brand palette and added backward-compatible alias variables for existing mock selectors.
+- feat(theme-colors): implemented a full-site color override layer (navbar, hero, sections, cards, links, forms, CTA bands, footer, utility widgets) to enforce the new brand system without changing page layout structure.
+- fix(theme-accessibility): tuned interactive states for buttons, links, form focus, FAQ toggles, and CTA contrast to keep readability and accessible emphasis across neutral/light-tan/green surfaces.
+- chore(qa-visual): executed desktop and mobile screenshot render passes after retheme (`scripts/capture-local-desktop.mjs`, `scripts/capture-local-mobile.mjs`) and validated palette consistency across key routes.
+- feat(branding-logo): imported user-provided `docs/new-logo-csa.png` into theme assets, generated a trimmed `new-logo-csa-navbar.png`, and switched header desktop/mobile fallback logos to this new asset.
+- feat(branding-logo): updated `kiddie-mock-seed` theme asset defaults so `header_logo_desktop` and `header_logo_mobile` now resolve to `new-logo-csa-navbar.png` by default.
+- fix(visual-consistency): added targeted overrides for `small-cards bg-color-blue` sections so card surfaces/text no longer render in legacy blue and now match the neutral + green/tan palette.
+- fix(contrast): strengthened text color handling inside green bands and normalized card/link contrast in previously conflicting blue-derived section variants.
+- chore(qa-visual): re-ran full-page and top/mobile screenshot passes after logo + contrast fixes to confirm nav branding and card color cleanup.
+- fix(button-contrast): added explicit nested span/button-label inheritance rules so CTA labels inside `.button-round` always match their button foreground color (white on green, dark on tan).
+- chore(qa-contrast): verified rendered CTA button colors via computed-style checks on `/our-curriculum/` and confirmed `rgb(255,255,255)` text on green button backgrounds.

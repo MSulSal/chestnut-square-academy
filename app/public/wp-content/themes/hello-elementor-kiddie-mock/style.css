@@ -4,13 +4,611 @@ Theme URI: https://example.local/kiddie-mock
 Description: Full-site Kiddie Academy style mock theme for Elementor-based frontend replication.
 Author: CSA Web Team
 Template: hello-elementor
-Version: 1.0.1
+Version: 1.0.16
 Text Domain: hello-elementor-kiddie-mock
 */
 
 :root {
-  --kiddie-navy: #1f2e57;
-  --kiddie-blue: #005cc4;
-  --kiddie-gold: #f2c638;
-  --kiddie-tan: #f5f1ec;
+  --csa-primary-green: #2e7d32;
+  --csa-primary-green-hover: #25682a;
+  --csa-secondary-green: #4caf50;
+  --csa-tan-accent: #e0a96d;
+  --csa-tan-accent-hover: #cd965f;
+  --csa-chestnut-brown: #8d6e63;
+  --csa-cream-bg: #f8f6f2;
+  --csa-light-tan-bg: #efe7dc;
+  --csa-white: #ffffff;
+  --csa-text-primary: #2b2b2b;
+  --csa-text-secondary: #555555;
+  --csa-link: #2e7d32;
+  --csa-link-hover: #225b27;
+  --csa-border-soft: #d8ccbc;
+  --csa-footer-bg: #245b2d;
+  --csa-shadow-soft: 0 10px 28px rgba(43, 43, 43, 0.08);
+
+  /* Backward-compatible aliases used by legacy mock styles. */
+  --kiddie-navy: var(--csa-text-primary);
+  --kiddie-blue: var(--csa-primary-green);
+  --kiddie-gold: var(--csa-tan-accent);
+  --kiddie-tan: var(--csa-light-tan-bg);
+}
+
+/* Default CSA fallback logo crop/fit for the theme header (Elementor logo overrides remain uncropped). */
+#header .nav-left .logo a img[src*="assets/images/logo-square.png"] {
+  width: 132px;
+  height: 132px;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.16);
+}
+
+#header .function-nav .mobile-logo img[src*="assets/images/logo-square.png"] {
+  width: 70px;
+  height: 70px;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.1);
+}
+
+#header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa-navbar.png"],
+#header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa.png"],
+#header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa-tree-navbar.png"],
+#header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa-tree.png"] {
+  width: 114px;
+  height: 58px;
+  max-width: none;
+  object-fit: contain;
+  object-position: center;
+  transform: none;
+}
+
+@media only screen and (min-width: 1200px) {
+  #header .inner-container {
+    align-items: stretch;
+  }
+
+  #header .nav-left {
+    width: 248px;
+    min-width: 248px;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    position: relative;
+    left: clamp(-120px, calc((1440px - 100vw) / 4), 0px);
+  }
+
+  #header .nav-left .logo {
+    width: 100%;
+    max-width: 100%;
+    height: 135px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #header .nav-left .logo a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #header .nav-left .logo a img[src*="assets/images/new-logo-csa-navbar.png"],
+  #header .nav-left .logo a img[src*="assets/images/new-logo-csa.png"],
+  #header .nav-left .logo a img[src*="assets/images/new-logo-csa-tree-navbar.png"],
+  #header .nav-left .logo a img[src*="assets/images/new-logo-csa-tree.png"] {
+    width: 228px;
+    height: 120px;
+    max-width: 228px;
+    max-height: 120px;
+    transform: none;
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  #header .nav-left .logo a img[src*="assets/images/logo-square-navbar.png"],
+  #header .nav-left .logo a img[src*="assets/images/logo-square.png"] {
+    width: auto;
+    height: 135px;
+    transform: none;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Keep Elementor Site Identity swaps no-code ready with a full-height default fit. */
+  #header .nav-left .logo a img {
+    height: 135px;
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* ===== CSA Brand Color System ===== */
+body.kiddie-mock-site,
+body.kiddie-mock-site .site-main,
+body.kiddie-mock-site .page-content,
+body.kiddie-mock-site .entry-content,
+body.kiddie-mock-site .elementor,
+body.kiddie-mock-site .elementor-section-wrap {
+  background-color: var(--csa-cream-bg);
+}
+
+body.kiddie-mock-site,
+body.kiddie-mock-site p,
+body.kiddie-mock-site li,
+body.kiddie-mock-site td,
+body.kiddie-mock-site label,
+body.kiddie-mock-site span {
+  color: var(--csa-text-secondary);
+}
+
+body.kiddie-mock-site h1,
+body.kiddie-mock-site h2,
+body.kiddie-mock-site h3,
+body.kiddie-mock-site h4,
+body.kiddie-mock-site h5,
+body.kiddie-mock-site h6 {
+  color: var(--csa-text-primary);
+}
+
+body.kiddie-mock-site a {
+  color: var(--csa-link);
+}
+
+body.kiddie-mock-site a:hover {
+  color: var(--csa-link-hover);
+}
+
+/* Navbar */
+body.kiddie-mock-site #header {
+  background-color: var(--csa-white);
+  box-shadow: 0 1px 0 rgba(43, 43, 43, 0.08);
+}
+
+body.kiddie-mock-site #header .support-nav,
+body.kiddie-mock-site #header .location-wrapper .chosen-location,
+body.kiddie-mock-site #header .location-details {
+  border-color: var(--csa-border-soft);
+}
+
+body.kiddie-mock-site #header .support-nav,
+body.kiddie-mock-site #header .location-wrapper .chosen-location,
+body.kiddie-mock-site #header .location-details,
+body.kiddie-mock-site #header .main-nav .submenu,
+body.kiddie-mock-site #header .location-details .address {
+  background-color: var(--csa-light-tan-bg);
+}
+
+body.kiddie-mock-site #header .main-nav .toplevel a,
+body.kiddie-mock-site #header .links-for-parents a,
+body.kiddie-mock-site #header .location-wrapper .chosen-location-name,
+body.kiddie-mock-site #header .location-wrapper .location,
+body.kiddie-mock-site #header .search-nav input[type="text"],
+body.kiddie-mock-site #header .search-nav button {
+  color: var(--csa-text-primary);
+  text-decoration: none;
+}
+
+body.kiddie-mock-site #header .main-nav .toplevel a:hover,
+body.kiddie-mock-site #header .main-nav li.active .toplevel a,
+body.kiddie-mock-site #header .main-nav .submenu a:hover,
+body.kiddie-mock-site #header .links-for-parents a:hover,
+body.kiddie-mock-site #header .links-for-parents a.active,
+body.kiddie-mock-site #header .change-button a,
+body.kiddie-mock-site #header .location-details .phone a,
+body.kiddie-mock-site #header .location-details .address a,
+body.kiddie-mock-site #header .child-menu-icon i,
+body.kiddie-mock-site #header .location-wrapper i,
+body.kiddie-mock-site #header .icon-search {
+  color: var(--csa-primary-green);
+}
+
+body.kiddie-mock-site #header .search-nav .yxt-SearchBar,
+body.kiddie-mock-site #header .search-nav .yxt-AutoComplete {
+  border-color: var(--csa-border-soft);
+}
+
+body.kiddie-mock-site #header .search-nav form button.search-button {
+  background-color: var(--csa-primary-green) !important;
+  border-color: var(--csa-primary-green) !important;
+  color: var(--csa-white) !important;
+}
+
+body.kiddie-mock-site #header .search-nav form button.search-button:hover {
+  background-color: var(--csa-primary-green-hover) !important;
+  border-color: var(--csa-primary-green-hover) !important;
+}
+
+/* Buttons */
+body.kiddie-mock-site a.button-round,
+body.kiddie-mock-site button.button-round,
+body.kiddie-mock-site input[type="submit"],
+body.kiddie-mock-site .button-round .elementor-button,
+body.kiddie-mock-site .elementor-widget-button .elementor-button {
+  background-color: var(--csa-primary-green);
+  border: 1px solid var(--csa-primary-green);
+  color: var(--csa-white);
+  text-decoration: none;
+}
+
+body.kiddie-mock-site a.button-round:hover,
+body.kiddie-mock-site button.button-round:hover,
+body.kiddie-mock-site input[type="submit"]:hover,
+body.kiddie-mock-site .button-round .elementor-button:hover,
+body.kiddie-mock-site .elementor-widget-button .elementor-button:hover {
+  background-color: var(--csa-primary-green-hover);
+  border-color: var(--csa-primary-green-hover);
+  color: var(--csa-white);
+}
+
+body.kiddie-mock-site a.button-round.blue,
+body.kiddie-mock-site button.button-round.blue,
+body.kiddie-mock-site .button-round.secondary .elementor-button,
+body.kiddie-mock-site .button-round.tan .elementor-button,
+body.kiddie-mock-site .button-round.accent .elementor-button {
+  background-color: var(--csa-tan-accent);
+  border-color: var(--csa-tan-accent);
+  color: var(--csa-text-primary);
+}
+
+body.kiddie-mock-site a.button-round.blue:hover,
+body.kiddie-mock-site button.button-round.blue:hover,
+body.kiddie-mock-site .button-round.secondary .elementor-button:hover,
+body.kiddie-mock-site .button-round.tan .elementor-button:hover,
+body.kiddie-mock-site .button-round.accent .elementor-button:hover {
+  background-color: var(--csa-tan-accent-hover);
+  border-color: var(--csa-tan-accent-hover);
+  color: var(--csa-text-primary);
+}
+
+body.kiddie-mock-site a.button-round.outline,
+body.kiddie-mock-site button.button-round.outline,
+body.kiddie-mock-site .button-round.outline .elementor-button {
+  background-color: transparent;
+  border-color: var(--csa-primary-green);
+  color: var(--csa-primary-green);
+}
+
+body.kiddie-mock-site a.button-round.outline:hover,
+body.kiddie-mock-site button.button-round.outline:hover,
+body.kiddie-mock-site .button-round.outline .elementor-button:hover {
+  background-color: rgba(46, 125, 50, 0.08);
+  border-color: var(--csa-primary-green-hover);
+  color: var(--csa-primary-green-hover);
+}
+
+/* Ensure nested button label spans do not override intended button text contrast. */
+body.kiddie-mock-site a.button-round span,
+body.kiddie-mock-site button.button-round span,
+body.kiddie-mock-site .button-round .elementor-button-content-wrapper,
+body.kiddie-mock-site .button-round .elementor-button-text,
+body.kiddie-mock-site .button-round .elementor-button-icon {
+  color: inherit !important;
+}
+
+/* Sections and color bands */
+body.kiddie-mock-site #curriculum,
+body.kiddie-mock-site #why-kiddie,
+body.kiddie-mock-site .tan-bg,
+body.kiddie-mock-site .offset-bg.tan,
+body.kiddie-mock-site .bg-color-tan,
+body.kiddie-mock-site .subpage-hero .offset-bg.tan,
+body.kiddie-mock-site .faq-preview-section,
+body.kiddie-mock-site .kma-academies-hero-right {
+  background-color: var(--csa-light-tan-bg);
+}
+
+body.kiddie-mock-site .offset-bg.blue,
+body.kiddie-mock-site .bg-color-blue,
+body.kiddie-mock-site .blue-bg,
+body.kiddie-mock-site .find-academy,
+body.kiddie-mock-site .contact-us-academy,
+body.kiddie-mock-site .kma-state-strip {
+  background-color: var(--csa-primary-green);
+}
+
+body.kiddie-mock-site .bg-color-blue h1,
+body.kiddie-mock-site .bg-color-blue h2,
+body.kiddie-mock-site .bg-color-blue h3,
+body.kiddie-mock-site .bg-color-blue h4,
+body.kiddie-mock-site .bg-color-blue h5,
+body.kiddie-mock-site .bg-color-blue h6,
+body.kiddie-mock-site .bg-color-blue p,
+body.kiddie-mock-site .bg-color-blue li,
+body.kiddie-mock-site .bg-color-blue a {
+  color: var(--csa-white);
+}
+
+body.kiddie-mock-site .find-academy h1,
+body.kiddie-mock-site .find-academy h2,
+body.kiddie-mock-site .find-academy h3,
+body.kiddie-mock-site .find-academy h4,
+body.kiddie-mock-site .find-academy p,
+body.kiddie-mock-site .find-academy a,
+body.kiddie-mock-site .contact-us-academy h1,
+body.kiddie-mock-site .contact-us-academy h2,
+body.kiddie-mock-site .contact-us-academy h3,
+body.kiddie-mock-site .contact-us-academy h4,
+body.kiddie-mock-site .contact-us-academy p,
+body.kiddie-mock-site .contact-us-academy a,
+body.kiddie-mock-site .kma-state-strip h2 {
+  color: var(--csa-white);
+}
+
+/* Hero */
+body.kiddie-mock-site #hero .hero-overlay {
+  background: linear-gradient(90deg, rgba(43, 43, 43, 0.3) 0%, rgba(43, 43, 43, 0.12) 56%, rgba(43, 43, 43, 0) 100%);
+}
+
+body.kiddie-mock-site #hero .copy h1,
+body.kiddie-mock-site #hero .copy p,
+body.kiddie-mock-site #hero .copy a,
+body.kiddie-mock-site #hero .locator .get-current-location {
+  color: var(--csa-white);
+}
+
+body.kiddie-mock-site #hero .copy h1 .headline-highlight {
+  color: var(--csa-tan-accent) !important;
+}
+
+/* Cards and content blocks */
+body.kiddie-mock-site .card .text,
+body.kiddie-mock-site .small-cards .card,
+body.kiddie-mock-site .column-3-image-text-cards .text,
+body.kiddie-mock-site .image-text .text,
+body.kiddie-mock-site .text.offset-top,
+body.kiddie-mock-site .ui-datepicker,
+body.kiddie-mock-site #curriculum .slide,
+body.kiddie-mock-site #curriculum .slides.mobile.abtasty-slick .slide .detail-container {
+  background-color: var(--csa-white);
+  box-shadow: var(--csa-shadow-soft);
+  border-color: var(--csa-border-soft);
+}
+
+body.kiddie-mock-site .small-cards.bg-color-blue,
+body.kiddie-mock-site .small-cards.overlapping.bg-color-blue {
+  background-color: transparent;
+}
+
+body.kiddie-mock-site .small-cards.bg-color-blue .card,
+body.kiddie-mock-site .small-cards.bg-color-blue .card .text,
+body.kiddie-mock-site .small-cards.bg-color-blue .card .card-copy {
+  background-color: var(--csa-white) !important;
+  color: var(--csa-text-secondary) !important;
+  border-color: var(--csa-border-soft);
+}
+
+body.kiddie-mock-site .small-cards.bg-color-blue .card h3,
+body.kiddie-mock-site .small-cards.bg-color-blue .card h4,
+body.kiddie-mock-site .small-cards.bg-color-blue .card h5,
+body.kiddie-mock-site .small-cards.bg-color-blue .card .title,
+body.kiddie-mock-site .small-cards.bg-color-blue .card strong {
+  color: var(--csa-text-primary) !important;
+}
+
+body.kiddie-mock-site .small-cards.bg-color-blue .card p,
+body.kiddie-mock-site .small-cards.bg-color-blue .card li,
+body.kiddie-mock-site .small-cards.bg-color-blue .card span:not(.elementor-button-text) {
+  color: var(--csa-text-secondary) !important;
+}
+
+body.kiddie-mock-site .small-cards.bg-color-blue .card a:not(.button-round):not(.elementor-button) {
+  color: var(--csa-link) !important;
+}
+
+body.kiddie-mock-site .small-cards.bg-color-blue .card a:not(.button-round):not(.elementor-button):hover {
+  color: var(--csa-link-hover) !important;
+}
+
+body.kiddie-mock-site #curriculum .slide:hover,
+body.kiddie-mock-site #curriculum .slide.hover,
+body.kiddie-mock-site #curriculum .slides.mobile.abtasty-slick .slide .detail-container,
+body.kiddie-mock-site #testimonial .blue-bg,
+body.kiddie-mock-site #testimonial .more-link a,
+body.kiddie-mock-site #testimonial .testimonial-bottom p {
+  background-color: var(--csa-primary-green);
+  color: var(--csa-white);
+}
+
+body.kiddie-mock-site #testimonial .quote p {
+  color: var(--csa-white);
+}
+
+body.kiddie-mock-site #curriculum .program-title,
+body.kiddie-mock-site #why-kiddie .card .card-title,
+body.kiddie-mock-site .column-3-image-text-cards .text .title {
+  color: var(--csa-text-primary);
+}
+
+body.kiddie-mock-site .column-3-image-text-cards a,
+body.kiddie-mock-site .image-text .text ul a,
+body.kiddie-mock-site .image-text .text p a,
+body.kiddie-mock-site #why-kiddie .card h4 a,
+body.kiddie-mock-site .arrow-link,
+body.kiddie-mock-site .text-link {
+  color: var(--csa-link);
+}
+
+body.kiddie-mock-site .column-3-image-text-cards a:hover,
+body.kiddie-mock-site .image-text .text ul a:hover,
+body.kiddie-mock-site .image-text .text p a:hover,
+body.kiddie-mock-site #why-kiddie .card h4 a:hover,
+body.kiddie-mock-site .arrow-link:hover,
+body.kiddie-mock-site .text-link:hover {
+  color: var(--csa-link-hover);
+}
+
+body.kiddie-mock-site #curriculum .slide .overview,
+body.kiddie-mock-site .card .card-copy,
+body.kiddie-mock-site .card .card-copy p,
+body.kiddie-mock-site .column-3-image-text-cards .text p,
+body.kiddie-mock-site .image-text .text p,
+body.kiddie-mock-site .image-text .text li {
+  color: var(--csa-text-secondary);
+}
+
+body.kiddie-mock-site #why-kiddie .card .text,
+body.kiddie-mock-site .small-cards .card,
+body.kiddie-mock-site .column-3-image-text-cards .text,
+body.kiddie-mock-site .image-text .text {
+  border-top: 4px solid var(--csa-secondary-green);
+}
+
+body.kiddie-mock-site .icon,
+body.kiddie-mock-site .mobile-carousel .slick-dots li button,
+body.kiddie-mock-site .desktop-carousel .slick-dots li button,
+body.kiddie-mock-site .expand-button-desktop label div,
+body.kiddie-mock-site .expand-button.mobile-button label div {
+  background-color: var(--csa-primary-green);
+  border-color: var(--csa-primary-green);
+}
+
+body.kiddie-mock-site .svg-icon.blue path {
+  fill: var(--csa-primary-green);
+}
+
+body.kiddie-mock-site .desktop-carousel .slick-prev:before,
+body.kiddie-mock-site .desktop-carousel .slick-next:before {
+  color: var(--csa-primary-green);
+}
+
+body.kiddie-mock-site .mobile-carousel .slick-dots li.slick-active button,
+body.kiddie-mock-site .desktop-carousel .slick-dots li.slick-active button {
+  background-color: var(--csa-primary-green);
+}
+
+body.kiddie-mock-site .svg-icon.yellow path,
+body.kiddie-mock-site #testimonial .star-rating > span {
+  fill: var(--csa-tan-accent);
+  color: var(--csa-tan-accent);
+}
+
+/* FAQ styles */
+body.kiddie-mock-site .faq-preview-section .links p[data-question] {
+  color: var(--csa-primary-green);
+}
+
+body.kiddie-mock-site .faq-preview-section .links p[data-question] strong {
+  text-decoration: none;
+}
+
+body.kiddie-mock-site .faq-preview-section .links p[data-question] i {
+  background-color: var(--csa-tan-accent);
+  color: var(--csa-text-primary);
+}
+
+body.kiddie-mock-site .faq-preview-section .links p[data-question]:hover,
+body.kiddie-mock-site .faq-preview-section .links p[data-question].open {
+  color: var(--csa-link-hover);
+}
+
+body.kiddie-mock-site .faq-preview-section .links p[data-question]:hover i,
+body.kiddie-mock-site .faq-preview-section .links p[data-question].open i {
+  background-color: var(--csa-primary-green);
+  color: var(--csa-white);
+}
+
+/* Forms */
+body.kiddie-mock-site input[type="text"],
+body.kiddie-mock-site input[type="email"],
+body.kiddie-mock-site input[type="tel"],
+body.kiddie-mock-site input[type="search"],
+body.kiddie-mock-site input[type="number"],
+body.kiddie-mock-site textarea,
+body.kiddie-mock-site select {
+  background-color: var(--csa-white);
+  border: 1px solid var(--csa-border-soft);
+  color: var(--csa-text-primary);
+}
+
+body.kiddie-mock-site input[type="text"]::placeholder,
+body.kiddie-mock-site input[type="email"]::placeholder,
+body.kiddie-mock-site input[type="tel"]::placeholder,
+body.kiddie-mock-site input[type="search"]::placeholder,
+body.kiddie-mock-site textarea::placeholder {
+  color: rgba(85, 85, 85, 0.75);
+}
+
+body.kiddie-mock-site input[type="text"]:focus,
+body.kiddie-mock-site input[type="email"]:focus,
+body.kiddie-mock-site input[type="tel"]:focus,
+body.kiddie-mock-site input[type="search"]:focus,
+body.kiddie-mock-site input[type="number"]:focus,
+body.kiddie-mock-site textarea:focus,
+body.kiddie-mock-site select:focus {
+  border-color: var(--csa-secondary-green);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+  outline: none;
+}
+
+body.kiddie-mock-site .locator .form button {
+  background-color: var(--csa-primary-green) !important;
+  border-color: var(--csa-primary-green) !important;
+  color: var(--csa-white) !important;
+}
+
+body.kiddie-mock-site .locator .form button:hover {
+  background-color: var(--csa-primary-green-hover) !important;
+  border-color: var(--csa-primary-green-hover) !important;
+}
+
+body.kiddie-mock-site .locator .get-current-location,
+body.kiddie-mock-site .locator-small .locator .get-current-location {
+  color: var(--csa-primary-green);
+}
+
+body.kiddie-mock-site #hero .locator .get-current-location,
+body.kiddie-mock-site .find-academy .locator .get-current-location,
+body.kiddie-mock-site .contact-us-academy .locator .get-current-location {
+  color: var(--csa-white);
+}
+
+/* Footer */
+body.kiddie-mock-site #footer {
+  background-color: var(--csa-footer-bg);
+}
+
+body.kiddie-mock-site #footer p,
+body.kiddie-mock-site #footer a,
+body.kiddie-mock-site #footer li,
+body.kiddie-mock-site #footer p span,
+body.kiddie-mock-site #footer .be-label,
+body.kiddie-mock-site #footer .be-related-link {
+  color: var(--csa-white);
+}
+
+body.kiddie-mock-site #footer .eyebrow {
+  color: var(--csa-tan-accent);
+}
+
+body.kiddie-mock-site #footer a:hover,
+body.kiddie-mock-site #footer .be-related-link:hover {
+  color: #f7ddc0;
+}
+
+/* Utility widgets */
+body.kiddie-mock-site .accessibility-widget {
+  background-color: var(--csa-primary-green);
+  border-color: rgba(255, 255, 255, 0.92);
+}
+
+body.kiddie-mock-site .accessibility-widget:hover,
+body.kiddie-mock-site .accessibility-widget:focus-visible {
+  background-color: var(--csa-primary-green-hover);
+}
+
+body.kiddie-mock-site #scroll-top {
+  background: var(--csa-primary-green);
+  border-color: var(--csa-primary-green);
+  color: var(--csa-white);
+}
+
+body.kiddie-mock-site #scroll-top:hover {
+  background: var(--csa-white);
+  color: var(--csa-primary-green);
 }

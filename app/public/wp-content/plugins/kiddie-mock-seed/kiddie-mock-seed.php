@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kiddie Mock Seed
  * Description: Builds a full Kiddie Academy style frontend mock across all key pages for WordPress + Elementor testing.
- * Version: 1.3.8
+ * Version: 1.3.15
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: kiddie-mock-seed
@@ -38,9 +38,11 @@ function kms_build_asset_key( $url ) {
  * @return array<string,string>
  */
 function kms_get_theme_asset_defaults() {
+	$theme_base = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/';
+
 	return array(
-		'header_logo_desktop' => 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/kiddie-academy-logo.png',
-		'header_logo_mobile'  => 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/2023-refresh/kiddie-academy-logo-stacked.svg',
+		'header_logo_desktop' => $theme_base . 'new-logo-csa-navbar.png',
+		'header_logo_mobile'  => $theme_base . 'new-logo-csa-navbar.png',
 		'footer_logo'         => 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/2023-refresh/ka-logo-white-footer.svg',
 	);
 }
