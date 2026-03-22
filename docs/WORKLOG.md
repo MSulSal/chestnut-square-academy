@@ -200,3 +200,9 @@
 - chore(qa-visual): re-ran full-page and top/mobile screenshot passes after logo + contrast fixes to confirm nav branding and card color cleanup.
 - fix(button-contrast): added explicit nested span/button-label inheritance rules so CTA labels inside `.button-round` always match their button foreground color (white on green, dark on tan).
 - chore(qa-contrast): verified rendered CTA button colors via computed-style checks on `/our-curriculum/` and confirmed `rgb(255,255,255)` text on green button backgrounds.
+- feat(scope-trim): added a one-time `small-business simplification` pass in `kiddie-mock-seed` that keeps only core pages (`home`, `company`, `our-curriculum`, `faq`, `contact-us`, `privacy-policy`) and archives franchise/corporate-scale page trees.
+- feat(scope-trim): implemented section/component pruning for core templates (removing non-essential recruitment/testimonial/finder/blog-heavy blocks) while preserving the existing visual style system and CSS.
+- feat(scope-trim): added link remapping so oversized-franchise routes (`/academies/*`, `/franchising/*`, `/careers/*`, etc.) route into core single-location pages instead of dead links.
+- feat(nav-trim): reduced header navigation to small-center essentials (About, Programs, FAQ, Contact) and switched header CTA to `Schedule a Tour`.
+- feat(footer-trim): replaced corporate/franchise footer destinations with local-only quick links and contact actions for single-location operation.
+- chore(runtime): triggered simplification rollout via local HTTP request and verified published pages now include only the six core routes.

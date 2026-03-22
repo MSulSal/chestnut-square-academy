@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kiddie Mock Seed
  * Description: Builds a full Kiddie Academy style frontend mock across all key pages for WordPress + Elementor testing.
- * Version: 1.3.15
+ * Version: 1.3.18
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: kiddie-mock-seed
@@ -2364,6 +2364,353 @@ function kms_run_native_parity_seed( $overwrite = true ) {
 	kms_set_seed_profile( 'native-parity' );
 	flush_rewrite_rules();
 }
+
+/**
+ * Return reduced page set for a single-location daycare operation.
+ *
+ * @return array<int,array<string,string>>
+ */
+function kms_get_small_business_blueprints() {
+	return array(
+		array( 'path' => 'home', 'title' => 'Home', 'template' => 'home' ),
+		array( 'path' => 'company', 'title' => 'About Us', 'template' => 'company' ),
+		array( 'path' => 'our-curriculum', 'title' => 'Programs', 'template' => 'our-curriculum' ),
+		array( 'path' => 'faq', 'title' => 'Frequently Asked Questions', 'template' => 'faq' ),
+		array( 'path' => 'contact-us', 'title' => 'Contact Us', 'template' => 'contact-us' ),
+		array( 'path' => 'privacy-policy', 'title' => 'Privacy Policy', 'template' => 'generic' ),
+	);
+}
+
+/**
+ * Remove DOM nodes for XPath selector list.
+ *
+ * @param DOMXPath             $xpath  XPath instance.
+ * @param array<int,string>    $queries XPath queries.
+ */
+function kms_small_business_remove_nodes( $xpath, $queries ) {
+	if ( ! $xpath instanceof DOMXPath || ! is_array( $queries ) ) {
+		return;
+	}
+
+	foreach ( $queries as $query ) {
+		if ( ! is_string( $query ) || '' === $query ) {
+			continue;
+		}
+
+		$nodes = $xpath->query( $query );
+		if ( ! $nodes instanceof DOMNodeList || 0 === $nodes->length ) {
+			continue;
+		}
+
+		for ( $index = $nodes->length - 1; $index >= 0; $index-- ) {
+			$node = $nodes->item( $index );
+			if ( ! $node instanceof DOMNode || ! $node->parentNode instanceof DOMNode ) {
+				continue;
+			}
+
+			$node->parentNode->removeChild( $node );
+		}
+	}
+}
+
+/**
+ * Map oversized-franchise links to small-business core routes.
+ *
+ * @param string $href Source link.
+ * @return string
+ */
+function kms_small_business_map_href( $href ) {
+	if ( ! is_string( $href ) || '' === trim( $href ) ) {
+		return $href;
+	}
+
+	$parsed = wp_parse_url( $href );
+	if ( ! is_array( $parsed ) || empty( $parsed['path'] ) ) {
+		return $href;
+	}
+
+	$path = '/' . ltrim( (string) $parsed['path'], '/' );
+
+	if ( preg_match( '#^/academies(?:/|$)#', $path ) ) {
+		return home_url( '/contact-us/' );
+	}
+
+	if ( preg_match( '#^/(careers|franchising|corporate-careers)(?:/|$)#', $path ) ) {
+		return home_url( '/contact-us/' );
+	}
+
+	if ( preg_match( '#^/(academic-leadership|community-essentials|accreditation)(?:/|$)#', $path ) ) {
+		return home_url( '/company/' );
+	}
+
+	if ( preg_match( '#^/(parent-testimonials|newsroom|store)(?:/|$)#', $path ) ) {
+		return home_url( '/faq/' );
+	}
+
+	return $href;
+}
+
+/**
+ * Apply small-business section/component trimming without touching styles.
+ *
+ * @param string $path Page path.
+ * @param string $html Original HTML.
+ * @return string
+ */
+function kms_trim_small_business_html( $path, $html ) {
+	if ( ! is_string( $html ) || '' === trim( $html ) ) {
+		return $html;
+	}
+
+	$queries_map = array(
+		'home'           => array(
+			"//*[@id='join-us']",
+			"//*[@id='start-your-career']",
+			"//*[@id='testimonial']",
+			"//*[@id='contact-us-academy']",
+		),
+		'company'        => array(
+			"//*[@id='experts']",
+			"//*[@id='standards']",
+			"//*[@id='join-us']",
+			"//*[contains(concat(' ', normalize-space(@class), ' '), ' featured-blogs ')]",
+			"//*[@id='contact-us-academy']",
+		),
+		'our-curriculum' => array(
+			"//*[self::section and contains(concat(' ', normalize-space(@class), ' '), ' small-cards ')]",
+			"//*[self::section and contains(concat(' ', normalize-space(@class), ' '), ' image-text ')]",
+			"//*[@id='testimonial']",
+			"//*[@id='contact-us-academy']",
+		),
+		'contact-us'     => array(
+			"//*[self::section and contains(concat(' ', normalize-space(@class), ' '), ' text-image ')]",
+			"//*[@id='contact-us-academy']",
+		),
+	);
+
+	if ( isset( $queries_map[ $path ] ) ) {
+		$internal_errors = libxml_use_internal_errors( true );
+		$document        = new DOMDocument( '1.0', 'UTF-8' );
+		$wrapped_html    = '<div id="kms-small-root">' . $html . '</div>';
+
+		if ( $document->loadHTML( '<?xml encoding="utf-8" ?>' . $wrapped_html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD ) ) {
+			$xpath = new DOMXPath( $document );
+			kms_small_business_remove_nodes( $xpath, $queries_map[ $path ] );
+
+			$root = $document->getElementById( 'kms-small-root' );
+			if ( $root instanceof DOMElement ) {
+				$rebuilt = '';
+				foreach ( $root->childNodes as $child ) {
+					$rebuilt .= $document->saveHTML( $child );
+				}
+				$html = $rebuilt;
+			}
+		}
+
+		libxml_clear_errors();
+		libxml_use_internal_errors( $internal_errors );
+	}
+
+	$internal_errors = libxml_use_internal_errors( true );
+	$document        = new DOMDocument( '1.0', 'UTF-8' );
+	$wrapped_html    = '<div id="kms-small-links-root">' . $html . '</div>';
+
+	if ( $document->loadHTML( '<?xml encoding="utf-8" ?>' . $wrapped_html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD ) ) {
+		$anchors = $document->getElementsByTagName( 'a' );
+		if ( $anchors instanceof DOMNodeList && $anchors->length > 0 ) {
+			foreach ( $anchors as $anchor ) {
+				if ( ! $anchor instanceof DOMElement || ! $anchor->hasAttribute( 'href' ) ) {
+					continue;
+				}
+
+				$href    = (string) $anchor->getAttribute( 'href' );
+				$mapped  = kms_small_business_map_href( $href );
+				if ( $mapped !== $href ) {
+					$anchor->setAttribute( 'href', $mapped );
+				}
+			}
+		}
+
+		$root = $document->getElementById( 'kms-small-links-root' );
+		if ( $root instanceof DOMElement ) {
+			$rebuilt = '';
+			foreach ( $root->childNodes as $child ) {
+				$rebuilt .= $document->saveHTML( $child );
+			}
+			$html = $rebuilt;
+		}
+	}
+
+	libxml_clear_errors();
+	libxml_use_internal_errors( $internal_errors );
+
+	$text_replacements = array(
+		'Find an Academy Near You'             => 'Schedule a Tour',
+		'Find Your Academy'                    => 'Schedule a Tour',
+		'View All Academies'                   => 'Schedule a Tour',
+		'Contact <br>Kiddie Academy Corporate' => 'Contact <br>Chestnut Square Academy',
+		'Kiddie Academy Corporate'             => 'Chestnut Square Academy',
+		'3415 Box Hill Corporate Center Drive' => '402 S. Chestnut St.',
+		'Abingdon, MD 21009'                   => 'McKinney, TX',
+		'Toll-free: <a href="tel:800-554-3343"><b>800-554-3343</b></a>' => '',
+		'To contact your local Kiddie Academy, <a href="/contact-us/"><b>find our nearest location here</b></a>.' => 'Schedule a tour and our team will contact you with current availability.',
+	);
+
+	return str_replace( array_keys( $text_replacements ), array_values( $text_replacements ), $html );
+}
+
+/**
+ * Upsert one page using reduced native parity data.
+ *
+ * @param array<string,string> $blueprint Blueprint.
+ * @param bool                 $overwrite Overwrite existing content.
+ * @return int
+ */
+function kms_upsert_small_business_page( $blueprint, $overwrite ) {
+	$path      = (string) $blueprint['path'];
+	$title     = (string) $blueprint['title'];
+	$template  = (string) $blueprint['template'];
+	$slug      = basename( $path );
+	$parent_id = 0;
+
+	if ( false !== strpos( $path, '/' ) ) {
+		$parent_path = dirname( $path );
+		$parent_page = get_page_by_path( $parent_path, OBJECT, 'page' );
+		if ( $parent_page instanceof WP_Post ) {
+			$parent_id = (int) $parent_page->ID;
+		}
+	}
+
+	$page = get_page_by_path( $path, OBJECT, 'page' );
+
+	$postarr = array(
+		'post_title'     => $title,
+		'post_name'      => $slug,
+		'post_type'      => 'page',
+		'post_status'    => 'publish',
+		'post_parent'    => $parent_id,
+		'comment_status' => 'closed',
+	);
+
+	if ( $page instanceof WP_Post ) {
+		$postarr['ID'] = (int) $page->ID;
+	} else {
+		$postarr['post_content'] = '';
+	}
+
+	$page_html = '';
+	if ( $overwrite || ! isset( $postarr['ID'] ) ) {
+		$page_html               = kms_get_page_html( $template, $title, $path );
+		$page_html               = kms_localize_internal_links( $page_html );
+		$page_html               = kms_replace_asset_urls_in_markup( $page_html );
+		$page_html               = kms_trim_small_business_html( $path, $page_html );
+		$postarr['post_content'] = wp_strip_all_tags( (string) $title );
+	}
+
+	$page_id = wp_insert_post( wp_slash( $postarr ), true );
+	if ( is_wp_error( $page_id ) ) {
+		return 0;
+	}
+
+	update_post_meta( $page_id, '_wp_page_template', 'default' );
+
+	if ( $overwrite || ! $page instanceof WP_Post ) {
+		kms_store_elementor_document( $page_id, kms_build_native_parity_data( $page_html, $page_id ) );
+	}
+
+	return (int) $page_id;
+}
+
+/**
+ * Archive full-parity pages not needed for the small-business build.
+ *
+ * @param array<int,string> $keep_paths Kept page paths.
+ */
+function kms_archive_non_small_business_pages( $keep_paths ) {
+	$sorted = array_reverse( kms_sort_blueprints_by_depth( kms_get_page_blueprints() ) );
+
+	foreach ( $sorted as $blueprint ) {
+		$path = (string) $blueprint['path'];
+		if ( in_array( $path, $keep_paths, true ) ) {
+			continue;
+		}
+
+		$page = get_page_by_path( $path, OBJECT, 'page' );
+		if ( ! $page instanceof WP_Post || 'trash' === $page->post_status ) {
+			continue;
+		}
+
+		wp_trash_post( (int) $page->ID );
+	}
+
+	$keep_slugs = array();
+	foreach ( $keep_paths as $keep_path ) {
+		$keep_slugs[] = basename( (string) $keep_path );
+	}
+
+	$all_pages = get_posts(
+		array(
+			'post_type'   => 'page',
+			'post_status' => array( 'publish', 'draft', 'private', 'pending', 'future' ),
+			'numberposts' => -1,
+		)
+	);
+
+	foreach ( $all_pages as $page ) {
+		if ( ! $page instanceof WP_Post ) {
+			continue;
+		}
+
+		if ( in_array( $page->post_name, $keep_slugs, true ) ) {
+			continue;
+		}
+
+		if ( 'trash' === $page->post_status ) {
+			continue;
+		}
+
+		wp_trash_post( (int) $page->ID );
+	}
+}
+
+/**
+ * Run one-time simplification pass for single-location daycare operation.
+ *
+ * @param bool $overwrite Overwrite existing content.
+ */
+function kms_run_small_business_simplification( $overwrite = true ) {
+	$blueprints = kms_sort_blueprints_by_depth( kms_get_small_business_blueprints() );
+	$keep_paths = array();
+
+	foreach ( $blueprints as $blueprint ) {
+		$keep_paths[] = (string) $blueprint['path'];
+		kms_upsert_small_business_page( $blueprint, $overwrite );
+	}
+
+	$home = get_page_by_path( 'home', OBJECT, 'page' );
+	if ( $home instanceof WP_Post ) {
+		update_option( 'show_on_front', 'page' );
+		update_option( 'page_on_front', (int) $home->ID );
+	}
+
+	update_option( 'page_for_posts', 0 );
+	kms_archive_non_small_business_pages( $keep_paths );
+	kms_set_seed_profile( 'native-parity' );
+	update_option( 'kms_small_business_simplify_ver', '1.0.2' );
+	flush_rewrite_rules();
+}
+
+/**
+ * Apply small-business simplification once after plugin/theme updates.
+ */
+function kms_apply_small_business_simplification_once() {
+	if ( '1.0.2' === (string) get_option( 'kms_small_business_simplify_ver', '' ) ) {
+		return;
+	}
+
+	kms_run_small_business_simplification( true );
+}
+add_action( 'init', 'kms_apply_small_business_simplification_once', 50 );
 
 /**
  * One-time safety sync: mirror post_content into Elementor document meta.

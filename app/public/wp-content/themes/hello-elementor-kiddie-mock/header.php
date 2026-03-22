@@ -23,31 +23,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php
 $home_url                 = home_url( '/' );
-$academies_url            = home_url( '/academies/' );
-$approach_url             = home_url( '/academies/approach-to-childcare/' );
 $programs_url             = home_url( '/our-curriculum/' );
-$tuition_url              = home_url( '/academies/enrollment-and-tuition/' );
 $company_url              = home_url( '/company/' );
-$careers_url              = home_url( '/careers/' );
-$for_parents_url          = home_url( '/for-parents/' );
-$franchising_url          = home_url( '/franchising/' );
+$faq_url                  = home_url( '/faq/' );
 $contact_url              = home_url( '/contact-us/' );
-$leadership_url           = home_url( '/academic-leadership/' );
-$community_url            = home_url( '/community-essentials/' );
-$testimonials_url         = home_url( '/parent-testimonials/' );
-$newsroom_url             = home_url( '/newsroom/' );
-$infant_url               = home_url( '/academies/programs/infant-daycare/' );
-$toddler_url              = home_url( '/academies/programs/toddler-daycare-curriculum/' );
-$early_preschool_url      = home_url( '/academies/programs/early-preschool/' );
-$preschool_url            = home_url( '/academies/programs/preschool/' );
-$pre_kindergarten_url     = home_url( '/academies/programs/pre-kindergarten/' );
-$kindergarten_url         = home_url( '/academies/programs/kindergarten/' );
-$school_age_url           = home_url( '/academies/programs/school-age-programs/' );
-$summer_camp_url          = home_url( '/academies/programs/summer-camp/' );
-$is_academies_index       = is_page( 'academies' );
-$header_cta_url           = $academies_url;
-$header_cta_label         = 'Find Your Academy';
-$header_cta_aria          = 'Find Your Academy - View All Academies';
+$header_cta_url           = $contact_url;
+$header_cta_label         = 'Schedule a Tour';
+$header_cta_aria          = 'Schedule a Tour - Contact Us';
 $desktop_logo_default     = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa-navbar.png';
 $mobile_logo_default      = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa-navbar.png';
 $elementor_site_logo      = function_exists( 'kiddie_mock_get_elementor_site_logo_url' ) ? trim( (string) kiddie_mock_get_elementor_site_logo_url() ) : '';
@@ -76,9 +58,9 @@ if ( '' !== $elementor_site_logo ) {
 				<div class="support-nav">
 					<div class="top-quicklinks one-row-flex">
 						<div class="links-for-parents">
-							<a href="<?php echo esc_url( $for_parents_url ); ?>">Family Essentials Blog</a>
-							<a href="<?php echo esc_url( $franchising_url ); ?>">Franchise With Us</a>
-							<a href="<?php echo esc_url( $careers_url ); ?>">Careers</a>
+							<a href="<?php echo esc_url( $programs_url ); ?>">Programs</a>
+							<a href="<?php echo esc_url( $faq_url ); ?>">FAQ</a>
+							<a href="<?php echo esc_url( $contact_url ); ?>">Contact Us</a>
 						</div>
 						<div class="header-search" tabindex="0"><span class="toplevel icon-search"></span></div>
 						<div class="search-nav">
@@ -94,40 +76,10 @@ if ( '' !== $elementor_site_logo ) {
 
 				<div class="main-nav">
 					<ul class="one-row-flex top-menu">
-						<li><span class="toplevel"><a href="<?php echo esc_url( $approach_url ); ?>">Approach to Care</a></span></li>
-						<li>
-							<span class="toplevel has-child curriculum">
-								<a href="<?php echo esc_url( $programs_url ); ?>">Programs</a>
-								<div class="child-menu-icon"><i class="fa-solid fa-chevron-down"></i></div>
-							</span>
-							<ul class="curriculum-submenu submenu">
-								<li><a href="<?php echo esc_url( $infant_url ); ?>" aria-label="Infant 6 weeks to 12 months"><span class="title">Infant</span> <span class="age">6 weeks to 12 months</span></a></li>
-								<li><a href="<?php echo esc_url( $toddler_url ); ?>" aria-label="Toddler 13 to 24 months"><span class="title">Toddler</span> <span class="age">13 to 24 months</span></a></li>
-								<li><a href="<?php echo esc_url( $early_preschool_url ); ?>" aria-label="Early Preschool 2-Year-Olds"><span class="title">Early Preschool</span> <span class="age">2-Year-Olds</span></a></li>
-								<li><a href="<?php echo esc_url( $preschool_url ); ?>" aria-label="Preschool 3-Year-Olds"><span class="title">Preschool</span> <span class="age">3-Year-Olds</span></a></li>
-								<li><a href="<?php echo esc_url( $pre_kindergarten_url ); ?>" aria-label="Pre-Kindergarten 4-Year-Olds"><span class="title">Pre-Kindergarten</span> <span class="age">4-Year-Olds</span></a></li>
-								<li><a href="<?php echo esc_url( $kindergarten_url ); ?>" aria-label="Kindergarten 5-Year-Olds"><span class="title">Kindergarten</span> <span class="age">5-Year-Olds</span></a></li>
-								<li><a href="<?php echo esc_url( $school_age_url ); ?>" aria-label="School Age 5 to 12-Year-Olds"><span class="title">School Age</span> <span class="age">5 to 12-Year-Olds</span></a></li>
-								<li><a href="<?php echo esc_url( $summer_camp_url ); ?>" aria-label="Summer Camp 2 to 12-Year-Olds"><span class="title">Summer Camp</span> <span class="age">2 to 12-Year-Olds</span></a></li>
-							</ul>
-						</li>
-						<li><span class="toplevel"><a href="<?php echo esc_url( $tuition_url ); ?>">Tuition & Enrollment</a></span></li>
-						<li>
-							<span class="toplevel has-child about">
-								<a href="<?php echo esc_url( $company_url ); ?>">About Us</a>
-								<div class="child-menu-icon"><i class="fa-solid fa-chevron-down"></i></div>
-							</span>
-							<ul class="about-submenu submenu">
-								<li><a href="<?php echo esc_url( $franchising_url ); ?>"><span>Franchise With Us</span></a></li>
-								<li><a href="<?php echo esc_url( $careers_url ); ?>"><span>Careers</span></a></li>
-								<li><a href="<?php echo esc_url( $leadership_url ); ?>"><span>Leadership</span></a></li>
-								<li><a href="<?php echo esc_url( $community_url ); ?>"><span>Social Responsibility</span></a></li>
-								<li><a href="<?php echo esc_url( $testimonials_url ); ?>" aria-label="Parent Testimonials"><span>Testimonials</span></a></li>
-								<div class="break"></div>
-								<li><a href="<?php echo esc_url( $newsroom_url ); ?>"><span>Newsroom</span></a></li>
-								<li><a href="<?php echo esc_url( $contact_url ); ?>"><span>Contact Us</span></a></li>
-							</ul>
-						</li>
+						<li><span class="toplevel"><a href="<?php echo esc_url( $company_url ); ?>">About Us</a></span></li>
+						<li><span class="toplevel"><a href="<?php echo esc_url( $programs_url ); ?>">Programs</a></span></li>
+						<li><span class="toplevel"><a href="<?php echo esc_url( $faq_url ); ?>">FAQ</a></span></li>
+						<li><span class="toplevel"><a href="<?php echo esc_url( $contact_url ); ?>">Contact Us</a></span></li>
 					</ul>
 				</div>
 
