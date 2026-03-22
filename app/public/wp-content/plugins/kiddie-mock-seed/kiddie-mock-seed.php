@@ -41,9 +41,9 @@ function kms_get_theme_asset_defaults() {
 	$theme_base = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/';
 
 	return array(
-		'header_logo_desktop' => $theme_base . 'new-logo-csa-navbar.png',
-		'header_logo_mobile'  => $theme_base . 'new-logo-csa-navbar.png',
-		'footer_logo'         => 'https://kiddieacademy.com/wp-content/themes/kiddieacademy/assets/img/2023-refresh/ka-logo-white-footer.svg',
+		'header_logo_desktop' => $theme_base . 'new-logo-csa.png',
+		'header_logo_mobile'  => $theme_base . 'new-logo-csa.png',
+		'footer_logo'         => $theme_base . 'new-logo-csa.png',
 	);
 }
 
@@ -2758,7 +2758,7 @@ function kms_run_small_business_simplification( $overwrite = true ) {
 	update_option( 'page_for_posts', 0 );
 	kms_archive_non_small_business_pages( $keep_paths );
 	kms_set_seed_profile( 'native-parity' );
-	update_option( 'kms_small_business_simplify_ver', '1.0.6' );
+	update_option( 'kms_small_business_simplify_ver', '1.0.7' );
 	flush_rewrite_rules();
 }
 
@@ -2766,13 +2766,62 @@ function kms_run_small_business_simplification( $overwrite = true ) {
  * Apply small-business simplification once after plugin/theme updates.
  */
 function kms_apply_small_business_simplification_once() {
-	if ( '1.0.6' === (string) get_option( 'kms_small_business_simplify_ver', '' ) ) {
+	if ( '1.0.7' === (string) get_option( 'kms_small_business_simplify_ver', '' ) ) {
 		return;
 	}
 
 	kms_run_small_business_simplification( true );
 }
 add_action( 'init', 'kms_apply_small_business_simplification_once', 50 );
+
+/**
+ * Migrate legacy Kiddie/old-logo asset overrides to current CSA defaults.
+ */
+function kms_migrate_legacy_asset_overrides_once() {
+	if ( '1.0.1' === (string) get_option( 'kms_asset_override_migration_ver', '' ) ) {
+		return;
+	}
+
+	$overrides = kms_get_asset_overrides();
+	$defaults  = kms_get_theme_asset_defaults();
+	$changed   = false;
+
+	$slots = array( 'header_logo_desktop', 'header_logo_mobile', 'footer_logo' );
+	foreach ( $slots as $slot ) {
+		$current = isset( $overrides[ $slot ] ) ? trim( (string) $overrides[ $slot ] ) : '';
+		if ( '' === $current ) {
+			$overrides[ $slot ] = $defaults[ $slot ];
+			$changed            = true;
+			continue;
+		}
+
+		if ( 'footer_logo' === $slot && false !== stripos( $current, 'ka-logo-white-footer.svg' ) ) {
+			$overrides[ $slot ] = $defaults[ $slot ];
+			$changed            = true;
+			continue;
+		}
+
+		if (
+			in_array( $slot, array( 'header_logo_desktop', 'header_logo_mobile' ), true ) &&
+			(
+				false !== stripos( $current, 'new-logo-csa-navbar.png' ) ||
+				false !== stripos( $current, 'new-logo-csa-tree-navbar.png' ) ||
+				false !== stripos( $current, 'logo-square-navbar.png' ) ||
+				false !== stripos( $current, 'ka-logo' )
+			)
+		) {
+			$overrides[ $slot ] = $defaults[ $slot ];
+			$changed            = true;
+		}
+	}
+
+	if ( $changed ) {
+		kms_set_asset_overrides( $overrides );
+	}
+
+	update_option( 'kms_asset_override_migration_ver', '1.0.1' );
+}
+add_action( 'init', 'kms_migrate_legacy_asset_overrides_once', 45 );
 
 /**
  * One-time safety sync: mirror post_content into Elementor document meta.

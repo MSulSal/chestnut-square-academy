@@ -30,8 +30,8 @@ $contact_url              = home_url( '/contact-us/' );
 $header_cta_url           = $contact_url;
 $header_cta_label         = 'Schedule a Tour';
 $header_cta_aria          = 'Schedule a Tour - Contact Us';
-$desktop_logo_default     = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa-navbar.png';
-$mobile_logo_default      = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa-navbar.png';
+$desktop_logo_default     = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa.png';
+$mobile_logo_default      = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa.png';
 $elementor_site_logo      = function_exists( 'kiddie_mock_get_elementor_site_logo_url' ) ? trim( (string) kiddie_mock_get_elementor_site_logo_url() ) : '';
 
 if ( '' !== $elementor_site_logo ) {

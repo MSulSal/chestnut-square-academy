@@ -212,3 +212,8 @@
 - feat(contact-copy): converted contact-page corporate copy blocks to local Downtown McKinney wording (address/hours and tour-focused CTA language).
 - fix(a11y-copy): updated header/mobile and footer logo alt text from Kiddie branding to Chestnut Square Academy branding.
 - chore(qa-copy): re-ran simplification rollout and verified `Kiddie` mentions in `<main>` content are now `0` on Home/About/Programs/FAQ/Contact/Privacy pages, with `elementor-widget-html` still `0` (native widget editability preserved).
+- fix(branding-footer-logo): replaced remaining Kiddie footer logo source with local `assets/images/new-logo-csa.png` in both theme footer fallback and seed plugin asset defaults.
+- fix(branding-nav-logo): switched header desktop/mobile fallback logos from `new-logo-csa-navbar.png` to `new-logo-csa.png` for consistent no-code Elementor replacement flow.
+- feat(asset-migration): added one-time legacy asset-override migration to auto-rewrite saved old logo overrides (`ka-logo-white-footer.svg`, prior navbar logo variants) to current CSA defaults without manual DB edits.
+- chore(runtime-refresh): bumped small-business simplification guard version to `1.0.7` to force a clean reseed/update pass on next load after logo/copy fixes.
+- chore(qa-copy): verified rendered core routes (`/`, `/company/`, `/our-curriculum/`, `/faq/`, `/contact-us/`, `/privacy-policy/`) contain zero visible `Kiddie` text and confirmed footer logo no longer resolves to Kiddie CDN.
