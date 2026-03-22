@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kiddie Mock Seed
  * Description: Builds a full Kiddie Academy style frontend mock across all key pages for WordPress + Elementor testing.
- * Version: 1.3.22
+ * Version: 1.3.23
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: kiddie-mock-seed
@@ -1280,8 +1280,8 @@ function kms_owner_shared_images() {
 function kms_get_owner_edit_blueprints() {
 	return array(
 		array( 'path' => 'home', 'title' => 'Home' ),
+		array( 'path' => 'life-at-chestnut', 'title' => 'Life at Chestnut' ),
 		array( 'path' => 'company', 'title' => 'About Us' ),
-		array( 'path' => 'our-curriculum', 'title' => 'Programs' ),
 		array( 'path' => 'faq', 'title' => 'Frequently Asked Questions' ),
 		array( 'path' => 'contact-us', 'title' => 'Contact Us' ),
 		array( 'path' => 'academies', 'title' => 'Find an Academy' ),
@@ -1297,8 +1297,8 @@ function kms_get_owner_edit_blueprints() {
 function kms_get_owner_plain_content( $path ) {
 	$copy = array(
 		'home'           => 'Chestnut Square Academy is an early learning center in Downtown McKinney serving families with warm, dependable care and play-based learning.',
+		'life-at-chestnut' => 'A look into daily life at Chestnut Square Academy through classroom and community moments.',
 		'company'        => 'Learn about Chestnut Square Academy, our family-first approach, and our commitment to the Downtown McKinney community.',
-		'our-curriculum' => 'Explore age-based early learning programs, daily routines, and enrichment opportunities at Chestnut Square Academy.',
 		'faq'            => 'Answers to common family questions about programs, enrollment, daily routines, and communication.',
 		'contact-us'     => 'Get in touch with Chestnut Square Academy to ask questions or schedule a tour.',
 		'academies'      => 'Find location and contact details for Chestnut Square Academy in Downtown McKinney.',
@@ -1586,7 +1586,7 @@ function kms_build_owner_page_data( $path, $post_id ) {
 			$post_id,
 			$counter,
 			array(
-				kms_owner_heading_widget( $post_id, $counter, 'Gallery', 'h1' ),
+				kms_owner_heading_widget( $post_id, $counter, 'Life at Chestnut', 'h1' ),
 				kms_owner_text_widget( $post_id, $counter, '<p>A look at daily life at Chestnut Square Academy.</p>' ),
 			),
 			'kms-owner-section kms-owner-hero'
@@ -1722,8 +1722,8 @@ function kms_build_owner_page_data( $path, $post_id ) {
 
 	$map = array(
 		'home'           => $home_data,
+		'life-at-chestnut' => $gallery_data,
 		'company'        => $about_data,
-		'our-curriculum' => $programs_data,
 		'gallery'        => $gallery_data,
 		'faq'            => $faq_data,
 		'contact-us'     => $contact_data,
@@ -2375,8 +2375,8 @@ function kms_run_native_parity_seed( $overwrite = true ) {
 function kms_get_small_business_blueprints() {
 	return array(
 		array( 'path' => 'home', 'title' => 'Home', 'template' => 'home' ),
+		array( 'path' => 'life-at-chestnut', 'title' => 'Life at Chestnut', 'template' => 'life-at-chestnut' ),
 		array( 'path' => 'company', 'title' => 'About Us', 'template' => 'company' ),
-		array( 'path' => 'our-curriculum', 'title' => 'Programs', 'template' => 'our-curriculum' ),
 		array( 'path' => 'faq', 'title' => 'Frequently Asked Questions', 'template' => 'faq' ),
 		array( 'path' => 'contact-us', 'title' => 'Contact Us', 'template' => 'contact-us' ),
 		array( 'path' => 'privacy-policy', 'title' => 'Privacy Policy', 'template' => 'generic' ),
@@ -2437,6 +2437,10 @@ function kms_small_business_map_href( $href ) {
 		return home_url( '/contact-us/' );
 	}
 
+	if ( preg_match( '#^/(our-curriculum|academies/programs)(?:/|$)#', $path ) ) {
+		return home_url( '/life-at-chestnut/' );
+	}
+
 	if ( preg_match( '#^/(careers|franchising|corporate-careers)(?:/|$)#', $path ) ) {
 		return home_url( '/contact-us/' );
 	}
@@ -2467,6 +2471,7 @@ function kms_trim_small_business_html( $path, $html ) {
 	$queries_map = array(
 		'home'           => array(
 			"//*[@id='hero']//*[contains(concat(' ', normalize-space(@class), ' '), ' locator ')]",
+			"//section[contains(translate(normalize-space(string(.)),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'learning with momentum')]",
 			"//*[@id='join-us']",
 			"//*[@id='start-your-career']",
 			"//*[@id='testimonial']",
@@ -2501,6 +2506,10 @@ function kms_trim_small_business_html( $path, $html ) {
 			"//*[contains(@href,'/kindergarten/')]/ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' slide ')][1]",
 			"//*[contains(@href,'school-age-programs')]/ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' slide ')][1]",
 			"//*[contains(@href,'summer-camp')]/ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' slide ')][1]",
+		),
+		'life-at-chestnut' => array(
+			"//*[contains(concat(' ', normalize-space(@class), ' '), ' blog-preview-section ')]",
+			"//*[@id='contact-us-academy']",
 		),
 		'contact-us'     => array(
 			"//*[@id='contact-us-academy']",
@@ -2571,10 +2580,13 @@ function kms_trim_small_business_html( $path, $html ) {
 		'Where <span>Learning</span> Grows' => $hero_tagline_html,
 		'Rooted in Care. Growing Together.' => $hero_tagline_html,
 		'Rooted in Care.<br>Growing Together.' => $hero_tagline_html,
+		'Programs at a Glance' => 'LIFE AT CHESTNUT',
 		'<p class="program-title">Pre-Kindergarten</p>' => '<p class="program-title">Pre-K</p>',
 		'aria-label="Pre-Kindergarten 4-Year-Olds"' => 'aria-label="Pre-K 4 to 5-Year-Olds"',
 		'alt="Pre-Kindergarten Program (mobile)"' => 'alt="Pre-K Program (mobile)"',
 		'alt="Pre-Kindergarten Program"' => 'alt="Pre-K Program"',
+		'Learning with momentum for every stage.' => '',
+		'Learning with momentum' => '',
 		'https://kiddieacademy.com/wp-content/uploads/2024/09/landing-hero-jpg.avif' => trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/cover.png',
 		'https://kiddieacademy.com/wp-content/uploads/2024/09/landing-hero-mobile-updated2-jpg.avif' => trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/cover.png',
 		'alt="Kiddie Academy"' => 'alt="Chestnut Square Academy"',
@@ -2779,7 +2791,7 @@ function kms_run_small_business_simplification( $overwrite = true ) {
 	update_option( 'page_for_posts', 0 );
 	kms_archive_non_small_business_pages( $keep_paths );
 	kms_set_seed_profile( 'native-parity' );
-	update_option( 'kms_small_business_simplify_ver', '1.0.7' );
+	update_option( 'kms_small_business_simplify_ver', '1.0.8' );
 	flush_rewrite_rules();
 }
 
@@ -2787,7 +2799,7 @@ function kms_run_small_business_simplification( $overwrite = true ) {
  * Apply small-business simplification once after plugin/theme updates.
  */
 function kms_apply_small_business_simplification_once() {
-	if ( '1.0.7' === (string) get_option( 'kms_small_business_simplify_ver', '' ) ) {
+	if ( '1.0.8' === (string) get_option( 'kms_small_business_simplify_ver', '' ) ) {
 		return;
 	}
 
@@ -2799,18 +2811,18 @@ add_action( 'init', 'kms_apply_small_business_simplification_once', 50 );
  * One-time refresh of Home hero text/image after branding updates.
  */
 function kms_refresh_home_hero_once() {
-	if ( '1.0.3' === (string) get_option( 'kms_home_hero_refresh_ver', '' ) ) {
+	if ( '1.0.4' === (string) get_option( 'kms_home_hero_refresh_ver', '' ) ) {
 		return;
 	}
 
 	$blueprints = kms_get_small_business_blueprints();
 	foreach ( $blueprints as $blueprint ) {
-		if ( isset( $blueprint['path'] ) && in_array( (string) $blueprint['path'], array( 'home', 'our-curriculum' ), true ) ) {
+		if ( isset( $blueprint['path'] ) && in_array( (string) $blueprint['path'], array( 'home', 'life-at-chestnut' ), true ) ) {
 			kms_upsert_small_business_page( $blueprint, true );
 		}
 	}
 
-	update_option( 'kms_home_hero_refresh_ver', '1.0.3' );
+	update_option( 'kms_home_hero_refresh_ver', '1.0.4' );
 }
 add_action( 'init', 'kms_refresh_home_hero_once', 52 );
 
@@ -3134,14 +3146,14 @@ function kms_enqueue_owner_edit_styles() {
 			'kms-native-parity-mode',
 			plugin_dir_url( __FILE__ ) . 'assets/css/native-parity-mode.css',
 			array(),
-			'1.4.4'
+			'1.4.6'
 		);
 		if ( ! kms_is_elementor_editor_context() ) {
 			wp_enqueue_script(
 				'kms-native-parity-front',
 				plugin_dir_url( __FILE__ ) . 'assets/js/native-parity-front.js',
 				array(),
-				'1.4.4',
+				'1.4.6',
 				true
 			);
 		}

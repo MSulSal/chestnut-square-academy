@@ -160,28 +160,78 @@
       return;
     }
 
+    function getAnswerFor(question) {
+      var answerId = question.getAttribute("data-question");
+      if (!answerId) {
+        return null;
+      }
+
+      var parent = question.parentElement;
+      if (parent) {
+        var scoped = parent.querySelector('[data-answer="' + answerId + '"]');
+        if (scoped) {
+          return scoped;
+        }
+
+        var scopedClassFallback = parent.querySelector(".kms-data-answer-" + answerId);
+        if (scopedClassFallback) {
+          return scopedClassFallback;
+        }
+      }
+
+      return (
+        document.querySelector('[data-answer="' + answerId + '"]') ||
+        document.querySelector(".kms-data-answer-" + answerId)
+      );
+    }
+
+    function setOpen(question, open) {
+      var answer = getAnswerFor(question);
+      if (!answer) {
+        return;
+      }
+
+      question.classList.toggle("open", !!open);
+      question.setAttribute("aria-expanded", open ? "true" : "false");
+
+      if (open) {
+        answer.removeAttribute("hidden");
+        answer.style.display = "block";
+      } else {
+        answer.setAttribute("hidden", "hidden");
+        answer.style.display = "none";
+      }
+    }
+
+    function toggleQuestion(question) {
+      var answer = getAnswerFor(question);
+      if (!answer) {
+        return;
+      }
+
+      var computed = window.getComputedStyle ? window.getComputedStyle(answer) : null;
+      var isVisibleByStyle = computed ? computed.display !== "none" && computed.visibility !== "hidden" : answer.style.display !== "none";
+      var isOpen = !answer.hasAttribute("hidden") && isVisibleByStyle;
+      setOpen(question, !isOpen);
+    }
+
     questions.forEach(function (question) {
       if (question.dataset.kmsBoundFaq) {
         return;
       }
 
+      question.setAttribute("role", "button");
+      question.setAttribute("tabindex", "0");
+      setOpen(question, false);
+
       question.addEventListener("click", function () {
-        question.classList.toggle("open");
+        toggleQuestion(question);
+      });
 
-        var answerId = question.getAttribute("data-question");
-        if (!answerId) {
-          return;
-        }
-
-        var answer = document.querySelector('[data-answer="' + answerId + '"]');
-        if (!answer) {
-          return;
-        }
-
-        if (answer.hasAttribute("hidden")) {
-          answer.removeAttribute("hidden");
-        } else {
-          answer.setAttribute("hidden", "hidden");
+      question.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          toggleQuestion(question);
         }
       });
 

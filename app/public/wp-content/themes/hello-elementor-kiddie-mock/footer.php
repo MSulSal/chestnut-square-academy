@@ -10,8 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $home_url         = home_url( '/' );
+$life_url         = home_url( '/life-at-chestnut/' );
 $company_url      = home_url( '/company/' );
-$programs_url     = home_url( '/our-curriculum/' );
 $faq_url          = home_url( '/faq/' );
 $contact_url      = home_url( '/contact-us/' );
 $privacy_url      = home_url( '/privacy-policy/' );
@@ -44,8 +44,8 @@ $footer_logo         = apply_filters( 'kms_asset_url', $footer_logo_default, 'fo
 				<p class="eyebrow">Quick Links</p>
 				<ul id="menu-footer-quick" class="menu">
 					<li><a href="<?php echo esc_url( $home_url ); ?>">Home</a></li>
+					<li><a href="<?php echo esc_url( $life_url ); ?>">Life at Chestnut</a></li>
 					<li><a href="<?php echo esc_url( $company_url ); ?>">About Us</a></li>
-					<li><a href="<?php echo esc_url( $programs_url ); ?>">Programs</a></li>
 					<li><a href="<?php echo esc_url( $faq_url ); ?>">FAQ</a></li>
 					<li><a href="<?php echo esc_url( $contact_url ); ?>">Contact Us</a></li>
 				</ul>
@@ -53,8 +53,9 @@ $footer_logo         = apply_filters( 'kms_asset_url', $footer_logo_default, 'fo
 			<div class="contact">
 				<p class="eyebrow">Contact</p>
 				<ul id="menu-footer-contact" class="menu">
-					<li><a href="<?php echo esc_url( $contact_url ); ?>">Schedule a Tour</a></li>
 					<li><a href="https://maps.google.com/?q=402+S+Chestnut+St,+McKinney,+TX" target="_blank" rel="noopener noreferrer">Get Directions</a></li>
+					<li><a href="<?php echo esc_url( $contact_url ); ?>">Schedule a Tour</a></li>
+					<li><a href="<?php echo esc_url( $privacy_url ); ?>">Privacy Policy</a></li>
 				</ul>
 			</div>
 		</div>

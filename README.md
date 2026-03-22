@@ -34,7 +34,7 @@ Business Profile settings include a copy-ready NAP block and JSON reference for 
 - Active implementation stack: `hello-elementor-kiddie-mock` theme + `kiddie-mock-seed` plugin.
 - In `Tools > Kiddie Mock Seed` you can switch between:
 - `Mock Parity Mode`: Kiddie-style layout parity using HTML-section blocks.
-- `Owner Edit Mode`: stricter native Elementor widgets for direct drag-and-drop editing on core pages (`home`, `company`, `our-curriculum`, `faq`, `contact-us`, `academies`).
+- `Owner Edit Mode`: stricter native Elementor widgets for direct drag-and-drop editing on core pages (`home`, `life-at-chestnut`, `company`, `faq`, `contact-us`, `academies`).
 - `Native Parity Mode`: fully native Elementor widgets across the seeded Kiddie page tree (`text-editor`, `heading`, `image`, `button`, containers), with frontend wrapper unwrapping for closer live parity.
 - Native parity scripts are automatically disabled during Elementor editor/preview contexts to prevent drag-and-drop/edit conflicts.
 - The plugin stores the active mode in `kms_seed_profile` (`mock-parity`, `owner-edit`, or `native-parity`).

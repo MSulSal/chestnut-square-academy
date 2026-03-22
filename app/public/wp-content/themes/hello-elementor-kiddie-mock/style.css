@@ -4,7 +4,7 @@ Theme URI: https://example.local/kiddie-mock
 Description: Full-site Kiddie Academy style mock theme for Elementor-based frontend replication.
 Author: CSA Web Team
 Template: hello-elementor
-Version: 1.0.16
+Version: 1.0.19
 Text Domain: hello-elementor-kiddie-mock
 */
 
@@ -556,6 +556,20 @@ body.kiddie-mock-site .faq-preview-section .links p[data-question].open i {
   color: var(--csa-white);
 }
 
+body.kiddie-mock-site .faq-preview-section .links [data-answer],
+body.kiddie-mock-site .faq-preview-section .links [class*="kms-data-answer-"] {
+  display: none !important;
+}
+
+body.kiddie-mock-site .faq-preview-section .links [data-answer]:not([hidden]) {
+  display: block !important;
+}
+
+body.kiddie-mock-site .faq-preview-section .links p[data-question].open + [data-answer],
+body.kiddie-mock-site .faq-preview-section .links p[data-question].open + [class*="kms-data-answer-"] {
+  display: block !important;
+}
+
 /* Forms */
 body.kiddie-mock-site input[type="text"],
 body.kiddie-mock-site input[type="email"],
@@ -673,12 +687,13 @@ body.kiddie-mock-site #scroll-top:hover {
 /* Crayon-style nav typography and CMYK tab color sequence. */
 body.kiddie-mock-site #header .main-nav .top-menu > li > .toplevel > a {
   font-family: "Childhood", "Permanent Marker", "Comic Sans MS", cursive !important;
-  font-size: clamp(1.25rem, 1.55vw, 1.9rem);
+  font-size: clamp(1.04rem, 1.26vw, 1.52rem);
   font-weight: 700 !important;
   letter-spacing: 0.02em;
   line-height: 1.05;
   text-decoration: none !important;
   text-transform: none;
+  white-space: nowrap;
 }
 
 body.kiddie-mock-site #header .main-nav .top-menu > li:nth-child(1) > .toplevel > a {
@@ -705,12 +720,12 @@ body.kiddie-mock-site #header .main-nav .top-menu > li.active > .toplevel > a {
 
 @media only screen and (min-width: 1200px) {
   body.kiddie-mock-site #header .nav-left {
-    width: 338px;
-    min-width: 338px;
+    width: 390px;
+    min-width: 390px;
   }
 
   body.kiddie-mock-site #header .nav-left .logo {
-    height: 154px;
+    height: 166px;
   }
 
   body.kiddie-mock-site #header .main-nav .top-menu {
@@ -719,20 +734,22 @@ body.kiddie-mock-site #header .main-nav .top-menu > li.active > .toplevel > a {
 
   body.kiddie-mock-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa.png"],
   body.kiddie-mock-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa-tree.png"] {
-    width: 322px;
-    height: 148px;
-    max-width: 322px;
-    max-height: 148px;
+    width: 370px;
+    height: 164px;
+    max-width: 370px;
+    max-height: 164px;
     object-fit: contain;
+    object-position: center center;
   }
 }
 
 body.kiddie-mock-site #header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa.png"],
 body.kiddie-mock-site #header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa-tree.png"] {
-  width: 146px;
-  height: 84px;
+  width: 174px;
+  height: 100px;
   max-width: none;
   object-fit: contain;
+  object-position: center center;
 }
 
 /* Hero cleanup: remove location finder and rebalance tagline placement. */
@@ -748,25 +765,29 @@ body.kiddie-mock-site #hero {
 body.kiddie-mock-site #hero .copy {
   min-height: inherit;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  --csa-hero-inset: clamp(16px, 3.4vw, 48px);
+  padding: var(--csa-hero-inset);
 }
 
 body.kiddie-mock-site #hero .copy .container {
-  width: min(1180px, 92vw);
-  margin-inline: auto;
+  width: 100%;
+  margin: 0;
+  max-width: none;
+  padding: 0;
   text-align: left;
 }
 
 body.kiddie-mock-site #hero .copy .headline,
 body.kiddie-mock-site #hero .copy h1.headline {
   font-family: "Childhood", "Permanent Marker", "Comic Sans MS", cursive !important;
-  font-size: clamp(2.85rem, 7.4vw, 7.25rem);
-  line-height: 0.9;
+  font-size: clamp(3.6rem, 9.2vw, 9.4rem);
+  line-height: 0.88;
   letter-spacing: 0.012em;
-  max-width: 11ch;
+  max-width: 9.6ch;
   margin: 0;
   text-align: left;
-  margin-inline: 0 auto;
+  margin-inline: 0;
   text-wrap: balance;
 }
 
@@ -777,49 +798,48 @@ body.kiddie-mock-site #hero .copy .headline .headline-highlight {
 
 @media screen and (max-width: 991px) {
   body.kiddie-mock-site #hero .copy {
-    align-items: flex-end;
-    padding-bottom: 56px;
+    align-items: flex-start;
+    --csa-hero-inset: clamp(14px, 5.2vw, 30px);
   }
 
   body.kiddie-mock-site #hero .copy .headline,
   body.kiddie-mock-site #hero .copy h1.headline {
-    font-size: clamp(2.5rem, 12.3vw, 4.85rem);
-    line-height: 0.94;
-    max-width: 11.5ch;
-    margin-inline: 0 auto;
+    font-size: clamp(3.2rem, 15vw, 5.9rem);
+    line-height: 0.9;
+    max-width: 9.8ch;
+    margin-inline: 0;
   }
 }
 
 /* Footer logo alignment and sizing. */
 body.kiddie-mock-site #footer .company-info .logo {
-  width: auto;
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: 0 0 12px;
-  padding: 2px 0;
+  justify-content: flex-start;
+  margin: 0 0 8px;
+  padding: 0;
 }
 
 body.kiddie-mock-site #footer .company-info .logo img {
   display: block;
   width: auto;
   height: auto;
-  max-width: min(240px, 70vw);
-  max-height: 116px;
+  max-width: min(228px, 62vw);
+  max-height: 112px;
   object-fit: contain;
-  object-position: center;
+  object-position: left center;
 }
 
 @media screen and (min-width: 1200px) {
   body.kiddie-mock-site #footer .company-info .logo {
-    justify-content: flex-start;
-    margin: 0 0 10px;
+    margin: 0 0 6px;
     padding: 0;
   }
 
   body.kiddie-mock-site #footer .company-info .logo img {
-    max-width: 260px;
-    max-height: 122px;
+    max-width: 248px;
+    max-height: 116px;
   }
 }
 
