@@ -131,3 +131,7 @@
 - feat(elementor-editability): replaced single-widget Elementor document generation with multi-section chunk generation (top-level page blocks become draggable/reorderable sections in Navigator).
 - feat(elementor-migration): bumped one-time Elementor document sync gate to `1.0.4` so existing seeded pages auto-convert to the new multi-section editable structure on next init.
 - chore(versioning): bumped `kiddie-mock-seed` plugin metadata to `1.0.3` for the drag-and-drop structure pass.
+- feat(elementor-components): added recursive DOM-to-Elementor converter that maps wrappers to Elementor containers and maps leaf content to native widgets (`heading`, `text-editor`, `image`) with HTML fallback for complex nodes (forms/scripts/iframes/etc.).
+- fix(elementor-migration): moved sync hook to `wp_loaded`, added Elementor class guard, and version-gated migration at `1.1.1` to avoid false-positive sync completion before Elementor is loaded.
+- fix(elementor-cache): cleared `_elementor_element_cache` and `_elementor_css` whenever seeded document data is rewritten so frontend reflects new widget/container schema immediately.
+- chore(runtime): reset migration gates and re-triggered sync/reseed in Local runtime; verified frontend now renders `heading/text-editor/image` widget types (component-level edit handles present).
