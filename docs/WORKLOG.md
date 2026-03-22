@@ -131,3 +131,10 @@
 - feat(elementor-editability): replaced single-widget Elementor document generation with multi-section chunk generation (top-level page blocks become draggable/reorderable sections in Navigator).
 - feat(elementor-migration): bumped one-time Elementor document sync gate to `1.0.4` so existing seeded pages auto-convert to the new multi-section editable structure on next init.
 - chore(versioning): bumped `kiddie-mock-seed` plugin metadata to `1.0.3` for the drag-and-drop structure pass.
+- revert(elementor): rolled back the unsafe broad converter pass and restored stable parity rendering, then re-seeded pages/caches for layout recovery.
+- feat(owner-edit-mode): added one-click `Run Owner Edit Mode Seed` action in `Tools > Kiddie Mock Seed` with profile tracking (`mock-parity` vs `owner-edit`).
+- feat(owner-edit-components): implemented a stricter owner-edit template set for core pages (`home`, `company`, `our-curriculum`, `faq`, `contact-us`, `academies`) using native Elementor widgets.
+- feat(owner-edit-components): removed HTML-widget fallback from owner-mode core pages by composing sections from `heading`, `text-editor`, `image`, `button`, `icon-list`, `accordion`, and `shortcode` widgets.
+- feat(owner-edit-style): added frontend owner-mode class + stylesheet (`assets/css/owner-edit-mode.css`) for stable open layout and predictable editing behavior.
+- docs(owner-edit): added `docs/OWNER-EDIT-MODE.md` with switching instructions and widget-level behavior for handoff.
+- chore(versioning): bumped `kiddie-mock-seed` plugin metadata to `1.2.0` for owner-edit mode release.

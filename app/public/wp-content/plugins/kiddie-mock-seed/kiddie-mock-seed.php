@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kiddie Mock Seed
  * Description: Builds a full Kiddie Academy style frontend mock across all key pages for WordPress + Elementor testing.
- * Version: 1.0.3
+ * Version: 1.2.0
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: kiddie-mock-seed
@@ -807,16 +807,27 @@ function kms_split_html_for_elementor( $html ) {
 }
 
 /**
+ * Persist Elementor document metadata on a post.
+ *
+ * @param int                    $post_id Post ID.
+ * @param array<int,mixed>|mixed $data    Elementor document data.
+ */
+function kms_store_elementor_document( $post_id, $data ) {
+	update_post_meta( $post_id, '_elementor_edit_mode', 'builder' );
+	update_post_meta( $post_id, '_elementor_template_type', 'wp-page' );
+	update_post_meta( $post_id, '_elementor_version', defined( 'ELEMENTOR_VERSION' ) ? ELEMENTOR_VERSION : '3.0.0' );
+	update_post_meta( $post_id, '_elementor_data', wp_slash( wp_json_encode( $data ) ) );
+	delete_post_meta( $post_id, '_elementor_element_cache' );
+	delete_post_meta( $post_id, '_elementor_css' );
+}
+
+/**
  * Apply Elementor document data for editable page content.
  *
  * @param int    $post_id Post ID.
  * @param string $html HTML block.
  */
 function kms_set_elementor_document( $post_id, $html ) {
-	if ( ! class_exists( '\\Elementor\\Plugin' ) ) {
-		return;
-	}
-
 	$chunks = kms_split_html_for_elementor( $html );
 
 	if ( empty( $chunks ) ) {
@@ -860,10 +871,7 @@ function kms_set_elementor_document( $post_id, $html ) {
 		);
 	}
 
-	update_post_meta( $post_id, '_elementor_edit_mode', 'builder' );
-	update_post_meta( $post_id, '_elementor_template_type', 'wp-page' );
-	update_post_meta( $post_id, '_elementor_version', defined( 'ELEMENTOR_VERSION' ) ? ELEMENTOR_VERSION : '3.0.0' );
-	update_post_meta( $post_id, '_elementor_data', wp_slash( wp_json_encode( $data ) ) );
+	kms_store_elementor_document( $post_id, $data );
 }
 
 /**
@@ -948,6 +956,868 @@ function kms_run_seed( $overwrite = true ) {
 		update_option( 'page_for_posts', (int) $blog->ID );
 	}
 
+	kms_set_seed_profile( 'mock-parity' );
+	flush_rewrite_rules();
+}
+
+/**
+ * Get current frontend seed profile.
+ *
+ * @return string
+ */
+function kms_get_seed_profile() {
+	$profile = get_option( 'kms_seed_profile', 'mock-parity' );
+
+	return is_string( $profile ) ? $profile : 'mock-parity';
+}
+
+/**
+ * Save frontend seed profile.
+ *
+ * @param string $profile Profile key.
+ */
+function kms_set_seed_profile( $profile ) {
+	update_option( 'kms_seed_profile', sanitize_key( (string) $profile ) );
+}
+
+/**
+ * Build deterministic Elementor node ID for owner-edit mode.
+ *
+ * @param int    $post_id Post ID.
+ * @param int    $counter Running counter.
+ * @param string $prefix  ID prefix.
+ * @return string
+ */
+function kms_owner_make_node_id( $post_id, &$counter, $prefix ) {
+	$counter++;
+
+	return substr( md5( 'owner-' . $prefix . '-' . $post_id . '-' . $counter ), 0, 8 );
+}
+
+/**
+ * Build a generic Elementor widget payload for owner-edit mode.
+ *
+ * @param int                 $post_id  Post ID.
+ * @param int                 $counter  Running counter.
+ * @param string              $type     Elementor widget type.
+ * @param array<string,mixed> $settings Elementor widget settings.
+ * @param string              $classes  Optional CSS classes.
+ * @param string              $css_id   Optional CSS ID.
+ * @return array<string,mixed>
+ */
+function kms_owner_make_widget( $post_id, &$counter, $type, $settings, $classes = '', $css_id = '' ) {
+	if ( '' !== $classes ) {
+		$settings['css_classes']  = $classes;
+		$settings['_css_classes'] = $classes;
+	}
+
+	if ( '' !== $css_id ) {
+		$settings['css_id']  = $css_id;
+		$settings['_css_id'] = $css_id;
+	}
+
+	return array(
+		'id'         => kms_owner_make_node_id( $post_id, $counter, 'wid' ),
+		'elType'     => 'widget',
+		'widgetType' => $type,
+		'settings'   => $settings,
+		'elements'   => array(),
+	);
+}
+
+/**
+ * Build a container payload for owner-edit mode.
+ *
+ * @param int                 $post_id   Post ID.
+ * @param int                 $counter   Running counter.
+ * @param array<int,mixed>    $elements  Child Elementor elements.
+ * @param string              $classes   Optional CSS classes.
+ * @param string              $css_id    Optional CSS ID.
+ * @param bool                $is_inner  Inner container flag.
+ * @param string              $html_tag  HTML tag.
+ * @param array<string,mixed> $settings  Extra Elementor container settings.
+ * @return array<string,mixed>
+ */
+function kms_owner_make_container( $post_id, &$counter, $elements, $classes = '', $css_id = '', $is_inner = false, $html_tag = 'section', $settings = array() ) {
+	$base_settings = array(
+		'content_width'  => 'full',
+		'flex_direction' => 'column',
+	);
+
+	if ( '' !== $classes ) {
+		$base_settings['css_classes']  = $classes;
+		$base_settings['_css_classes'] = $classes;
+	}
+
+	if ( '' !== $css_id ) {
+		$base_settings['css_id']  = $css_id;
+		$base_settings['_css_id'] = $css_id;
+	}
+
+	if ( 'div' !== $html_tag ) {
+		$base_settings['html_tag'] = $html_tag;
+	}
+
+	$container_settings = array_merge( $base_settings, $settings );
+
+	return array(
+		'id'       => kms_owner_make_node_id( $post_id, $counter, 'con' ),
+		'elType'   => 'container',
+		'settings' => $container_settings,
+		'elements' => is_array( $elements ) ? $elements : array(),
+		'isInner'  => (bool) $is_inner,
+	);
+}
+
+/**
+ * Build a heading widget for owner-edit mode.
+ *
+ * @param int    $post_id Post ID.
+ * @param int    $counter Running counter.
+ * @param string $title   Heading text/HTML.
+ * @param string $tag     Heading tag.
+ * @param string $classes Optional CSS classes.
+ * @return array<string,mixed>
+ */
+function kms_owner_heading_widget( $post_id, &$counter, $title, $tag = 'h2', $classes = '' ) {
+	return kms_owner_make_widget(
+		$post_id,
+		$counter,
+		'heading',
+		array(
+			'title'       => (string) $title,
+			'header_size' => (string) $tag,
+		),
+		$classes
+	);
+}
+
+/**
+ * Build a text-editor widget for owner-edit mode.
+ *
+ * @param int    $post_id Post ID.
+ * @param int    $counter Running counter.
+ * @param string $html    HTML copy.
+ * @param string $classes Optional CSS classes.
+ * @return array<string,mixed>
+ */
+function kms_owner_text_widget( $post_id, &$counter, $html, $classes = '' ) {
+	return kms_owner_make_widget(
+		$post_id,
+		$counter,
+		'text-editor',
+		array(
+			'editor' => (string) $html,
+		),
+		$classes
+	);
+}
+
+/**
+ * Build an image widget for owner-edit mode.
+ *
+ * @param int    $post_id Post ID.
+ * @param int    $counter Running counter.
+ * @param string $url     Image URL.
+ * @param string $classes Optional CSS classes.
+ * @return array<string,mixed>
+ */
+function kms_owner_image_widget( $post_id, &$counter, $url, $classes = '' ) {
+	return kms_owner_make_widget(
+		$post_id,
+		$counter,
+		'image',
+		array(
+			'image'      => array(
+				'id'  => 0,
+				'url' => esc_url_raw( (string) $url ),
+			),
+			'image_size' => 'full',
+		),
+		$classes
+	);
+}
+
+/**
+ * Build a button widget for owner-edit mode.
+ *
+ * @param int    $post_id Post ID.
+ * @param int    $counter Running counter.
+ * @param string $text    Button label.
+ * @param string $url     Target URL.
+ * @param string $classes Optional CSS classes.
+ * @return array<string,mixed>
+ */
+function kms_owner_button_widget( $post_id, &$counter, $text, $url, $classes = '' ) {
+	return kms_owner_make_widget(
+		$post_id,
+		$counter,
+		'button',
+		array(
+			'text' => (string) $text,
+			'size' => 'md',
+			'link' => array(
+				'url' => (string) $url,
+			),
+		),
+		$classes
+	);
+}
+
+/**
+ * Build an icon-list item payload.
+ *
+ * @param string $text Item text.
+ * @param string $url  Optional item URL.
+ * @return array<string,mixed>
+ */
+function kms_owner_icon_item( $text, $url = '' ) {
+	return array(
+		'_id'           => substr( md5( (string) $text . (string) $url ), 0, 8 ),
+		'text'          => (string) $text,
+		'icon'          => 'fas fa-circle-check',
+		'selected_icon' => array(
+			'value'   => 'fas fa-circle-check',
+			'library' => 'fa-solid',
+		),
+		'link'          => array(
+			'url' => (string) $url,
+		),
+	);
+}
+
+/**
+ * Build an icon-list widget for owner-edit mode.
+ *
+ * @param int                 $post_id Post ID.
+ * @param int                 $counter Running counter.
+ * @param array<int,mixed>    $items   Icon list items.
+ * @param string              $classes Optional CSS classes.
+ * @return array<string,mixed>
+ */
+function kms_owner_icon_list_widget( $post_id, &$counter, $items, $classes = '' ) {
+	return kms_owner_make_widget(
+		$post_id,
+		$counter,
+		'icon-list',
+		array(
+			'icon_list'     => is_array( $items ) ? $items : array(),
+			'space_between' => 12,
+		),
+		$classes
+	);
+}
+
+/**
+ * Build an accordion widget for owner-edit mode.
+ *
+ * @param int                 $post_id Post ID.
+ * @param int                 $counter Running counter.
+ * @param array<int,mixed>    $tabs    Accordion tabs.
+ * @param string              $classes Optional CSS classes.
+ * @return array<string,mixed>
+ */
+function kms_owner_accordion_widget( $post_id, &$counter, $tabs, $classes = '' ) {
+	return kms_owner_make_widget(
+		$post_id,
+		$counter,
+		'accordion',
+		array(
+			'tabs'           => is_array( $tabs ) ? $tabs : array(),
+			'active_item_no' => '1',
+		),
+		$classes
+	);
+}
+
+/**
+ * Build a shortcode widget for owner-edit mode.
+ *
+ * @param int    $post_id   Post ID.
+ * @param int    $counter   Running counter.
+ * @param string $shortcode Shortcode value.
+ * @param string $classes   Optional CSS classes.
+ * @return array<string,mixed>
+ */
+function kms_owner_shortcode_widget( $post_id, &$counter, $shortcode, $classes = '' ) {
+	return kms_owner_make_widget(
+		$post_id,
+		$counter,
+		'shortcode',
+		array(
+			'shortcode' => (string) $shortcode,
+		),
+		$classes
+	);
+}
+
+/**
+ * Return owner-edit shared image defaults.
+ *
+ * @return array<string,string>
+ */
+function kms_owner_shared_images() {
+	return array(
+		'hero'      => 'https://kiddieacademy.com/wp-content/uploads/2024/09/landing-hero-jpg.avif',
+		'classroom' => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Preschool.jpg',
+		'infant'    => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg',
+		'toddler'   => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg',
+		'staff'     => 'https://kiddieacademy.com/wp-content/uploads/2024/08/teacher-parent-circle-time.jpg',
+		'activity'  => 'https://kiddieacademy.com/wp-content/uploads/2024/08/learnon-classroom-group-activity.jpg',
+		'exterior'  => 'https://kiddieacademy.com/wp-content/uploads/2024/08/kiddie-academy-center-exterior.jpg',
+	);
+}
+
+/**
+ * Return page blueprints for owner-edit mode.
+ *
+ * @return array<int,array<string,string>>
+ */
+function kms_get_owner_edit_blueprints() {
+	return array(
+		array( 'path' => 'home', 'title' => 'Home' ),
+		array( 'path' => 'company', 'title' => 'About Us' ),
+		array( 'path' => 'our-curriculum', 'title' => 'Programs' ),
+		array( 'path' => 'faq', 'title' => 'Frequently Asked Questions' ),
+		array( 'path' => 'contact-us', 'title' => 'Contact Us' ),
+		array( 'path' => 'academies', 'title' => 'Find an Academy' ),
+	);
+}
+
+/**
+ * Return owner-edit plain page copy fallback for post_content.
+ *
+ * @param string $path Page path.
+ * @return string
+ */
+function kms_get_owner_plain_content( $path ) {
+	$copy = array(
+		'home'           => 'Chestnut Square Academy is an early learning center in Downtown McKinney serving families with warm, dependable care and play-based learning.',
+		'company'        => 'Learn about Chestnut Square Academy, our family-first approach, and our commitment to the Downtown McKinney community.',
+		'our-curriculum' => 'Explore age-based early learning programs, daily routines, and enrichment opportunities at Chestnut Square Academy.',
+		'faq'            => 'Answers to common family questions about programs, enrollment, daily routines, and communication.',
+		'contact-us'     => 'Get in touch with Chestnut Square Academy to ask questions or schedule a tour.',
+		'academies'      => 'Find location and contact details for Chestnut Square Academy in Downtown McKinney.',
+	);
+
+	return isset( $copy[ $path ] ) ? (string) $copy[ $path ] : 'Early learning and childcare information.';
+}
+
+/**
+ * Build owner-edit Elementor document data by page path.
+ *
+ * @param string $path    Page path.
+ * @param int    $post_id Post ID.
+ * @return array<int,mixed>
+ */
+function kms_build_owner_page_data( $path, $post_id ) {
+	$counter = 0;
+	$home    = trailingslashit( home_url() );
+	$images  = kms_owner_shared_images();
+
+	$hero_left = array(
+		kms_owner_heading_widget( $post_id, $counter, 'Nurturing Early Learners in Downtown McKinney', 'h1', 'kms-owner-title' ),
+		kms_owner_text_widget( $post_id, $counter, '<p>Warm care. Structured learning. A neighborhood school experience families can trust.</p>', 'kms-owner-lead' ),
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_button_widget( $post_id, $counter, 'Schedule a Tour', $home . 'contact-us/', 'kms-owner-btn-primary' ),
+				kms_owner_button_widget( $post_id, $counter, 'Call the School', $home . 'contact-us/', 'kms-owner-btn-secondary' ),
+			),
+			'kms-owner-button-row',
+			'',
+			true,
+			'div'
+		),
+	);
+
+	$home_data = array(
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_make_container(
+					$post_id,
+					$counter,
+					array(
+						kms_owner_make_container( $post_id, $counter, $hero_left, 'kms-owner-col', '', true, 'div' ),
+						kms_owner_make_container(
+							$post_id,
+							$counter,
+							array( kms_owner_image_widget( $post_id, $counter, $images['hero'], 'kms-owner-hero-image' ) ),
+							'kms-owner-col',
+							'',
+							true,
+							'div'
+						),
+					),
+					'kms-owner-grid kms-owner-grid-two',
+					'',
+					true,
+					'div'
+				),
+			),
+			'kms-owner-section kms-owner-hero',
+			'owner-home-hero'
+		),
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_heading_widget( $post_id, $counter, 'Quick Facts', 'h2' ),
+				kms_owner_icon_list_widget(
+					$post_id,
+					$counter,
+					array(
+						kms_owner_icon_item( 'Located in Historic Downtown McKinney' ),
+						kms_owner_icon_item( 'Hours: Monday-Friday, 6:00 AM-6:00 PM' ),
+						kms_owner_icon_item( 'Serving early learners from infancy through early school years' ),
+						kms_owner_icon_item( 'Texas Rising Star participant' ),
+					)
+				),
+			),
+			'kms-owner-section kms-owner-facts'
+		),
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_heading_widget( $post_id, $counter, 'Programs for Every Stage', 'h2' ),
+				kms_owner_make_container(
+					$post_id,
+					$counter,
+					array(
+						kms_owner_make_container(
+							$post_id,
+							$counter,
+							array(
+								kms_owner_image_widget( $post_id, $counter, $images['infant'] ),
+								kms_owner_heading_widget( $post_id, $counter, 'Infants', 'h3' ),
+								kms_owner_text_widget( $post_id, $counter, '<p>Gentle routines, safe care, and meaningful developmental moments from the very beginning.</p>' ),
+							),
+							'kms-owner-card',
+							'',
+							true,
+							'div'
+						),
+						kms_owner_make_container(
+							$post_id,
+							$counter,
+							array(
+								kms_owner_image_widget( $post_id, $counter, $images['toddler'] ),
+								kms_owner_heading_widget( $post_id, $counter, 'Toddlers', 'h3' ),
+								kms_owner_text_widget( $post_id, $counter, '<p>Hands-on exploration, language growth, and social-emotional development through play.</p>' ),
+							),
+							'kms-owner-card',
+							'',
+							true,
+							'div'
+						),
+						kms_owner_make_container(
+							$post_id,
+							$counter,
+							array(
+								kms_owner_image_widget( $post_id, $counter, $images['classroom'] ),
+								kms_owner_heading_widget( $post_id, $counter, 'Preschool & Pre-K', 'h3' ),
+								kms_owner_text_widget( $post_id, $counter, '<p>School-readiness experiences with literacy, math, creativity, and confidence-building activities.</p>' ),
+							),
+							'kms-owner-card',
+							'',
+							true,
+							'div'
+						),
+					),
+					'kms-owner-grid kms-owner-grid-three',
+					'',
+					true,
+					'div'
+				),
+			),
+			'kms-owner-section'
+		),
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_heading_widget( $post_id, $counter, 'Common Family Questions', 'h2' ),
+				kms_owner_accordion_widget(
+					$post_id,
+					$counter,
+					array(
+						array( '_id' => 'oq1', 'tab_title' => 'What ages do you serve?', 'tab_content' => 'Chestnut Square Academy serves children from infancy through early school years, based on current classroom availability.' ),
+						array( '_id' => 'oq2', 'tab_title' => 'How do I schedule a tour?', 'tab_content' => 'Use the Schedule a Tour button and our team will follow up to confirm a time that works for your family.' ),
+						array( '_id' => 'oq3', 'tab_title' => 'What are your hours?', 'tab_content' => 'Our standard schedule is Monday-Friday, 6:00 AM to 6:00 PM.' ),
+						array( '_id' => 'oq4', 'tab_title' => 'Where are you located?', 'tab_content' => '402 S. Chestnut St., McKinney, Texas in the heart of Historic Downtown McKinney.' ),
+					)
+				),
+			),
+			'kms-owner-section kms-owner-faq'
+		),
+	);
+
+	$about_data = array(
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_heading_widget( $post_id, $counter, 'A Small School with a Big Heart', 'h1' ),
+				kms_owner_text_widget( $post_id, $counter, '<p>Chestnut Square Academy is rooted in Downtown McKinney and built around close relationships with children and families.</p>' ),
+			),
+			'kms-owner-section kms-owner-hero'
+		),
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_make_container(
+					$post_id,
+					$counter,
+					array(
+						kms_owner_make_container(
+							$post_id,
+							$counter,
+							array(
+								kms_owner_heading_widget( $post_id, $counter, 'Director Message', 'h2' ),
+								kms_owner_text_widget( $post_id, $counter, '<p>Welcome to our school community. We believe children thrive when they feel safe, known, and encouraged every day.</p>' ),
+								kms_owner_text_widget( $post_id, $counter, '<p>Our team is committed to partnering with families and making each classroom a place where learning and care go hand in hand.</p>' ),
+							),
+							'kms-owner-col',
+							'',
+							true,
+							'div'
+						),
+						kms_owner_make_container(
+							$post_id,
+							$counter,
+							array(
+								kms_owner_image_widget( $post_id, $counter, $images['staff'] ),
+							),
+							'kms-owner-col',
+							'',
+							true,
+							'div'
+						),
+					),
+					'kms-owner-grid kms-owner-grid-two',
+					'',
+					true,
+					'div'
+				),
+			),
+			'kms-owner-section'
+		),
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_heading_widget( $post_id, $counter, 'Our Approach', 'h2' ),
+				kms_owner_icon_list_widget(
+					$post_id,
+					$counter,
+					array(
+						kms_owner_icon_item( 'Warm, responsive care in every classroom' ),
+						kms_owner_icon_item( 'Age-appropriate learning experiences' ),
+						kms_owner_icon_item( 'Family partnership and communication' ),
+						kms_owner_icon_item( 'Community connection in Historic Downtown McKinney' ),
+					)
+				),
+			),
+			'kms-owner-section'
+		),
+	);
+
+	$programs_data = array(
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_heading_widget( $post_id, $counter, 'Programs', 'h1' ),
+				kms_owner_text_widget( $post_id, $counter, '<p>Our programs are designed to support growth at each stage with a balance of structure, care, and playful discovery.</p>' ),
+			),
+			'kms-owner-section kms-owner-hero'
+		),
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_make_container(
+					$post_id,
+					$counter,
+					array(
+						kms_owner_make_container( $post_id, $counter, array( kms_owner_heading_widget( $post_id, $counter, 'Infants', 'h3' ), kms_owner_text_widget( $post_id, $counter, '<p>Supportive care and developmental play from 6 weeks and up.</p>' ) ), 'kms-owner-card', '', true, 'div' ),
+						kms_owner_make_container( $post_id, $counter, array( kms_owner_heading_widget( $post_id, $counter, 'Toddlers', 'h3' ), kms_owner_text_widget( $post_id, $counter, '<p>Language, movement, and social learning through guided exploration.</p>' ) ), 'kms-owner-card', '', true, 'div' ),
+						kms_owner_make_container( $post_id, $counter, array( kms_owner_heading_widget( $post_id, $counter, 'Preschool / Pre-K', 'h3' ), kms_owner_text_widget( $post_id, $counter, '<p>Early academics, creative play, and routines that build confidence.</p>' ) ), 'kms-owner-card', '', true, 'div' ),
+					),
+					'kms-owner-grid kms-owner-grid-three',
+					'',
+					true,
+					'div'
+				),
+			),
+			'kms-owner-section'
+		),
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_heading_widget( $post_id, $counter, 'Daily Rhythm', 'h2' ),
+				kms_owner_icon_list_widget(
+					$post_id,
+					$counter,
+					array(
+						kms_owner_icon_item( 'Arrival and welcome activities' ),
+						kms_owner_icon_item( 'Learning centers and guided instruction' ),
+						kms_owner_icon_item( 'Meals, rest, and outdoor play' ),
+						kms_owner_icon_item( 'Afternoon enrichment and family handoff' ),
+					)
+				),
+			),
+			'kms-owner-section'
+		),
+	);
+
+	$gallery_data = array(
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_heading_widget( $post_id, $counter, 'Gallery', 'h1' ),
+				kms_owner_text_widget( $post_id, $counter, '<p>A look at daily life at Chestnut Square Academy.</p>' ),
+			),
+			'kms-owner-section kms-owner-hero'
+		),
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_make_container(
+					$post_id,
+					$counter,
+					array(
+						kms_owner_image_widget( $post_id, $counter, $images['classroom'] ),
+						kms_owner_image_widget( $post_id, $counter, $images['activity'] ),
+						kms_owner_image_widget( $post_id, $counter, $images['staff'] ),
+						kms_owner_image_widget( $post_id, $counter, $images['exterior'] ),
+					),
+					'kms-owner-grid kms-owner-grid-gallery',
+					'',
+					true,
+					'div'
+				),
+			),
+			'kms-owner-section'
+		),
+	);
+
+	$faq_data = array(
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_heading_widget( $post_id, $counter, 'Frequently Asked Questions', 'h1' ),
+				kms_owner_text_widget( $post_id, $counter, '<p>Helpful answers for families considering Chestnut Square Academy.</p>' ),
+			),
+			'kms-owner-section kms-owner-hero'
+		),
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_accordion_widget(
+					$post_id,
+					$counter,
+					array(
+						array( '_id' => 'fq1', 'tab_title' => 'What are your operating hours?', 'tab_content' => 'Monday-Friday, 6:00 AM to 6:00 PM.' ),
+						array( '_id' => 'fq2', 'tab_title' => 'Where are you located?', 'tab_content' => '402 S. Chestnut St., McKinney, TX.' ),
+						array( '_id' => 'fq3', 'tab_title' => 'Do you provide meals?', 'tab_content' => 'Meal offerings may include breakfast and lunch depending on classroom schedule.' ),
+						array( '_id' => 'fq4', 'tab_title' => 'Is your school part of Texas Rising Star?', 'tab_content' => 'Yes, Chestnut Square Academy participates in the Texas Rising Star program.' ),
+						array( '_id' => 'fq5', 'tab_title' => 'How do I start enrollment?', 'tab_content' => 'Schedule a tour first so we can discuss your family needs and current availability.' ),
+					)
+				),
+			),
+			'kms-owner-section kms-owner-faq'
+		),
+	);
+
+	$contact_data = array(
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_heading_widget( $post_id, $counter, 'Schedule a Tour', 'h1' ),
+				kms_owner_text_widget( $post_id, $counter, '<p>Tell us about your family and we will follow up with available tour times.</p>' ),
+			),
+			'kms-owner-section kms-owner-hero'
+		),
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_make_container(
+					$post_id,
+					$counter,
+					array(
+						kms_owner_make_container(
+							$post_id,
+							$counter,
+							array(
+								kms_owner_heading_widget( $post_id, $counter, 'Contact Information', 'h2' ),
+								kms_owner_icon_list_widget(
+									$post_id,
+									$counter,
+									array(
+										kms_owner_icon_item( '402 S. Chestnut St., McKinney, TX' ),
+										kms_owner_icon_item( 'Monday-Friday, 6:00 AM-6:00 PM' ),
+										kms_owner_icon_item( 'Texas Rising Star Daycare in Downtown McKinney' ),
+									)
+								),
+								kms_owner_button_widget( $post_id, $counter, 'Get Directions', 'https://maps.google.com/?q=402+S+Chestnut+St,+McKinney,+TX', 'kms-owner-btn-secondary' ),
+							),
+							'kms-owner-col',
+							'',
+							true,
+							'div'
+						),
+						kms_owner_make_container(
+							$post_id,
+							$counter,
+							array(
+								kms_owner_heading_widget( $post_id, $counter, 'Tour Request Form', 'h2' ),
+								kms_owner_text_widget( $post_id, $counter, '<p>Use your preferred form plugin shortcode below, then replace this text with your live form.</p>' ),
+								kms_owner_shortcode_widget( $post_id, $counter, '[fluentform id=\"1\"]', 'kms-owner-form-shortcode' ),
+							),
+							'kms-owner-col',
+							'',
+							true,
+							'div'
+						),
+					),
+					'kms-owner-grid kms-owner-grid-two',
+					'',
+					true,
+					'div'
+				),
+			),
+			'kms-owner-section'
+		),
+	);
+
+	$academies_data = array(
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_heading_widget( $post_id, $counter, 'Chestnut Square Academy', 'h1' ),
+				kms_owner_text_widget( $post_id, $counter, '<p>In the heart of Historic Downtown McKinney.</p>' ),
+				kms_owner_button_widget( $post_id, $counter, 'Contact Us', $home . 'contact-us/', 'kms-owner-btn-primary' ),
+			),
+			'kms-owner-section kms-owner-hero'
+		),
+	);
+
+	$map = array(
+		'home'           => $home_data,
+		'company'        => $about_data,
+		'our-curriculum' => $programs_data,
+		'gallery'        => $gallery_data,
+		'faq'            => $faq_data,
+		'contact-us'     => $contact_data,
+		'academies'      => $academies_data,
+	);
+
+	if ( isset( $map[ $path ] ) ) {
+		return $map[ $path ];
+	}
+
+	return array(
+		kms_owner_make_container(
+			$post_id,
+			$counter,
+			array(
+				kms_owner_heading_widget( $post_id, $counter, 'Owner Edit Page', 'h1' ),
+				kms_owner_text_widget( $post_id, $counter, '<p>This page is ready for direct editing in Elementor.</p>' ),
+			),
+			'kms-owner-section'
+		),
+	);
+}
+
+/**
+ * Create or update one owner-edit page.
+ *
+ * @param array<string,string> $blueprint Page blueprint.
+ * @param bool                 $overwrite Whether to overwrite existing content.
+ * @return int
+ */
+function kms_upsert_owner_page( $blueprint, $overwrite ) {
+	$path      = (string) $blueprint['path'];
+	$title     = (string) $blueprint['title'];
+	$slug      = basename( $path );
+	$parent_id = 0;
+
+	if ( false !== strpos( $path, '/' ) ) {
+		$parent_path = dirname( $path );
+		$parent_page = get_page_by_path( $parent_path, OBJECT, 'page' );
+
+		if ( $parent_page instanceof WP_Post ) {
+			$parent_id = (int) $parent_page->ID;
+		}
+	}
+
+	$page = get_page_by_path( $path, OBJECT, 'page' );
+
+	$postarr = array(
+		'post_title'     => $title,
+		'post_name'      => $slug,
+		'post_type'      => 'page',
+		'post_status'    => 'publish',
+		'post_parent'    => $parent_id,
+		'comment_status' => 'closed',
+	);
+
+	if ( $page instanceof WP_Post ) {
+		$postarr['ID'] = (int) $page->ID;
+	} else {
+		$postarr['post_content'] = '';
+	}
+
+	if ( $overwrite || ! isset( $postarr['ID'] ) ) {
+		$postarr['post_content'] = kms_get_owner_plain_content( $path );
+	}
+
+	$page_id = wp_insert_post( wp_slash( $postarr ), true );
+
+	if ( is_wp_error( $page_id ) ) {
+		return 0;
+	}
+
+	update_post_meta( $page_id, '_wp_page_template', 'default' );
+
+	if ( $overwrite || ! $page instanceof WP_Post ) {
+		kms_store_elementor_document( $page_id, kms_build_owner_page_data( $path, $page_id ) );
+	}
+
+	return (int) $page_id;
+}
+
+/**
+ * Seed owner-edit mode templates.
+ *
+ * @param bool $overwrite Whether to overwrite existing content.
+ */
+function kms_run_owner_edit_seed( $overwrite = true ) {
+	foreach ( kms_get_owner_edit_blueprints() as $blueprint ) {
+		kms_upsert_owner_page( $blueprint, $overwrite );
+	}
+
+	$home = get_page_by_path( 'home', OBJECT, 'page' );
+	if ( $home instanceof WP_Post ) {
+		update_option( 'show_on_front', 'page' );
+		update_option( 'page_on_front', (int) $home->ID );
+	}
+
+	kms_set_seed_profile( 'owner-edit' );
 	flush_rewrite_rules();
 }
 
@@ -958,6 +1828,10 @@ function kms_run_seed( $overwrite = true ) {
  * but cached/stale Elementor document data remained behind.
  */
 function kms_sync_elementor_documents_once() {
+	if ( '1' === (string) get_option( 'kms_disable_legacy_runtime_sync', '1' ) ) {
+		return;
+	}
+
 	if ( get_option( 'kms_elementor_sync_version' ) === '1.0.4' ) {
 		return;
 	}
@@ -981,6 +1855,10 @@ add_action( 'init', 'kms_sync_elementor_documents_once', 25 );
  * One-time runtime reseed to guarantee current templates are reflected on site.
  */
 function kms_runtime_reseed_once() {
+	if ( '1' === (string) get_option( 'kms_disable_legacy_runtime_sync', '1' ) ) {
+		return;
+	}
+
 	if ( get_option( 'kms_runtime_seed_version' ) === '1.0.3' ) {
 		return;
 	}
@@ -1148,6 +2026,38 @@ function kms_enqueue_admin_assets( $hook_suffix ) {
 add_action( 'admin_enqueue_scripts', 'kms_enqueue_admin_assets' );
 
 /**
+ * Add owner-edit mode body class on frontend.
+ *
+ * @param array<int,string> $classes Body classes.
+ * @return array<int,string>
+ */
+function kms_add_frontend_body_classes( $classes ) {
+	if ( 'owner-edit' === kms_get_seed_profile() ) {
+		$classes[] = 'kms-owner-mode';
+	}
+
+	return $classes;
+}
+add_filter( 'body_class', 'kms_add_frontend_body_classes' );
+
+/**
+ * Enqueue owner-edit mode styles when active.
+ */
+function kms_enqueue_owner_edit_styles() {
+	if ( 'owner-edit' !== kms_get_seed_profile() ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'kms-owner-edit-mode',
+		plugin_dir_url( __FILE__ ) . 'assets/css/owner-edit-mode.css',
+		array(),
+		'1.0.0'
+	);
+}
+add_action( 'wp_enqueue_scripts', 'kms_enqueue_owner_edit_styles', 40 );
+
+/**
  * Handle tools form submit.
  */
 function kms_handle_tools_actions() {
@@ -1171,6 +2081,24 @@ function kms_handle_tools_actions() {
 			array(
 				'page'   => 'kiddie-mock-seed',
 				'kms_ok' => '1',
+			),
+			admin_url( 'tools.php' )
+		);
+
+		wp_safe_redirect( $redirect );
+		exit;
+	}
+
+	if ( 'run_owner_seed' === $action ) {
+		check_admin_referer( 'kms_run_owner_seed' );
+
+		$overwrite = isset( $_POST['kms_overwrite'] ) && '1' === $_POST['kms_overwrite'];
+		kms_run_owner_edit_seed( $overwrite );
+
+		$redirect = add_query_arg(
+			array(
+				'page'         => 'kiddie-mock-seed',
+				'kms_owner_ok' => '1',
 			),
 			admin_url( 'tools.php' )
 		);
@@ -1244,19 +2172,39 @@ add_action( 'admin_init', 'kms_handle_tools_actions' );
  * Render admin tools page.
  */
 function kms_render_tools_page() {
-	$done = isset( $_GET['kms_ok'] ) && '1' === $_GET['kms_ok'];
+	$done       = isset( $_GET['kms_ok'] ) && '1' === $_GET['kms_ok'];
+	$owner_done = isset( $_GET['kms_owner_ok'] ) && '1' === $_GET['kms_owner_ok'];
+	$profile    = kms_get_seed_profile();
 	?>
 	<div class="wrap">
 		<h1>Kiddie Mock Seed</h1>
 		<?php if ( $done ) : ?>
 			<div class="notice notice-success"><p>Seed completed successfully.</p></div>
 		<?php endif; ?>
-		<p>Rebuild the full Kiddie-style mock page tree, including Elementor-editable page content.</p>
-		<form method="post">
+		<?php if ( $owner_done ) : ?>
+			<div class="notice notice-success"><p>Owner Edit Mode seed completed successfully.</p></div>
+		<?php endif; ?>
+
+		<p><strong>Active profile:</strong> <code><?php echo esc_html( $profile ); ?></code></p>
+
+		<hr>
+		<h2>Mock Parity Mode</h2>
+		<p>Rebuild the full Kiddie-style mock page tree using layout-parity HTML sections.</p>
+		<form method="post" style="margin-bottom: 16px;">
 			<?php wp_nonce_field( 'kms_run_seed' ); ?>
 			<input type="hidden" name="kms_action" value="run_seed">
 			<p><label><input type="checkbox" name="kms_overwrite" value="1" checked> Overwrite existing page content</label></p>
 			<p><button type="submit" class="button button-primary">Run Full Mock Seed</button></p>
+		</form>
+
+		<hr>
+		<h2>Owner Edit Mode</h2>
+		<p>Apply stricter owner-edit templates built with native Elementor widgets for direct drag-and-drop editing on core pages.</p>
+		<form method="post">
+			<?php wp_nonce_field( 'kms_run_owner_seed' ); ?>
+			<input type="hidden" name="kms_action" value="run_owner_seed">
+			<p><label><input type="checkbox" name="kms_overwrite" value="1" checked> Overwrite existing page content</label></p>
+			<p><button type="submit" class="button">Run Owner Edit Mode Seed</button></p>
 		</form>
 	</div>
 	<?php

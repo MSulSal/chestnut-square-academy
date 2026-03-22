@@ -12,6 +12,7 @@ Elementor-friendly WordPress build package for Chestnut Square Academy.
 - Handoff credentials template: `docs/HANDOFF-CREDENTIAL-INVENTORY.md`
 - Non-technical owner guide: `docs/OWNER-QUICK-GUIDE.md`
 - Owner data entry map: `docs/OWNER-DATA-ENTRY-MAP.md`
+- Owner Edit Mode guide: `docs/OWNER-EDIT-MODE.md`
 - InstaWP owner rehearsal plan: `docs/INSTAWP-OWNER-TEST-RUN.md`
 - Content source notes for seeded copy: `docs/CONTENT-SOURCE-NOTES.md`
 - Hello Elementor child theme: `app/public/wp-content/themes/hello-elementor-csa`
@@ -27,6 +28,13 @@ Business Profile settings include a copy-ready NAP block and JSON reference for 
 - The current generated site is a structured scaffold, not the final visual finish.
 - It now includes richer location-based starter copy seeded from public listing signals and clearly marked `[VERIFY]` gates.
 - Final polished appearance and section composition are completed in Elementor during Phase 2.
+
+## Kiddie Mock Modes
+- Active implementation stack: `hello-elementor-kiddie-mock` theme + `kiddie-mock-seed` plugin.
+- In `Tools > Kiddie Mock Seed` you can switch between:
+- `Mock Parity Mode`: Kiddie-style layout parity using HTML-section blocks.
+- `Owner Edit Mode`: stricter native Elementor widgets for direct drag-and-drop editing on core pages (`home`, `company`, `our-curriculum`, `faq`, `contact-us`, `academies`).
+- The plugin stores the active mode in `kms_seed_profile` (`mock-parity` or `owner-edit`).
 
 ## Quick Start (LocalWP)
 1. Start the site in LocalWP.
