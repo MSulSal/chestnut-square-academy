@@ -77,3 +77,7 @@ Exact clone-level behavior can still vary because Elementor and third-party sour
   - Renamed active child theme label to `Chestnut Square Academy` in theme metadata.
   - Removed deprecated `hello-elementor-csa` theme files and local `hello-elementor-kiddie-mock` folder to prevent accidental fallback.
   - Bumped child-theme version to `1.0.70`.
+- `fix(migration-runtime): force CSA theme options and replace stale legacy content paths`
+  - Upgraded `csa-theme-guard` to override `template` and `stylesheet` at runtime via `pre_option_*` filters (safer than one-time switching).
+  - Added persistence step to write corrected theme options once.
+  - Added content-level replacements for old theme asset paths and legacy `Kiddie Academy`/`5/6` text so imported DB content cannot regress visuals or wording.

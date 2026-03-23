@@ -11,33 +11,106 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Keep the CSA child theme active even after migrations/imports.
+ * Get target theme slugs.
  *
- * Some migrations preserve older theme slugs in options. This guard runs as an
- * MU plugin so it does not depend on normal plugin activation.
+ * @return array{stylesheet:string,template:string}
  */
-function csa_theme_guard_enforce_theme() {
-	$target_stylesheet = 'hello-elementor-csa-site';
-	$target_template   = 'hello-elementor';
-
-	$current_theme = wp_get_theme();
-	if ( ! $current_theme instanceof WP_Theme ) {
-		return;
-	}
-
-	$current_stylesheet = (string) $current_theme->get_stylesheet();
-	$current_template   = (string) $current_theme->get_template();
-
-	if ( $current_stylesheet === $target_stylesheet && $current_template === $target_template ) {
-		return;
-	}
-
-	$target_theme = wp_get_theme( $target_stylesheet );
-	if ( ! $target_theme instanceof WP_Theme || ! $target_theme->exists() ) {
-		return;
-	}
-
-	switch_theme( $target_stylesheet, $target_template );
+function csa_theme_guard_get_target() {
+	return array(
+		'stylesheet' => 'hello-elementor-csa-site',
+		'template'   => 'hello-elementor',
+	);
 }
-add_action( 'init', 'csa_theme_guard_enforce_theme', 1 );
 
+/**
+ * Check if CSA target child theme exists.
+ *
+ * @return bool
+ */
+function csa_theme_guard_target_exists() {
+	$target = csa_theme_guard_get_target();
+	$theme  = wp_get_theme( $target['stylesheet'] );
+
+	return $theme instanceof WP_Theme && $theme->exists();
+}
+
+/**
+ * Runtime stylesheet override so migrated DB values cannot force a wrong theme.
+ *
+ * @param mixed $pre_option Existing pre_option value.
+ * @return mixed
+ */
+function csa_theme_guard_pre_option_stylesheet( $pre_option ) {
+	if ( csa_theme_guard_target_exists() ) {
+		$target = csa_theme_guard_get_target();
+		return $target['stylesheet'];
+	}
+
+	return $pre_option;
+}
+add_filter( 'pre_option_stylesheet', 'csa_theme_guard_pre_option_stylesheet', 1 );
+
+/**
+ * Runtime template override so migrated DB values cannot force a wrong theme.
+ *
+ * @param mixed $pre_option Existing pre_option value.
+ * @return mixed
+ */
+function csa_theme_guard_pre_option_template( $pre_option ) {
+	if ( csa_theme_guard_target_exists() ) {
+		$target = csa_theme_guard_get_target();
+		return $target['template'];
+	}
+
+	return $pre_option;
+}
+add_filter( 'pre_option_template', 'csa_theme_guard_pre_option_template', 1 );
+
+/**
+ * Persist the corrected theme once in the database for long-term stability.
+ */
+function csa_theme_guard_persist_theme_once() {
+	if ( ! csa_theme_guard_target_exists() ) {
+		return;
+	}
+
+	$target               = csa_theme_guard_get_target();
+	$current_stylesheet   = (string) get_option( 'stylesheet', '' );
+	$current_template     = (string) get_option( 'template', '' );
+	$needs_stylesheet_fix = $current_stylesheet !== $target['stylesheet'];
+	$needs_template_fix   = $current_template !== $target['template'];
+
+	if ( ! $needs_stylesheet_fix && ! $needs_template_fix ) {
+		return;
+	}
+
+	update_option( 'stylesheet', $target['stylesheet'] );
+	update_option( 'template', $target['template'] );
+}
+add_action( 'init', 'csa_theme_guard_persist_theme_once', 2 );
+
+/**
+ * Replace stale theme-folder URLs in stored content after migrations.
+ *
+ * @param string $content HTML content.
+ * @return string
+ */
+function csa_theme_guard_replace_legacy_theme_paths( $content ) {
+	if ( ! is_string( $content ) || '' === $content ) {
+		return $content;
+	}
+
+	$replacements = array(
+		'/wp-content/themes/hello-elementor-kiddie-mock/' => '/wp-content/themes/hello-elementor-csa-site/',
+		'/wp-content/themes/hello-elementor-csa/'         => '/wp-content/themes/hello-elementor-csa-site/',
+		'Kiddie Academy'                                  => 'Chestnut Square Academy',
+		'kiddie academy'                                  => 'chestnut square academy',
+		'5/6 years'                                       => '4/5 years',
+		'5/6 year'                                        => '4/5 year',
+		'5/6'                                             => '4/5',
+	);
+
+	return str_replace( array_keys( $replacements ), array_values( $replacements ), $content );
+}
+add_filter( 'the_content', 'csa_theme_guard_replace_legacy_theme_paths', 1 );
+add_filter( 'elementor/frontend/the_content', 'csa_theme_guard_replace_legacy_theme_paths', 1 );
