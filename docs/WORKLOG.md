@@ -324,4 +324,20 @@
 - chore(versioning): bumped child theme version to `1.0.54` for cache-safe rollout of navbar alignment + logo scale refinement.
 - tweak(nav-optical-balance): added logo-art optical nudge token (`--csa-nav-logo-optical-left-nudge: 8px`) and applied a subtle left translation to desktop logo rendering so painted logo content balances the right-edge nav text by eye.
 - chore(versioning): bumped child theme version to `1.0.55` for cache-safe rollout of optical-balance adjustment.
+- style(nav-right-margin-align): aligned desktop navbar tabs to the same right content margin rail by constraining header inner-container to page-content width (`calc(100% - 64px)`, `max-width: min(1340px, calc(100vw - 64px))`) and right-anchoring the tab list.
+- style(nav-density): reduced desktop navbar tab text size/letter spacing and replaced stretched `space-between` distribution with tighter right-aligned gap spacing for cleaner balance.
+- chore(versioning): bumped child theme version to `1.0.56` for cache-safe rollout of navbar right-margin alignment + density refinement.
+- fix(hero-photo-privacy): removed visible shirt text from both hero source assets (`cover.png` and `cover-hd.jpg`) using a localized inpaint pass over the chest logo region.
+- chore(tooling): added `scripts/remove-cover-shirt-text.ps1` to make the shirt-text cleanup reproducible across both source and HD hero images.
+- chore(versioning): bumped child theme version to `1.0.57` and cache-busted hero background source (`cover-hd.jpg?v=2`) for immediate pickup of the updated cover photo.
+- tweak(hero-tagline-shadow): increased home hero tagline text-shadow slightly (`0 5px 18px rgba(16,24,19,0.52)`) for a touch more separation without making the headline heavy.
+- chore(versioning): bumped child theme version to `1.0.58` for cache-safe rollout of the tagline shadow refinement.
+- fix(hero-shirt-text-pass2): redid shirt-text removal from original cover source using iterative neighborhood inpaint + soft localized blur blend (removing prior hard black-box artifacts).
+- chore(tooling): upgraded `scripts/remove-cover-shirt-text.ps1` with a safer, reproducible pipeline (scaled ROI, conservative text-mask detection, edge-aware inpaint, soft coherence blend).
+- chore(versioning): bumped child theme version to `1.0.59` and cache-busted hero background to `cover-hd.jpg?v=3` for immediate pickup of the corrected cover image.
+- feat(responsive-pass): added end-of-file responsive hardening overrides for mobile/tablet header, menu, hero, and content gutters to stabilize layout behavior across breakpoints while preserving Elementor no-code editability.
+- style(nav-mobile-cymk): implemented CYMK-inspired crayon burger lines on the mobile menu button (cyan/yellow/magenta with key-outline + key-state close icon) and kept interactions synced to existing `menu_checkbox` logic.
+- style(mobile-menu-ux): refined mobile flyout nav spacing/typography/tap targets and tied visibility cleanly to `body.mobile-menu-open` without structural template changes.
+- style(hero-mobile-balance): tightened mobile hero copy inset and headline scaling to reduce overflow/cropping while preserving full-viewport hero behavior under sticky header.
+- chore(versioning): bumped child theme version to `1.0.60` for cache-safe rollout of responsiveness + CYMK burger pass.
 

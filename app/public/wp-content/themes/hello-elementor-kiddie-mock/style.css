@@ -4,7 +4,7 @@ Theme URI: https://example.local/kiddie-mock
 Description: Full-site Kiddie Academy style mock theme for Elementor-based frontend replication.
 Author: CSA Web Team
 Template: hello-elementor
-Version: 1.0.55
+Version: 1.0.60
 Text Domain: hello-elementor-kiddie-mock
 */
 
@@ -931,7 +931,7 @@ body.kiddie-mock-site.page-home .kms-dom-id-hero .background-image,
 body.kiddie-mock-site.home .kms-dom-id-hero .background-image,
 body.kiddie-mock-site.page-home .animated-hero .background-image,
 body.kiddie-mock-site.home .animated-hero .background-image {
-  background-image: url('/wp-content/themes/hello-elementor-kiddie-mock/assets/images/cover-hd.jpg') !important;
+  background-image: url('/wp-content/themes/hello-elementor-kiddie-mock/assets/images/cover-hd.jpg?v=3') !important;
   background-size: cover;
   background-position: center center;
   transform: scaleX(-1);
@@ -956,7 +956,7 @@ body.kiddie-mock-site.home .kms-dom-id-hero .copy h1,
 body.kiddie-mock-site.page-home .kms-dom-id-hero .copy h1,
 body.kiddie-mock-site.home .animated-hero .copy h1,
 body.kiddie-mock-site.page-home .animated-hero .copy h1 {
-  text-shadow: 0 4px 16px rgba(16, 24, 19, 0.44);
+  text-shadow: 0 5px 18px rgba(16, 24, 19, 0.52);
 }
 
 body.kiddie-mock-site.home #hero .copy p,
@@ -1359,16 +1359,16 @@ body.kiddie-mock-site #footer .links > div {
 @media only screen and (min-width: 1200px) {
   body.kiddie-mock-site #header {
     box-sizing: border-box !important;
-    padding-left: var(--csa-hero-edge-pad) !important;
-    padding-right: var(--csa-hero-edge-pad) !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   body.kiddie-mock-site #header .inner-container {
     min-height: 118px !important;
-    width: 100% !important;
-    max-width: none !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+    width: calc(100% - 64px) !important;
+    max-width: min(1340px, calc(100vw - 64px)) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
@@ -1420,7 +1420,7 @@ body.kiddie-mock-site #footer .links > div {
   body.kiddie-mock-site #header .nav-right {
     flex: 1 1 auto !important;
     min-width: 0 !important;
-    margin-left: clamp(8px, 1vw, 18px) !important;
+    margin-left: clamp(4px, 0.6vw, 12px) !important;
     margin-right: 0 !important;
     padding-right: 0 !important;
   }
@@ -1437,11 +1437,17 @@ body.kiddie-mock-site #footer .links > div {
   }
 
   body.kiddie-mock-site #header .main-nav .top-menu {
-    width: 100% !important;
-    max-width: 980px !important;
+    width: auto !important;
+    max-width: none !important;
     margin: 0 0 0 auto !important;
-    justify-content: space-between !important;
-    gap: 0 !important;
+    justify-content: flex-end !important;
+    gap: clamp(24px, 2.2vw, 52px) !important;
+  }
+
+  body.kiddie-mock-site #header .main-nav .top-menu > li > .toplevel > a {
+    font-size: clamp(0.98rem, 1.08vw, 1.22rem) !important;
+    letter-spacing: 0.012em !important;
+    line-height: 1.02 !important;
   }
 }
 
@@ -1465,5 +1471,269 @@ body.kiddie-mock-site #footer .links > div {
   body.kiddie-mock-site #header .main-nav .top-menu > li > .toplevel > a:hover,
   body.kiddie-mock-site #header .main-nav .top-menu > li > .toplevel > a:focus-visible {
     cursor: url("assets/images/cursor-handprint.png?v=3") 8 6, pointer !important;
+  }
+}
+
+/* ==== Responsive hardening pass (Elementor-safe / no-code handoff safe) ==== */
+:root {
+  --csa-layout-gutter-mobile: clamp(14px, 4.5vw, 24px);
+  --csa-layout-gutter-tablet: clamp(18px, 3.4vw, 34px);
+  --csa-burger-cyan: #18aeea;
+  --csa-burger-yellow: #f4c640;
+  --csa-burger-magenta: #d94aa7;
+  --csa-burger-key: #2b2b2b;
+}
+
+@media only screen and (max-width: 1199px) {
+  body.kiddie-mock-site {
+    padding-top: var(--csa-sticky-header-live, var(--csa-sticky-header-height-mobile)) !important;
+  }
+
+  body.kiddie-mock-site #header {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    padding-inline: var(--csa-layout-gutter-mobile) !important;
+  }
+
+  body.kiddie-mock-site #header .inner-container {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 88px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  body.kiddie-mock-site #header .nav-left {
+    display: none !important;
+  }
+
+  body.kiddie-mock-site #header .nav-right,
+  body.kiddie-mock-site #header .link-menu {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.kiddie-mock-site #header .function-nav {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 10px 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  body.kiddie-mock-site #header .function-nav .mobile-logo {
+    display: flex !important;
+    align-items: center !important;
+    min-width: 0 !important;
+  }
+
+  body.kiddie-mock-site #header .function-nav .mobile-logo a {
+    display: flex !important;
+    align-items: center !important;
+    line-height: 0 !important;
+  }
+
+  body.kiddie-mock-site #header .function-nav .mobile-logo img {
+    width: auto !important;
+    height: clamp(56px, 8.4vw, 84px) !important;
+    max-width: min(68vw, 300px) !important;
+    max-height: clamp(56px, 8.4vw, 84px) !important;
+    object-fit: contain !important;
+    object-position: left center !important;
+  }
+
+  body.kiddie-mock-site #header .expand-button.mobile-button {
+    margin-left: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  body.kiddie-mock-site #header .expand-button.mobile-button #menu_checkbox {
+    position: absolute !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  body.kiddie-mock-site #header .expand-button.mobile-button label {
+    width: 46px !important;
+    height: 46px !important;
+    padding: 10px 8px !important;
+    box-sizing: border-box !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    box-shadow: 0 2px 10px rgba(43, 43, 43, 0.09) !important;
+    display: grid !important;
+    align-content: center !important;
+    gap: 6px !important;
+    cursor: pointer !important;
+  }
+
+  /* CYMK crayon-style burger lines. */
+  body.kiddie-mock-site #header .expand-button.mobile-button label div {
+    width: 100% !important;
+    height: 4px !important;
+    margin: 0 !important;
+    top: auto !important;
+    right: auto !important;
+    border-radius: 999px !important;
+    background-color: var(--csa-burger-key) !important;
+    box-shadow:
+      0 0 0 1px rgba(43, 43, 43, 0.25),
+      inset 0 -1px 0 rgba(43, 43, 43, 0.18) !important;
+    transition: transform 220ms ease, opacity 180ms ease, filter 180ms ease !important;
+    transform-origin: center !important;
+  }
+
+  body.kiddie-mock-site #header .expand-button.mobile-button label div:nth-child(1) {
+    background-image: repeating-linear-gradient(-16deg, var(--csa-burger-cyan) 0 6px, #36c7f3 6px 10px) !important;
+  }
+
+  body.kiddie-mock-site #header .expand-button.mobile-button label div:nth-child(2) {
+    background-image: repeating-linear-gradient(-13deg, var(--csa-burger-yellow) 0 6px, #ffda68 6px 10px) !important;
+  }
+
+  body.kiddie-mock-site #header .expand-button.mobile-button label div:nth-child(3) {
+    background-image: repeating-linear-gradient(-19deg, var(--csa-burger-magenta) 0 6px, #ee74c4 6px 10px) !important;
+  }
+
+  body.kiddie-mock-site #header .expand-button.mobile-button #menu_checkbox:checked + label div:nth-child(1) {
+    transform: translateY(10px) rotate(45deg) !important;
+    background: var(--csa-burger-key) !important;
+  }
+
+  body.kiddie-mock-site #header .expand-button.mobile-button #menu_checkbox:checked + label div:nth-child(2) {
+    opacity: 0 !important;
+    transform: scaleX(0.25) !important;
+  }
+
+  body.kiddie-mock-site #header .expand-button.mobile-button #menu_checkbox:checked + label div:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg) !important;
+    background: var(--csa-burger-key) !important;
+  }
+
+  body.kiddie-mock-site #header .main-nav {
+    display: none !important;
+    width: 100% !important;
+    margin: 10px 0 0 !important;
+    padding: 8px 0 10px !important;
+    background: var(--csa-white) !important;
+    border-top: 1px solid rgba(141, 110, 99, 0.22) !important;
+    border-bottom-left-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+    box-shadow: 0 8px 20px rgba(43, 43, 43, 0.08) !important;
+  }
+
+  body.kiddie-mock-site.mobile-menu-open #header .main-nav {
+    display: block !important;
+  }
+
+  body.kiddie-mock-site #header .main-nav .top-menu {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.kiddie-mock-site #header .main-nav .top-menu > li {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+
+  body.kiddie-mock-site #header .main-nav .top-menu > li > .toplevel {
+    padding: 0 !important;
+  }
+
+  body.kiddie-mock-site #header .main-nav .top-menu > li > .toplevel > a {
+    display: block !important;
+    width: 100% !important;
+    padding: 12px 2px !important;
+    font-size: clamp(1.02rem, 3.8vw, 1.28rem) !important;
+    line-height: 1.08 !important;
+    text-align: left !important;
+  }
+
+  body.kiddie-mock-site #hero,
+  body.kiddie-mock-site .kms-dom-id-hero,
+  body.kiddie-mock-site .animated-hero {
+    min-height: calc(100svh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-mobile))) !important;
+    height: calc(100svh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-mobile))) !important;
+    overflow: hidden !important;
+  }
+
+  body.kiddie-mock-site #hero .copy,
+  body.kiddie-mock-site .kms-dom-id-hero .copy,
+  body.kiddie-mock-site .animated-hero .copy {
+    padding: 0 0 clamp(16px, 4.2vw, 24px) clamp(16px, 4.2vw, 24px) !important;
+  }
+
+  body.kiddie-mock-site #hero .copy .headline,
+  body.kiddie-mock-site #hero .copy h1.headline,
+  body.kiddie-mock-site #hero .copy .headline .elementor-heading-title,
+  body.kiddie-mock-site #hero .copy .headline h1,
+  body.kiddie-mock-site .kms-dom-id-hero .copy .headline,
+  body.kiddie-mock-site .kms-dom-id-hero .copy h1.headline,
+  body.kiddie-mock-site .kms-dom-id-hero .copy .headline .elementor-heading-title,
+  body.kiddie-mock-site .kms-dom-id-hero .copy .headline h1,
+  body.kiddie-mock-site .animated-hero .copy .headline,
+  body.kiddie-mock-site .animated-hero .copy h1.headline,
+  body.kiddie-mock-site .animated-hero .copy .headline .elementor-heading-title,
+  body.kiddie-mock-site .animated-hero .copy .headline h1 {
+    font-size: clamp(4.8rem, 19vw, 8rem) !important;
+    line-height: 0.83 !important;
+    letter-spacing: 0.012em !important;
+    max-width: min(88vw, 8ch) !important;
+    text-wrap: balance !important;
+  }
+
+  body.kiddie-mock-site .content-wrapper,
+  body.kiddie-mock-site .desktop-content-wrapper {
+    width: calc(100% - (var(--csa-layout-gutter-mobile) * 2)) !important;
+    max-width: none !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  body.kiddie-mock-site #footer .company-info .logo img {
+    max-width: min(86vw, 340px) !important;
+    width: auto !important;
+    height: auto !important;
+  }
+}
+
+@media screen and (min-width: 680px) and (max-width: 1199px) {
+  body.kiddie-mock-site #header {
+    padding-inline: var(--csa-layout-gutter-tablet) !important;
+  }
+
+  body.kiddie-mock-site #header .function-nav .mobile-logo img {
+    max-width: 360px !important;
+  }
+
+  body.kiddie-mock-site #header .main-nav .top-menu > li > .toplevel > a {
+    font-size: clamp(1.08rem, 2.3vw, 1.32rem) !important;
+    padding: 13px 4px !important;
+  }
+
+  body.kiddie-mock-site #hero .copy .headline,
+  body.kiddie-mock-site #hero .copy h1.headline,
+  body.kiddie-mock-site #hero .copy .headline .elementor-heading-title,
+  body.kiddie-mock-site #hero .copy .headline h1,
+  body.kiddie-mock-site .kms-dom-id-hero .copy .headline,
+  body.kiddie-mock-site .kms-dom-id-hero .copy h1.headline,
+  body.kiddie-mock-site .kms-dom-id-hero .copy .headline .elementor-heading-title,
+  body.kiddie-mock-site .kms-dom-id-hero .copy .headline h1,
+  body.kiddie-mock-site .animated-hero .copy .headline,
+  body.kiddie-mock-site .animated-hero .copy h1.headline,
+  body.kiddie-mock-site .animated-hero .copy .headline .elementor-heading-title,
+  body.kiddie-mock-site .animated-hero .copy .headline h1 {
+    font-size: clamp(6rem, 12vw, 10.6rem) !important;
+    max-width: 7.8ch !important;
   }
 }
