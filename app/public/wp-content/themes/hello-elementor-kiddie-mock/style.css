@@ -4,7 +4,7 @@ Theme URI: https://example.local/kiddie-mock
 Description: Full-site Kiddie Academy style mock theme for Elementor-based frontend replication.
 Author: CSA Web Team
 Template: hello-elementor
-Version: 1.0.60
+Version: 1.0.61
 Text Domain: hello-elementor-kiddie-mock
 */
 
@@ -1517,20 +1517,44 @@ body.kiddie-mock-site #footer .links > div {
     padding: 0 !important;
   }
 
+  body.kiddie-mock-site #header .nav-right {
+    overflow: visible !important;
+  }
+
+  body.kiddie-mock-site #header .link-menu {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
   body.kiddie-mock-site #header .function-nav {
+    order: 1 !important;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    bottom: auto !important;
     width: 100% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
     gap: 12px !important;
     padding: 10px 0 !important;
+    margin: 0 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
     box-sizing: border-box !important;
   }
 
   body.kiddie-mock-site #header .function-nav .mobile-logo {
     display: flex !important;
     align-items: center !important;
+    flex: 1 1 auto !important;
     min-width: 0 !important;
+    margin: 0 !important;
   }
 
   body.kiddie-mock-site #header .function-nav .mobile-logo a {
@@ -1553,6 +1577,8 @@ body.kiddie-mock-site #footer .links > div {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    flex: 0 0 auto !important;
+    padding: 0 !important;
   }
 
   body.kiddie-mock-site #header .expand-button.mobile-button #menu_checkbox {
@@ -1562,8 +1588,8 @@ body.kiddie-mock-site #footer .links > div {
   }
 
   body.kiddie-mock-site #header .expand-button.mobile-button label {
-    width: 46px !important;
-    height: 46px !important;
+    width: 48px !important;
+    height: 48px !important;
     padding: 10px 8px !important;
     box-sizing: border-box !important;
     border-radius: 10px !important;
@@ -1619,9 +1645,10 @@ body.kiddie-mock-site #footer .links > div {
   }
 
   body.kiddie-mock-site #header .main-nav {
+    order: 2 !important;
     display: none !important;
     width: 100% !important;
-    margin: 10px 0 0 !important;
+    margin: 8px 0 0 !important;
     padding: 8px 0 10px !important;
     background: var(--csa-white) !important;
     border-top: 1px solid rgba(141, 110, 99, 0.22) !important;
@@ -1685,10 +1712,10 @@ body.kiddie-mock-site #footer .links > div {
   body.kiddie-mock-site .animated-hero .copy h1.headline,
   body.kiddie-mock-site .animated-hero .copy .headline .elementor-heading-title,
   body.kiddie-mock-site .animated-hero .copy .headline h1 {
-    font-size: clamp(4.8rem, 19vw, 8rem) !important;
-    line-height: 0.83 !important;
+    font-size: clamp(3.25rem, 12.8vw, 6.2rem) !important;
+    line-height: 0.86 !important;
     letter-spacing: 0.012em !important;
-    max-width: min(88vw, 8ch) !important;
+    max-width: min(90vw, 8.2ch) !important;
     text-wrap: balance !important;
   }
 
@@ -1733,7 +1760,7 @@ body.kiddie-mock-site #footer .links > div {
   body.kiddie-mock-site .animated-hero .copy h1.headline,
   body.kiddie-mock-site .animated-hero .copy .headline .elementor-heading-title,
   body.kiddie-mock-site .animated-hero .copy .headline h1 {
-    font-size: clamp(6rem, 12vw, 10.6rem) !important;
-    max-width: 7.8ch !important;
+    font-size: clamp(4.8rem, 10.4vw, 8.8rem) !important;
+    max-width: 8ch !important;
   }
 }

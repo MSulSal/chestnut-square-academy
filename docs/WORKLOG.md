@@ -340,4 +340,8 @@
 - style(mobile-menu-ux): refined mobile flyout nav spacing/typography/tap targets and tied visibility cleanly to `body.mobile-menu-open` without structural template changes.
 - style(hero-mobile-balance): tightened mobile hero copy inset and headline scaling to reduce overflow/cropping while preserving full-viewport hero behavior under sticky header.
 - chore(versioning): bumped child theme version to `1.0.60` for cache-safe rollout of responsiveness + CYMK burger pass.
+- fix(mobile-header-positioning): overrode legacy core mobile header constraints (`.function-nav` fixed offsets + `.link-menu` zero-height hidden overflow) so burger button remains in-view and the opened menu is no longer clipped/off-canvas.
+- style(mobile-menu-layout): reordered mobile header stack (`function-nav` row first, flyout nav second) for clearer no-code owner behavior and cleaner logo/burger-to-menu flow.
+- fix(hero-mobile-clipping): reduced phone hero headline clamp and width constraints so the longest crayon words no longer clip on narrow viewports while preserving desktop/tablet scale.
+- chore(versioning): bumped child theme version to `1.0.61` for cache-safe rollout of burger/menu/hero responsive fixes.
 
