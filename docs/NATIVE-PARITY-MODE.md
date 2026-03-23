@@ -72,3 +72,8 @@ Exact clone-level behavior can still vary because Elementor and third-party sour
   - Added mobile flush overrides so `main` and first hero section cannot introduce extra top spacing.
   - Kept sticky behavior and no-code Elementor structure unchanged; CSS-only adjustment.
   - Bumped child-theme version to `1.0.69`.
+- `fix(migration): enforce CSA active theme and remove legacy child themes`
+  - Added MU plugin `csa-theme-guard` so migrated installs always switch to `hello-elementor-csa-site` when available.
+  - Renamed active child theme label to `Chestnut Square Academy` in theme metadata.
+  - Removed deprecated `hello-elementor-csa` theme files and local `hello-elementor-kiddie-mock` folder to prevent accidental fallback.
+  - Bumped child-theme version to `1.0.70`.
