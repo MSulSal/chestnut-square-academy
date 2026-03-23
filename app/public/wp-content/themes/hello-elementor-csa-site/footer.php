@@ -1,8 +1,8 @@
 <?php
 /**
- * Custom footer for Kiddie mock theme.
+ * Custom footer for Chestnut mock theme.
  *
- * @package HelloElementorKiddieMock
+ * @package HelloElementorChestnutMock
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -14,12 +14,12 @@ $contact_url      = home_url( '/contact-us/' );
 $privacy_url      = home_url( '/privacy-policy/' );
 $footer_logo_default = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa-tree.png';
 $footer_logo         = apply_filters( 'kms_asset_url', $footer_logo_default, 'footer_logo' );
-$defaults            = function_exists( 'kiddie_mock_footer_text_defaults' ) ? kiddie_mock_footer_text_defaults() : array();
-$footer_school_name  = get_theme_mod( 'kiddie_mock_footer_school_name', isset( $defaults['school_name'] ) ? $defaults['school_name'] : 'Chestnut Square Academy' );
-$footer_address_1    = get_theme_mod( 'kiddie_mock_footer_address_1', isset( $defaults['address_1'] ) ? $defaults['address_1'] : '402 S. Chestnut St.' );
-$footer_address_2    = get_theme_mod( 'kiddie_mock_footer_address_2', isset( $defaults['address_2'] ) ? $defaults['address_2'] : 'McKinney, TX' );
-$footer_hours        = get_theme_mod( 'kiddie_mock_footer_hours', isset( $defaults['hours'] ) ? $defaults['hours'] : 'Monday-Friday: 6:00 AM-6:00 PM' );
-$footer_copyright    = get_theme_mod( 'kiddie_mock_footer_copyright', isset( $defaults['copyright'] ) ? $defaults['copyright'] : '&copy; ' . gmdate( 'Y' ) . ' Chestnut Square Academy. All rights reserved.' );
+$defaults            = function_exists( 'csa_site_footer_text_defaults' ) ? csa_site_footer_text_defaults() : array();
+$footer_school_name  = get_theme_mod( 'csa_site_footer_school_name', isset( $defaults['school_name'] ) ? $defaults['school_name'] : 'Chestnut Square Academy' );
+$footer_address_1    = get_theme_mod( 'csa_site_footer_address_1', isset( $defaults['address_1'] ) ? $defaults['address_1'] : '402 S. Chestnut St.' );
+$footer_address_2    = get_theme_mod( 'csa_site_footer_address_2', isset( $defaults['address_2'] ) ? $defaults['address_2'] : 'McKinney, TX' );
+$footer_hours        = get_theme_mod( 'csa_site_footer_hours', isset( $defaults['hours'] ) ? $defaults['hours'] : 'Monday-Friday: 6:00 AM-6:00 PM' );
+$footer_copyright    = get_theme_mod( 'csa_site_footer_copyright', isset( $defaults['copyright'] ) ? $defaults['copyright'] : '&copy; ' . gmdate( 'Y' ) . ' Chestnut Square Academy. All rights reserved.' );
 
 $quick_fallback = array(
 	array(
@@ -84,14 +84,14 @@ $contact_fallback = array(
 		<div class="links">
 			<div class="quick-links">
 				<p class="eyebrow">Quick Links</p>
-				<?php if ( function_exists( 'kiddie_mock_render_footer_menu' ) ) : ?>
-					<?php kiddie_mock_render_footer_menu( 'kiddie_footer_quick', 'menu-footer-quick', $quick_fallback ); ?>
+				<?php if ( function_exists( 'csa_site_render_footer_menu' ) ) : ?>
+					<?php csa_site_render_footer_menu( 'csa_footer_quick', 'menu-footer-quick', $quick_fallback ); ?>
 				<?php endif; ?>
 			</div>
 			<div class="contact">
 				<p class="eyebrow">Contact</p>
-				<?php if ( function_exists( 'kiddie_mock_render_footer_menu' ) ) : ?>
-					<?php kiddie_mock_render_footer_menu( 'kiddie_footer_contact', 'menu-footer-contact', $contact_fallback ); ?>
+				<?php if ( function_exists( 'csa_site_render_footer_menu' ) ) : ?>
+					<?php csa_site_render_footer_menu( 'csa_footer_contact', 'menu-footer-contact', $contact_fallback ); ?>
 				<?php endif; ?>
 			</div>
 		</div>
@@ -101,3 +101,5 @@ $contact_fallback = array(
 <?php wp_footer(); ?>
 </body>
 </html>
+
+

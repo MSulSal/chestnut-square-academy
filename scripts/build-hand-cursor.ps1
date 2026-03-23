@@ -1,6 +1,6 @@
 param(
   [string]$InputPath = "docs/Colorful handprint artwork on canvas.png",
-  [string]$OutputPath = "app/public/wp-content/themes/hello-elementor-kiddie-mock/assets/images/cursor-handprint.png",
+  [string]$OutputPath = "app/public/wp-content/themes/hello-elementor-csa-site/assets/images/cursor-handprint.png",
   [int]$OutputSize = 48
 )
 
@@ -112,3 +112,5 @@ try {
   $masked.Dispose()
   $src.Dispose()
 }
+
+

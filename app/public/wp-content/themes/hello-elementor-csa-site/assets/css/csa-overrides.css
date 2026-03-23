@@ -10,41 +10,41 @@
 
 /* Overrides for WordPress/Elementor compatibility and missing icon-font fallbacks. */
 
-.kiddie-mock-site .site-main,
-.kiddie-mock-site .page-content,
-.kiddie-mock-site .entry-content,
-.kiddie-mock-site .elementor,
-.kiddie-mock-site .elementor-section-wrap {
+.csa-site .site-main,
+.csa-site .page-content,
+.csa-site .entry-content,
+.csa-site .elementor,
+.csa-site .elementor-section-wrap {
   width: 100%;
   max-width: 100%;
   margin: 0;
   padding: 0;
 }
 
-.kiddie-mock-site .elementor-section.elementor-section-boxed > .elementor-container,
-.kiddie-mock-site .elementor-top-section > .elementor-container,
-.kiddie-mock-site .elementor-post__content,
-.kiddie-mock-site .elementor-widget-wrap,
-.kiddie-mock-site .elementor-widget-html,
-.kiddie-mock-site .elementor-widget-html .elementor-widget-container {
+.csa-site .elementor-section.elementor-section-boxed > .elementor-container,
+.csa-site .elementor-top-section > .elementor-container,
+.csa-site .elementor-post__content,
+.csa-site .elementor-widget-wrap,
+.csa-site .elementor-widget-html,
+.csa-site .elementor-widget-html .elementor-widget-container {
   width: 100%;
   max-width: 100%;
 }
 
-.kiddie-mock-site .elementor-column-gap-default > .elementor-column > .elementor-element-populated {
+.csa-site .elementor-column-gap-default > .elementor-column > .elementor-element-populated {
   padding: 0;
 }
 
-.kiddie-mock-site .page-content p:last-child {
+.csa-site .page-content p:last-child {
   margin-bottom: 0;
 }
 
-.kiddie-mock-site main#main-content {
+.csa-site main#main-content {
   display: block;
 }
 
-.kiddie-mock-site body,
-.kiddie-mock-site {
+.csa-site body,
+.csa-site {
   background: #fff;
 }
 
@@ -85,7 +85,7 @@
   }
 }
 
-/* Fallback icon mapping when Kiddie icon font is unavailable. */
+/* Fallback icon mapping when Chestnut icon font is unavailable. */
 .icon-search:before,
 .icon-facebook:before,
 .icon-twitter:before,
@@ -132,8 +132,8 @@ img.lazy[data-lazy-src]:not([src]) {
 }
 
 /* Home hero keyword should render in the same crayon style as the reference. */
-.kiddie-mock-site.page-home #hero .copy h1 .headline-highlight,
-.kiddie-mock-site.home #hero .copy h1 .headline-highlight {
+.csa-site.page-home #hero .copy h1 .headline-highlight,
+.csa-site.home #hero .copy h1 .headline-highlight {
   font-family: "Childhood", "Permanent Marker", "Comic Sans MS", cursive !important;
   font-size: 1.167em;
   display: block;
@@ -146,13 +146,13 @@ img.lazy[data-lazy-src]:not([src]) {
   letter-spacing: 0.02em;
 }
 
-.kiddie-mock-site.page-home #hero .copy h1,
-.kiddie-mock-site.home #hero .copy h1 {
+.csa-site.page-home #hero .copy h1,
+.csa-site.home #hero .copy h1 {
   text-transform: none;
 }
 
 /* Accessibility widget parity (bottom-left floating button). */
-.kiddie-mock-site .accessibility-widget {
+.csa-site .accessibility-widget {
   position: fixed;
   left: 22px;
   bottom: 22px;
@@ -170,76 +170,76 @@ img.lazy[data-lazy-src]:not([src]) {
   z-index: 2147483000;
 }
 
-.kiddie-mock-site .accessibility-widget:hover,
-.kiddie-mock-site .accessibility-widget:focus-visible {
+.csa-site .accessibility-widget:hover,
+.csa-site .accessibility-widget:focus-visible {
   background: #006fed;
   color: #ffffff;
 }
 
-.kiddie-mock-site .accessibility-widget i {
+.csa-site .accessibility-widget i {
   font-size: 24px;
   line-height: 1;
 }
 
 /* Academies page split hero + state strip parity. */
-.kiddie-mock-site .kma-academies-hero {
+.csa-site .kma-academies-hero {
   display: flex;
   min-height: 500px;
   border-top: 1px solid #ded8d1;
 }
 
-.kiddie-mock-site .kma-academies-hero-left {
+.csa-site .kma-academies-hero-left {
   flex: 0 0 56%;
   background: #f3f3f3;
 }
 
-.kiddie-mock-site .kma-academies-hero-right {
+.csa-site .kma-academies-hero-right {
   flex: 1 1 44%;
   background: #f5f1ec;
   border-left: 1px solid #d4cec8;
 }
 
-.kiddie-mock-site .kma-academies-hero-inner {
+.csa-site .kma-academies-hero-inner {
   max-width: 600px;
   padding: 42px 34px 34px 24px;
 }
 
-.kiddie-mock-site .kma-academies-hero-inner h1 {
+.csa-site .kma-academies-hero-inner h1 {
   margin: 0 0 20px;
   font-size: clamp(34px, 3.05vw, 48px);
   line-height: 1.06;
 }
 
-.kiddie-mock-site .kma-academies-hero-inner p {
+.csa-site .kma-academies-hero-inner p {
   margin: 0 0 16px;
   max-width: 520px;
 }
 
-.kiddie-mock-site .kma-academies-hero .locator-small .locator .form {
+.csa-site .kma-academies-hero .locator-small .locator .form {
   max-width: 100%;
 }
 
-.kiddie-mock-site .kma-academies-hero .locator-small .locator .form button {
+.csa-site .kma-academies-hero .locator-small .locator .form button {
   min-width: 190px;
 }
 
-.kiddie-mock-site .kma-academies-hero .locator-small .locator .get-current-location {
+.csa-site .kma-academies-hero .locator-small .locator .get-current-location {
   margin-top: 8px;
 }
 
-.kiddie-mock-site .kma-state-strip {
+.csa-site .kma-state-strip {
   background: #005cc4;
   padding: 28px 0 30px;
 }
 
-.kiddie-mock-site .kma-state-strip .content-wrapper {
+.csa-site .kma-state-strip .content-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
 }
 
-.kiddie-mock-site .kma-state-strip h2 {
+.csa-site .kma-state-strip h2 {
   margin: 0;
   color: #ffffff;
   font-size: clamp(30px, 2.35vw, 44px);
@@ -247,18 +247,18 @@ img.lazy[data-lazy-src]:not([src]) {
   white-space: nowrap;
 }
 
-.kiddie-mock-site .kma-state-strip-form {
+.csa-site .kma-state-strip-form {
   display: flex;
   align-items: center;
   gap: 0;
   flex: 0 1 48%;
 }
 
-.kiddie-mock-site .kma-select-wrap {
+.csa-site .kma-select-wrap {
   flex: 1 1 auto;
 }
 
-.kiddie-mock-site .kma-select-wrap select {
+.csa-site .kma-select-wrap select {
   width: 100%;
   height: 54px;
   border-radius: 28px 0 0 28px;
@@ -272,7 +272,7 @@ img.lazy[data-lazy-src]:not([src]) {
   appearance: auto;
 }
 
-.kiddie-mock-site .kma-state-strip-form .button-round {
+.csa-site .kma-state-strip-form .button-round {
   border-radius: 0 28px 28px 0;
   min-width: 102px;
   height: 54px;
@@ -283,35 +283,37 @@ img.lazy[data-lazy-src]:not([src]) {
 }
 
 @media screen and (max-width: 1199px) {
-  .kiddie-mock-site .kma-academies-hero {
+  .csa-site .kma-academies-hero {
     min-height: 0;
     flex-direction: column;
   }
 
-  .kiddie-mock-site .kma-academies-hero-left {
+  .csa-site .kma-academies-hero-left {
     display: none;
   }
 
-  .kiddie-mock-site .kma-academies-hero-right {
+  .csa-site .kma-academies-hero-right {
     border-left: 0;
   }
 
-  .kiddie-mock-site .kma-academies-hero-inner {
+  .csa-site .kma-academies-hero-inner {
     max-width: 680px;
     margin: 0 auto;
     padding: 40px 18px 34px;
   }
 
-  .kiddie-mock-site .kma-state-strip .content-wrapper {
+  .csa-site .kma-state-strip .content-wrapper {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .kiddie-mock-site .kma-state-strip-form {
+  .csa-site .kma-state-strip-form {
     flex: 1 1 auto;
   }
 
-  .kiddie-mock-site .kma-select-wrap select {
+  .csa-site .kma-select-wrap select {
     font-size: 24px;
   }
 }
+
+

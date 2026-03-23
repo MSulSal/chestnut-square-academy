@@ -1,0 +1,1768 @@
+/*
+Theme Name: Hello Elementor CSA Site
+Theme URI: https://example.local/csa-site
+Description: Full-site Chestnut Square Academy theme for Elementor-based no-code editing.
+Author: CSA Web Team
+Template: hello-elementor
+Version: 1.0.61
+Text Domain: hello-elementor-csa-site
+*/
+
+:root {
+  --csa-primary-green: #2e7d32;
+  --csa-primary-green-hover: #25682a;
+  --csa-secondary-green: #4caf50;
+  --csa-tan-accent: #e0a96d;
+  --csa-tan-accent-hover: #cd965f;
+  --csa-chestnut-brown: #8d6e63;
+  --csa-cream-bg: #f8f6f2;
+  --csa-light-tan-bg: #efe7dc;
+  --csa-white: #ffffff;
+  --csa-text-primary: #2b2b2b;
+  --csa-text-secondary: #555555;
+  --csa-link: #2e7d32;
+  --csa-link-hover: #225b27;
+  --csa-border-soft: #d8ccbc;
+  --csa-footer-bg: #245b2d;
+  --csa-shadow-soft: 0 10px 28px rgba(43, 43, 43, 0.08);
+  --csa-sticky-header-height-mobile: 95px;
+  --csa-sticky-header-height-desktop: 184px;
+
+  /* Backward-compatible aliases used by legacy mock styles. */
+  --Chestnut-navy: var(--csa-text-primary);
+  --Chestnut-blue: var(--csa-primary-green);
+  --Chestnut-gold: var(--csa-tan-accent);
+  --Chestnut-tan: var(--csa-light-tan-bg);
+}
+
+/* Default CSA fallback logo crop/fit for the theme header (Elementor logo overrides remain uncropped). */
+#header .nav-left .logo a img[src*="assets/images/logo-square.png"] {
+  width: 132px;
+  height: 132px;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.16);
+}
+
+#header .function-nav .mobile-logo img[src*="assets/images/logo-square.png"] {
+  width: 70px;
+  height: 70px;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.1);
+}
+
+#header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa-navbar.png"],
+#header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa.png"],
+#header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa-tree-navbar.png"],
+#header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa-tree.png"] {
+  width: 114px;
+  height: 58px;
+  max-width: none;
+  object-fit: contain;
+  object-position: center;
+  transform: none;
+}
+
+@media only screen and (min-width: 1200px) {
+  #header .inner-container {
+    align-items: stretch;
+  }
+
+  #header .nav-left {
+    width: 248px;
+    min-width: 248px;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    position: relative;
+    left: clamp(-120px, calc((1440px - 100vw) / 4), 0px);
+  }
+
+  #header .nav-left .logo {
+    width: 100%;
+    max-width: 100%;
+    height: 135px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #header .nav-left .logo a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #header .nav-left .logo a img[src*="assets/images/new-logo-csa-navbar.png"],
+  #header .nav-left .logo a img[src*="assets/images/new-logo-csa.png"],
+  #header .nav-left .logo a img[src*="assets/images/new-logo-csa-tree-navbar.png"],
+  #header .nav-left .logo a img[src*="assets/images/new-logo-csa-tree.png"] {
+    width: 228px;
+    height: 120px;
+    max-width: 228px;
+    max-height: 120px;
+    transform: none;
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  #header .nav-left .logo a img[src*="assets/images/logo-square-navbar.png"],
+  #header .nav-left .logo a img[src*="assets/images/logo-square.png"] {
+    width: auto;
+    height: 135px;
+    transform: none;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Keep Elementor Site Identity swaps no-code ready with a full-height default fit. */
+  #header .nav-left .logo a img {
+    height: 135px;
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* Lean single-location header layout (no top utility strip / no header CTA button). */
+@media only screen and (min-width: 1200px) {
+  body.csa-site #header .nav-right {
+    margin-left: 24px;
+    display: flex;
+    align-items: center;
+  }
+
+  body.csa-site #header .link-menu {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  body.csa-site #header .main-nav {
+    order: 1;
+    flex: 1 1 auto;
+    max-width: 940px;
+    margin: 0 auto;
+  }
+
+  body.csa-site #header .main-nav .top-menu {
+    justify-content: center;
+    gap: clamp(22px, 3.2vw, 64px);
+    margin: 0;
+    width: 100%;
+  }
+
+  body.csa-site #header .main-nav .top-menu li {
+    margin: 0;
+  }
+
+  body.csa-site #header .main-nav .toplevel {
+    padding: 14px 0;
+  }
+
+  body.csa-site #header .function-nav {
+    order: 2;
+    flex: 0 0 auto;
+    margin-left: 12px;
+  }
+}
+
+/* ===== CSA Brand Color System ===== */
+body.csa-site,
+body.csa-site .site-main,
+body.csa-site .page-content,
+body.csa-site .entry-content,
+body.csa-site .elementor,
+body.csa-site .elementor-section-wrap {
+  background-color: var(--csa-cream-bg);
+}
+
+body.csa-site,
+body.csa-site p,
+body.csa-site li,
+body.csa-site td,
+body.csa-site label,
+body.csa-site span {
+  color: var(--csa-text-secondary);
+}
+
+body.csa-site h1,
+body.csa-site h2,
+body.csa-site h3,
+body.csa-site h4,
+body.csa-site h5,
+body.csa-site h6 {
+  color: var(--csa-text-primary);
+}
+
+body.csa-site a {
+  color: var(--csa-link);
+}
+
+body.csa-site a:hover {
+  color: var(--csa-link-hover);
+}
+
+/* Navbar */
+body.csa-site #header {
+  background-color: var(--csa-white);
+  box-shadow: 0 1px 0 rgba(43, 43, 43, 0.08);
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 10000;
+}
+
+body.admin-bar.csa-site #header {
+  top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+  body.admin-bar.csa-site #header {
+    top: 46px;
+  }
+}
+
+body.csa-site #header .support-nav,
+body.csa-site #header .location-wrapper .chosen-location,
+body.csa-site #header .location-details {
+  border-color: var(--csa-border-soft);
+}
+
+body.csa-site #header .support-nav,
+body.csa-site #header .location-wrapper .chosen-location,
+body.csa-site #header .location-details,
+body.csa-site #header .main-nav .submenu,
+body.csa-site #header .location-details .address {
+  background-color: var(--csa-light-tan-bg);
+}
+
+body.csa-site #header .main-nav .toplevel a,
+body.csa-site #header .links-for-parents a,
+body.csa-site #header .location-wrapper .chosen-location-name,
+body.csa-site #header .location-wrapper .location,
+body.csa-site #header .search-nav input[type="text"],
+body.csa-site #header .search-nav button {
+  color: var(--csa-text-primary);
+  text-decoration: none;
+}
+
+body.csa-site #header .main-nav .toplevel a:hover,
+body.csa-site #header .main-nav li.active .toplevel a,
+body.csa-site #header .main-nav .submenu a:hover,
+body.csa-site #header .links-for-parents a:hover,
+body.csa-site #header .links-for-parents a.active,
+body.csa-site #header .change-button a,
+body.csa-site #header .location-details .phone a,
+body.csa-site #header .location-details .address a,
+body.csa-site #header .child-menu-icon i,
+body.csa-site #header .location-wrapper i,
+body.csa-site #header .icon-search {
+  color: var(--csa-primary-green);
+}
+
+body.csa-site #header .search-nav .yxt-SearchBar,
+body.csa-site #header .search-nav .yxt-AutoComplete {
+  border-color: var(--csa-border-soft);
+}
+
+body.csa-site #header .search-nav form button.search-button {
+  background-color: var(--csa-primary-green) !important;
+  border-color: var(--csa-primary-green) !important;
+  color: var(--csa-white) !important;
+}
+
+body.csa-site #header .search-nav form button.search-button:hover {
+  background-color: var(--csa-primary-green-hover) !important;
+  border-color: var(--csa-primary-green-hover) !important;
+}
+
+/* Buttons */
+body.csa-site a.button-round,
+body.csa-site button.button-round,
+body.csa-site input[type="submit"],
+body.csa-site .button-round .elementor-button,
+body.csa-site .elementor-widget-button .elementor-button {
+  background-color: var(--csa-primary-green);
+  border: 1px solid var(--csa-primary-green);
+  color: var(--csa-white);
+  text-decoration: none;
+}
+
+body.csa-site a.button-round:hover,
+body.csa-site button.button-round:hover,
+body.csa-site input[type="submit"]:hover,
+body.csa-site .button-round .elementor-button:hover,
+body.csa-site .elementor-widget-button .elementor-button:hover {
+  background-color: var(--csa-primary-green-hover);
+  border-color: var(--csa-primary-green-hover);
+  color: var(--csa-white);
+}
+
+body.csa-site a.button-round.blue,
+body.csa-site button.button-round.blue,
+body.csa-site .button-round.secondary .elementor-button,
+body.csa-site .button-round.tan .elementor-button,
+body.csa-site .button-round.accent .elementor-button {
+  background-color: var(--csa-tan-accent);
+  border-color: var(--csa-tan-accent);
+  color: var(--csa-text-primary);
+}
+
+body.csa-site a.button-round.blue:hover,
+body.csa-site button.button-round.blue:hover,
+body.csa-site .button-round.secondary .elementor-button:hover,
+body.csa-site .button-round.tan .elementor-button:hover,
+body.csa-site .button-round.accent .elementor-button:hover {
+  background-color: var(--csa-tan-accent-hover);
+  border-color: var(--csa-tan-accent-hover);
+  color: var(--csa-text-primary);
+}
+
+body.csa-site a.button-round.outline,
+body.csa-site button.button-round.outline,
+body.csa-site .button-round.outline .elementor-button {
+  background-color: transparent;
+  border-color: var(--csa-primary-green);
+  color: var(--csa-primary-green);
+}
+
+body.csa-site a.button-round.outline:hover,
+body.csa-site button.button-round.outline:hover,
+body.csa-site .button-round.outline .elementor-button:hover {
+  background-color: rgba(46, 125, 50, 0.08);
+  border-color: var(--csa-primary-green-hover);
+  color: var(--csa-primary-green-hover);
+}
+
+/* Ensure nested button label spans do not override intended button text contrast. */
+body.csa-site a.button-round span,
+body.csa-site button.button-round span,
+body.csa-site .button-round .elementor-button-content-wrapper,
+body.csa-site .button-round .elementor-button-text,
+body.csa-site .button-round .elementor-button-icon {
+  color: inherit !important;
+}
+
+/* Sections and color bands */
+body.csa-site #curriculum,
+body.csa-site #why-Chestnut,
+body.csa-site .tan-bg,
+body.csa-site .offset-bg.tan,
+body.csa-site .bg-color-tan,
+body.csa-site .subpage-hero .offset-bg.tan,
+body.csa-site .faq-preview-section,
+body.csa-site .kma-academies-hero-right {
+  background-color: var(--csa-light-tan-bg);
+}
+
+body.csa-site .offset-bg.blue,
+body.csa-site .bg-color-blue,
+body.csa-site .blue-bg,
+body.csa-site .find-academy,
+body.csa-site .contact-us-academy,
+body.csa-site .kma-state-strip {
+  background-color: var(--csa-primary-green);
+}
+
+body.csa-site .bg-color-blue h1,
+body.csa-site .bg-color-blue h2,
+body.csa-site .bg-color-blue h3,
+body.csa-site .bg-color-blue h4,
+body.csa-site .bg-color-blue h5,
+body.csa-site .bg-color-blue h6,
+body.csa-site .bg-color-blue p,
+body.csa-site .bg-color-blue li,
+body.csa-site .bg-color-blue a {
+  color: var(--csa-white);
+}
+
+body.csa-site .find-academy h1,
+body.csa-site .find-academy h2,
+body.csa-site .find-academy h3,
+body.csa-site .find-academy h4,
+body.csa-site .find-academy p,
+body.csa-site .find-academy a,
+body.csa-site .contact-us-academy h1,
+body.csa-site .contact-us-academy h2,
+body.csa-site .contact-us-academy h3,
+body.csa-site .contact-us-academy h4,
+body.csa-site .contact-us-academy p,
+body.csa-site .contact-us-academy a,
+body.csa-site .kma-state-strip h2 {
+  color: var(--csa-white);
+}
+
+/* Hero */
+body.csa-site #hero .hero-overlay,
+body.csa-site .kms-dom-id-hero .hero-overlay,
+body.csa-site .animated-hero .hero-overlay {
+  background: linear-gradient(90deg, rgba(43, 43, 43, 0.3) 0%, rgba(43, 43, 43, 0.12) 56%, rgba(43, 43, 43, 0) 100%);
+}
+
+body.csa-site #hero .copy h1,
+body.csa-site #hero .copy p,
+body.csa-site #hero .copy a,
+body.csa-site #hero .locator .get-current-location,
+body.csa-site .kms-dom-id-hero .copy h1,
+body.csa-site .kms-dom-id-hero .copy p,
+body.csa-site .kms-dom-id-hero .copy a,
+body.csa-site .kms-dom-id-hero .locator .get-current-location,
+body.csa-site .animated-hero .copy h1,
+body.csa-site .animated-hero .copy p,
+body.csa-site .animated-hero .copy a,
+body.csa-site .animated-hero .locator .get-current-location {
+  color: var(--csa-white);
+}
+
+body.csa-site #hero .copy h1 .headline-highlight,
+body.csa-site .kms-dom-id-hero .copy h1 .headline-highlight,
+body.csa-site .animated-hero .copy h1 .headline-highlight {
+  color: var(--csa-tan-accent) !important;
+}
+
+/* Cards and content blocks */
+body.csa-site .card .text,
+body.csa-site .small-cards .card,
+body.csa-site .column-3-image-text-cards .text,
+body.csa-site .image-text .text,
+body.csa-site .text.offset-top,
+body.csa-site .ui-datepicker,
+body.csa-site #curriculum .slide,
+body.csa-site #curriculum .slides.mobile.abtasty-slick .slide .detail-container {
+  background-color: var(--csa-white);
+  box-shadow: var(--csa-shadow-soft);
+  border-color: var(--csa-border-soft);
+}
+
+body.csa-site .small-cards.bg-color-blue,
+body.csa-site .small-cards.overlapping.bg-color-blue {
+  background-color: transparent;
+}
+
+body.csa-site .small-cards.bg-color-blue .card,
+body.csa-site .small-cards.bg-color-blue .card .text,
+body.csa-site .small-cards.bg-color-blue .card .card-copy {
+  background-color: var(--csa-white) !important;
+  color: var(--csa-text-secondary) !important;
+  border-color: var(--csa-border-soft);
+}
+
+body.csa-site .small-cards.bg-color-blue .card h3,
+body.csa-site .small-cards.bg-color-blue .card h4,
+body.csa-site .small-cards.bg-color-blue .card h5,
+body.csa-site .small-cards.bg-color-blue .card .title,
+body.csa-site .small-cards.bg-color-blue .card strong {
+  color: var(--csa-text-primary) !important;
+}
+
+body.csa-site .small-cards.bg-color-blue .card p,
+body.csa-site .small-cards.bg-color-blue .card li,
+body.csa-site .small-cards.bg-color-blue .card span:not(.elementor-button-text) {
+  color: var(--csa-text-secondary) !important;
+}
+
+body.csa-site .small-cards.bg-color-blue .card a:not(.button-round):not(.elementor-button) {
+  color: var(--csa-link) !important;
+}
+
+body.csa-site .small-cards.bg-color-blue .card a:not(.button-round):not(.elementor-button):hover {
+  color: var(--csa-link-hover) !important;
+}
+
+body.csa-site #curriculum .slide:hover,
+body.csa-site #curriculum .slide.hover,
+body.csa-site #curriculum .slides.mobile.abtasty-slick .slide .detail-container,
+body.csa-site #testimonial .blue-bg,
+body.csa-site #testimonial .more-link a,
+body.csa-site #testimonial .testimonial-bottom p {
+  background-color: var(--csa-primary-green);
+  color: var(--csa-white);
+}
+
+body.csa-site #testimonial .quote p {
+  color: var(--csa-white);
+}
+
+body.csa-site #curriculum .program-title,
+body.csa-site #why-Chestnut .card .card-title,
+body.csa-site .column-3-image-text-cards .text .title {
+  color: var(--csa-text-primary);
+}
+
+body.csa-site .column-3-image-text-cards a,
+body.csa-site .image-text .text ul a,
+body.csa-site .image-text .text p a,
+body.csa-site #why-Chestnut .card h4 a,
+body.csa-site .arrow-link,
+body.csa-site .text-link {
+  color: var(--csa-link);
+}
+
+body.csa-site .column-3-image-text-cards a:hover,
+body.csa-site .image-text .text ul a:hover,
+body.csa-site .image-text .text p a:hover,
+body.csa-site #why-Chestnut .card h4 a:hover,
+body.csa-site .arrow-link:hover,
+body.csa-site .text-link:hover {
+  color: var(--csa-link-hover);
+}
+
+body.csa-site #curriculum .slide .overview,
+body.csa-site .card .card-copy,
+body.csa-site .card .card-copy p,
+body.csa-site .column-3-image-text-cards .text p,
+body.csa-site .image-text .text p,
+body.csa-site .image-text .text li {
+  color: var(--csa-text-secondary);
+}
+
+body.csa-site #why-Chestnut .card .text,
+body.csa-site .small-cards .card,
+body.csa-site .column-3-image-text-cards .text,
+body.csa-site .image-text .text {
+  border-top: 4px solid var(--csa-secondary-green);
+}
+
+body.csa-site .icon,
+body.csa-site .mobile-carousel .slick-dots li button,
+body.csa-site .desktop-carousel .slick-dots li button,
+body.csa-site .expand-button-desktop label div,
+body.csa-site .expand-button.mobile-button label div {
+  background-color: var(--csa-primary-green);
+  border-color: var(--csa-primary-green);
+}
+
+body.csa-site .svg-icon.blue path {
+  fill: var(--csa-primary-green);
+}
+
+body.csa-site .desktop-carousel .slick-prev:before,
+body.csa-site .desktop-carousel .slick-next:before {
+  color: var(--csa-primary-green);
+}
+
+body.csa-site .mobile-carousel .slick-dots li.slick-active button,
+body.csa-site .desktop-carousel .slick-dots li.slick-active button {
+  background-color: var(--csa-primary-green);
+}
+
+body.csa-site .svg-icon.yellow path,
+body.csa-site #testimonial .star-rating > span {
+  fill: var(--csa-tan-accent);
+  color: var(--csa-tan-accent);
+}
+
+/* FAQ styles */
+body.csa-site .faq-preview-section .links p[data-question] {
+  color: var(--csa-primary-green);
+}
+
+body.csa-site .faq-preview-section .links p[data-question] strong {
+  text-decoration: none;
+}
+
+body.csa-site .faq-preview-section .links p[data-question] i {
+  background-color: var(--csa-tan-accent);
+  color: var(--csa-text-primary);
+}
+
+body.csa-site .faq-preview-section .links p[data-question]:hover,
+body.csa-site .faq-preview-section .links p[data-question].open {
+  color: var(--csa-link-hover);
+}
+
+body.csa-site .faq-preview-section .links p[data-question]:hover i,
+body.csa-site .faq-preview-section .links p[data-question].open i {
+  background-color: var(--csa-primary-green);
+  color: var(--csa-white);
+}
+
+body.csa-site .faq-preview-section .links [data-answer],
+body.csa-site .faq-preview-section .links [class*="kms-data-answer-"] {
+  display: none !important;
+}
+
+body.csa-site .faq-preview-section .links [data-answer]:not([hidden]) {
+  display: block !important;
+}
+
+body.csa-site .faq-preview-section .links p[data-question].open + [data-answer],
+body.csa-site .faq-preview-section .links p[data-question].open + [class*="kms-data-answer-"] {
+  display: block !important;
+}
+
+/* Forms */
+body.csa-site input[type="text"],
+body.csa-site input[type="email"],
+body.csa-site input[type="tel"],
+body.csa-site input[type="search"],
+body.csa-site input[type="number"],
+body.csa-site textarea,
+body.csa-site select {
+  background-color: var(--csa-white);
+  border: 1px solid var(--csa-border-soft);
+  color: var(--csa-text-primary);
+}
+
+body.csa-site input[type="text"]::placeholder,
+body.csa-site input[type="email"]::placeholder,
+body.csa-site input[type="tel"]::placeholder,
+body.csa-site input[type="search"]::placeholder,
+body.csa-site textarea::placeholder {
+  color: rgba(85, 85, 85, 0.75);
+}
+
+body.csa-site input[type="text"]:focus,
+body.csa-site input[type="email"]:focus,
+body.csa-site input[type="tel"]:focus,
+body.csa-site input[type="search"]:focus,
+body.csa-site input[type="number"]:focus,
+body.csa-site textarea:focus,
+body.csa-site select:focus {
+  border-color: var(--csa-secondary-green);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+  outline: none;
+}
+
+body.csa-site .locator .form button {
+  background-color: var(--csa-primary-green) !important;
+  border-color: var(--csa-primary-green) !important;
+  color: var(--csa-white) !important;
+}
+
+body.csa-site .locator .form button:hover {
+  background-color: var(--csa-primary-green-hover) !important;
+  border-color: var(--csa-primary-green-hover) !important;
+}
+
+body.csa-site .locator .get-current-location,
+body.csa-site .locator-small .locator .get-current-location {
+  color: var(--csa-primary-green);
+}
+
+body.csa-site #hero .locator .get-current-location,
+body.csa-site .kms-dom-id-hero .locator .get-current-location,
+body.csa-site .animated-hero .locator .get-current-location,
+body.csa-site .find-academy .locator .get-current-location,
+body.csa-site .contact-us-academy .locator .get-current-location {
+  color: var(--csa-white);
+}
+
+/* Footer */
+body.csa-site #footer {
+  background-color: var(--csa-footer-bg);
+}
+
+body.csa-site #footer p,
+body.csa-site #footer a,
+body.csa-site #footer li,
+body.csa-site #footer p span,
+body.csa-site #footer .be-label,
+body.csa-site #footer .be-related-link {
+  color: var(--csa-white);
+}
+
+body.csa-site #footer .eyebrow {
+  color: var(--csa-tan-accent);
+}
+
+body.csa-site #footer a:hover,
+body.csa-site #footer .be-related-link:hover {
+  color: #f7ddc0;
+}
+
+/* Utility widgets */
+body.csa-site .accessibility-widget {
+  background-color: var(--csa-primary-green);
+  border-color: rgba(255, 255, 255, 0.92);
+}
+
+body.csa-site .accessibility-widget:hover,
+body.csa-site .accessibility-widget:focus-visible {
+  background-color: var(--csa-primary-green-hover);
+}
+
+body.csa-site #scroll-top {
+  background: var(--csa-primary-green);
+  border-color: var(--csa-primary-green);
+  color: var(--csa-white);
+}
+
+body.csa-site #scroll-top:hover {
+  background: var(--csa-white);
+  color: var(--csa-primary-green);
+}
+
+/* ===== Header + Hero refinement (no-code handoff safe) ===== */
+:root {
+  --csa-crayon-cyan: #18aeea;
+  --csa-crayon-magenta: #d94aa7;
+  --csa-crayon-yellow: #b68a00;
+  --csa-crayon-key: #2b2b2b;
+  --csa-sticky-header-live: var(--csa-sticky-header-height-mobile);
+  --csa-hero-edge-pad: clamp(22px, 3.2vw, 64px);
+  --csa-hero-headline-size-desktop: clamp(10rem, 23vw, 24rem);
+  --csa-hero-headline-size-mobile: clamp(8rem, 32vw, 14rem);
+  --csa-hero-media-filter-desktop: saturate(1.16) contrast(1.1) brightness(1.06);
+  --csa-hero-media-filter-mobile: saturate(1.1) contrast(1.07) brightness(1.05);
+  --csa-nav-logo-optical-left-nudge: 8px;
+}
+
+/* Hide accessibility bubble if any legacy markup remains cached. */
+#accessibility-widget,
+.accessibility-widget {
+  display: none !important;
+}
+
+/* Crayon-style nav typography and CMYK tab color sequence. */
+body.csa-site #header .main-nav .top-menu > li > .toplevel > a {
+  font-family: "Childhood", "Permanent Marker", "Comic Sans MS", cursive !important;
+  font-size: clamp(1.14rem, 1.4vw, 1.64rem);
+  font-weight: 900 !important;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  text-decoration: none !important;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+body.csa-site #header .main-nav .top-menu > li:nth-child(1) > .toplevel > a {
+  color: var(--csa-crayon-cyan) !important;
+}
+
+body.csa-site #header .main-nav .top-menu > li:nth-child(2) > .toplevel > a {
+  color: var(--csa-crayon-magenta) !important;
+}
+
+body.csa-site #header .main-nav .top-menu > li:nth-child(3) > .toplevel > a {
+  color: var(--csa-crayon-yellow) !important;
+  text-shadow: 0 1px 0 rgba(43, 43, 43, 0.18);
+}
+
+body.csa-site #header .main-nav .top-menu > li:nth-child(4) > .toplevel > a {
+  color: var(--csa-crayon-key) !important;
+}
+
+body.csa-site #header .main-nav .top-menu > li > .toplevel > a:hover,
+body.csa-site #header .main-nav .top-menu > li.active > .toplevel > a {
+  filter: brightness(0.9);
+}
+
+@media only screen and (min-width: 1200px) {
+  body.csa-site {
+    padding-top: var(--csa-sticky-header-live, 184px) !important;
+  }
+
+  body.csa-site #header .inner-container {
+    max-width: min(1340px, calc(100vw - 64px));
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(100% - 64px);
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  body.csa-site #header .nav-left {
+    width: 500px;
+    min-width: 500px;
+    left: 0 !important;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  body.csa-site #header .nav-left .logo {
+    height: 198px;
+    justify-content: flex-start;
+    overflow: visible;
+  }
+
+  body.csa-site #header .nav-left .logo a {
+    justify-content: flex-start;
+    overflow: visible;
+  }
+
+  body.csa-site #header .nav-right {
+    margin-left: 0 !important;
+    flex: 1 1 auto;
+    width: auto;
+  }
+
+  body.csa-site #header .link-menu {
+    width: 100%;
+  }
+
+  body.csa-site #header .main-nav {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  body.csa-site #header .main-nav .top-menu {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  body.csa-site #header .main-nav .top-menu li {
+    margin: 0 !important;
+  }
+
+  body.csa-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa.png"],
+  body.csa-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa-tree.png"] {
+    width: 500px;
+    height: 196px;
+    max-width: 500px;
+    max-height: 196px;
+    object-fit: contain;
+    object-position: left center;
+    transform: none;
+  }
+
+  /* Keep Elementor Site Identity/logo swaps large too (source-agnostic, no-code). */
+  body.csa-site #header .nav-left .logo a img {
+    width: auto !important;
+    height: 196px !important;
+    max-height: 196px !important;
+    max-width: none !important;
+    object-fit: contain;
+    object-position: left center;
+    transform: none;
+  }
+}
+
+body.csa-site #header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa.png"],
+body.csa-site #header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa-tree.png"] {
+  width: 198px;
+  height: 116px;
+  max-width: none;
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* Hero cleanup: remove location finder and rebalance tagline placement. */
+body.csa-site #hero .locator,
+body.csa-site #hero .sub_content,
+body.csa-site .kms-dom-id-hero .locator,
+body.csa-site .kms-dom-id-hero .sub_content,
+body.csa-site .animated-hero .locator,
+body.csa-site .animated-hero .sub_content {
+  display: none !important;
+}
+
+body.csa-site #hero,
+body.csa-site .kms-dom-id-hero,
+body.csa-site .animated-hero {
+  height: calc(100vh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-mobile))) !important;
+  height: calc(100dvh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-mobile))) !important;
+  min-height: calc(100vh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-mobile))) !important;
+  min-height: calc(100dvh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-mobile))) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+body.csa-site #hero .copy,
+body.csa-site .kms-dom-id-hero .copy,
+body.csa-site .animated-hero .copy {
+  position: absolute !important;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  z-index: 2;
+  min-height: inherit;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  padding: 0 0 var(--csa-hero-edge-pad) var(--csa-hero-edge-pad);
+}
+
+body.csa-site #hero .copy .container,
+body.csa-site .kms-dom-id-hero .copy .container,
+body.csa-site .animated-hero .copy .container {
+  width: auto;
+  margin: 0 !important;
+  max-width: none !important;
+  padding: 0;
+  text-align: left;
+}
+
+body.csa-site #hero .copy .headline,
+body.csa-site #hero .copy h1.headline,
+body.csa-site #hero .copy .headline .elementor-heading-title,
+body.csa-site #hero .copy .headline h1,
+body.csa-site .kms-dom-id-hero .copy .headline,
+body.csa-site .kms-dom-id-hero .copy h1.headline,
+body.csa-site .kms-dom-id-hero .copy .headline .elementor-heading-title,
+body.csa-site .kms-dom-id-hero .copy .headline h1,
+body.csa-site .animated-hero .copy .headline,
+body.csa-site .animated-hero .copy h1.headline,
+body.csa-site .animated-hero .copy .headline .elementor-heading-title,
+body.csa-site .animated-hero .copy .headline h1 {
+  font-family: "Childhood", "Permanent Marker", "Comic Sans MS", cursive !important;
+  font-size: clamp(8rem, 18.5vw, 19.5rem);
+  line-height: 0.8;
+  letter-spacing: 0.012em;
+  max-width: 7.7ch;
+  margin: 0;
+  text-align: left;
+  margin-inline: 0;
+  text-wrap: balance;
+}
+
+body.csa-site #hero .copy .headline .headline-highlight,
+body.csa-site .kms-dom-id-hero .copy .headline .headline-highlight,
+body.csa-site .animated-hero .copy .headline .headline-highlight {
+  display: block;
+  margin-top: 8px;
+}
+
+body.csa-site.page-home #hero .background-image,
+body.csa-site.home #hero .background-image,
+body.csa-site.page-home .kms-dom-id-hero .background-image,
+body.csa-site.home .kms-dom-id-hero .background-image,
+body.csa-site.page-home .animated-hero .background-image,
+body.csa-site.home .animated-hero .background-image {
+  background-image: url('/wp-content/themes/hello-elementor-csa-site/assets/images/cover-hd.jpg?v=3') !important;
+  background-size: cover;
+  background-position: center center;
+  transform: scaleX(-1);
+  transform-origin: center center;
+  filter: var(--csa-hero-media-filter-desktop);
+  transition: none !important;
+  animation: none !important;
+}
+
+body.csa-site.home #hero .hero-overlay,
+body.csa-site.page-home #hero .hero-overlay,
+body.csa-site.home .kms-dom-id-hero .hero-overlay,
+body.csa-site.page-home .kms-dom-id-hero .hero-overlay,
+body.csa-site.home .animated-hero .hero-overlay,
+body.csa-site.page-home .animated-hero .hero-overlay {
+  background: linear-gradient(90deg, rgba(20, 32, 24, 0.16) 0%, rgba(20, 32, 24, 0.08) 42%, rgba(20, 32, 24, 0.02) 62%, rgba(20, 32, 24, 0) 76%) !important;
+}
+
+body.csa-site.home #hero .copy h1,
+body.csa-site.page-home #hero .copy h1,
+body.csa-site.home .kms-dom-id-hero .copy h1,
+body.csa-site.page-home .kms-dom-id-hero .copy h1,
+body.csa-site.home .animated-hero .copy h1,
+body.csa-site.page-home .animated-hero .copy h1 {
+  text-shadow: 0 5px 18px rgba(16, 24, 19, 0.52);
+}
+
+body.csa-site.home #hero .copy p,
+body.csa-site.page-home #hero .copy p,
+body.csa-site.home .kms-dom-id-hero .copy p,
+body.csa-site.page-home .kms-dom-id-hero .copy p,
+body.csa-site.home .animated-hero .copy p,
+body.csa-site.page-home .animated-hero .copy p {
+  text-shadow: 0 2px 10px rgba(16, 24, 19, 0.34);
+}
+
+/* Home-specific viewport-fit + edge anchoring for the hero headline. */
+body.csa-site.home .kms-dom-id-hero,
+body.csa-site.page-home .kms-dom-id-hero,
+body.csa-site.home .animated-hero,
+body.csa-site.page-home .animated-hero {
+  margin-bottom: 0 !important;
+}
+
+@media screen and (max-width: 991px) {
+  :root {
+    --csa-hero-edge-pad: clamp(12px, 4vw, 20px);
+  }
+
+  body.csa-site #hero .copy,
+  body.csa-site .kms-dom-id-hero .copy,
+  body.csa-site .animated-hero .copy {
+    justify-content: flex-start;
+    align-items: flex-end;
+    padding: 0 0 var(--csa-hero-edge-pad) var(--csa-hero-edge-pad);
+  }
+
+  body.csa-site #hero .copy .headline,
+  body.csa-site #hero .copy h1.headline,
+  body.csa-site #hero .copy .headline .elementor-heading-title,
+  body.csa-site #hero .copy .headline h1,
+  body.csa-site .kms-dom-id-hero .copy .headline,
+  body.csa-site .kms-dom-id-hero .copy h1.headline,
+  body.csa-site .kms-dom-id-hero .copy .headline .elementor-heading-title,
+  body.csa-site .kms-dom-id-hero .copy .headline h1,
+  body.csa-site .animated-hero .copy .headline,
+  body.csa-site .animated-hero .copy h1.headline,
+  body.csa-site .animated-hero .copy .headline .elementor-heading-title,
+  body.csa-site .animated-hero .copy .headline h1 {
+    font-size: clamp(6.4rem, 24.5vw, 11.8rem);
+    line-height: 0.82;
+    max-width: 7.9ch;
+    text-align: left;
+    margin-inline: 0;
+  }
+
+  body.csa-site.page-home #hero .background-image,
+  body.csa-site.home #hero .background-image,
+  body.csa-site.page-home .kms-dom-id-hero .background-image,
+  body.csa-site.home .kms-dom-id-hero .background-image,
+  body.csa-site.page-home .animated-hero .background-image,
+  body.csa-site.home .animated-hero .background-image {
+    filter: var(--csa-hero-media-filter-mobile);
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  :root {
+    --csa-sticky-header-live: var(--csa-sticky-header-height-desktop);
+    --csa-hero-edge-pad: clamp(26px, 3.6vw, 72px);
+  }
+
+  body.csa-site #hero,
+  body.csa-site .kms-dom-id-hero,
+  body.csa-site .animated-hero {
+    height: calc(100vh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-desktop))) !important;
+    height: calc(100dvh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-desktop))) !important;
+    min-height: calc(100vh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-desktop))) !important;
+    min-height: calc(100dvh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-desktop))) !important;
+  }
+}
+
+/* Home hero hard-fix: no overlap from following section + exact edge-anchored headline. */
+body.csa-site.home .kms-dom-id-curriculum,
+body.csa-site.page-home .kms-dom-id-curriculum,
+body.csa-site.home #curriculum,
+body.csa-site.page-home #curriculum {
+  margin-top: 0 !important;
+  top: 0 !important;
+  transform: none !important;
+  position: relative;
+  z-index: 2;
+}
+
+body.csa-site.home .kms-dom-id-curriculum .intro,
+body.csa-site.page-home .kms-dom-id-curriculum .intro,
+body.csa-site.home #curriculum .intro,
+body.csa-site.page-home #curriculum .intro {
+  margin-top: 0 !important;
+  top: 0 !important;
+  transform: none !important;
+}
+
+body.csa-site.home .kms-dom-id-hero .copy,
+body.csa-site.page-home .kms-dom-id-hero .copy,
+body.csa-site.home .animated-hero .copy,
+body.csa-site.page-home .animated-hero .copy {
+  padding-left: var(--csa-hero-edge-pad) !important;
+  padding-bottom: var(--csa-hero-edge-pad) !important;
+}
+
+/* Home hero tagline hard-size override (post-Elementor + post-parity safe). */
+body.csa-site.home .kms-dom-id-hero .copy h1.elementor-heading-title,
+body.csa-site.page-home .kms-dom-id-hero .copy h1.elementor-heading-title,
+body.csa-site.home .animated-hero .copy h1.elementor-heading-title,
+body.csa-site.page-home .animated-hero .copy h1.elementor-heading-title,
+body.csa-site.home .kms-dom-id-hero .copy h1.headline,
+body.csa-site.page-home .kms-dom-id-hero .copy h1.headline,
+body.csa-site.home .animated-hero .copy h1.headline,
+body.csa-site.page-home .animated-hero .copy h1.headline {
+  font-size: var(--csa-hero-headline-size-desktop) !important;
+  line-height: 0.76 !important;
+}
+
+@media screen and (max-width: 991px) {
+  body.csa-site.home .kms-dom-id-hero .copy h1.elementor-heading-title,
+  body.csa-site.page-home .kms-dom-id-hero .copy h1.elementor-heading-title,
+  body.csa-site.home .animated-hero .copy h1.elementor-heading-title,
+  body.csa-site.page-home .animated-hero .copy h1.elementor-heading-title,
+  body.csa-site.home .kms-dom-id-hero .copy h1.headline,
+  body.csa-site.page-home .kms-dom-id-hero .copy h1.headline,
+  body.csa-site.home .animated-hero .copy h1.headline,
+  body.csa-site.page-home .animated-hero .copy h1.headline {
+    font-size: var(--csa-hero-headline-size-mobile) !important;
+    line-height: 0.78 !important;
+  }
+}
+
+/* FAQ spacing polish: keep existing structure, add only inner padding. */
+body.csa-site .faq-preview-section .links {
+  padding: 12px 18px 10px;
+}
+
+body.csa-site .faq-preview-section .links > div p[data-question] {
+  margin: 0;
+}
+
+body.csa-site .faq-preview-section .links > div [data-answer],
+body.csa-site .faq-preview-section .links > div [class*="kms-data-answer-"] {
+  margin-top: 8px;
+}
+
+/* Footer logo alignment and sizing. */
+body.csa-site #footer .company-info .logo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 8px;
+  padding: 0;
+}
+
+body.csa-site #footer .company-info .logo img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(340px, 76vw);
+  max-height: 156px;
+  object-fit: contain;
+  object-position: center center;
+}
+
+@media screen and (min-width: 1200px) {
+  body.csa-site #footer .content-wrapper {
+    align-items: flex-start;
+  }
+
+  body.csa-site #footer .company-info {
+    align-items: center;
+    text-align: center;
+    margin-top: 0;
+  }
+
+  body.csa-site #footer .company-info .logo {
+    margin: 0 0 8px;
+    padding: 0;
+  }
+
+  body.csa-site #footer .company-info .logo img {
+    max-width: 374px;
+    max-height: 172px;
+  }
+
+  body.csa-site #footer .company-info p,
+  body.csa-site #footer .company-info .copyright {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Life at Chestnut: image-only gallery tiles, no rounded corners. */
+body.csa-site .life-gallery-page .life-gallery-grid .single-column .text {
+  display: none !important;
+}
+
+body.csa-site .life-gallery-page .life-gallery-grid .single-column.image-only .image-frame,
+body.csa-site .life-gallery-page .life-gallery-grid .single-column.image-only .image-frame img,
+body.csa-site .life-gallery-page .life-gallery-grid .single-column.image-only .fill-container {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+body.csa-site .life-gallery-page .life-gallery-grid .single-column.image-only .image-frame {
+  overflow: hidden;
+}
+
+/* Life at Chestnut spacing/sizing polish: add vertical breathing room and stronger image framing. */
+body.csa-site .life-gallery-page .life-gallery-grid .column-3 {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(14px, 1.8vw, 24px);
+  row-gap: clamp(18px, 2.2vw, 30px);
+  align-items: start;
+}
+
+body.csa-site .life-gallery-page .life-gallery-grid .single-column.image-only {
+  margin: 0;
+}
+
+body.csa-site .life-gallery-page .life-gallery-grid .single-column.image-only .image-frame {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  margin: 0;
+}
+
+body.csa-site .life-gallery-page .life-gallery-grid .single-column.image-only .image-frame .elementor-widget-image,
+body.csa-site .life-gallery-page .life-gallery-grid .single-column.image-only .image-frame .elementor-widget-container {
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.csa-site .life-gallery-page .life-gallery-grid .single-column.image-only .image-frame img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+@media screen and (max-width: 1100px) {
+  body.csa-site .life-gallery-page .life-gallery-grid .column-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 680px) {
+  body.csa-site .life-gallery-page .life-gallery-grid .column-3 {
+    grid-template-columns: 1fr;
+    row-gap: 16px;
+  }
+}
+
+/* Life at Chestnut hard-target (current rendered DOM): enforce spacing/sizing on live page markup. */
+body.csa-site.page-id-332 .column-3-image-text-cards .column-3 {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(14px, 1.8vw, 24px);
+  row-gap: clamp(18px, 2.2vw, 30px);
+  align-items: start;
+}
+
+body.csa-site.page-id-332 .column-3-image-text-cards .single-column.image-only {
+  margin: 0 !important;
+}
+
+body.csa-site.page-id-332 .column-3-image-text-cards .single-column.image-only .image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+body.csa-site.page-id-332 .column-3-image-text-cards .single-column.image-only .fill-container,
+body.csa-site.page-id-332 .column-3-image-text-cards .single-column.image-only .fill-container .elementor-widget-container {
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.csa-site.page-id-332 .column-3-image-text-cards .single-column.image-only img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 0 !important;
+}
+
+@media screen and (max-width: 1100px) {
+  body.csa-site.page-id-332 .column-3-image-text-cards .column-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 680px) {
+  body.csa-site.page-id-332 .column-3-image-text-cards .column-3 {
+    grid-template-columns: 1fr;
+    row-gap: 16px;
+  }
+}
+
+/* Life at Chestnut gallery hard-fix: one predictable layout system only. */
+body.csa-site.page-id-332 .column-3-image-text-cards .column-3 {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+  gap: 18px !important;
+}
+
+body.csa-site.page-id-332 .column-3-image-text-cards .single-column.image-only {
+  box-sizing: border-box;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: calc((100% - 36px) / 3) !important;
+  max-width: calc((100% - 36px) / 3) !important;
+  flex: 0 0 calc((100% - 36px) / 3) !important;
+}
+
+body.csa-site.page-id-332 .column-3-image-text-cards .single-column.image-only .image {
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.csa-site.page-id-332 .column-3-image-text-cards .single-column.image-only .fill-container,
+body.csa-site.page-id-332 .column-3-image-text-cards .single-column.image-only .fill-container .elementor-widget-container {
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.csa-site.page-id-332 .column-3-image-text-cards .single-column.image-only img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0 !important;
+}
+
+@media screen and (max-width: 1100px) {
+  body.csa-site.page-id-332 .column-3-image-text-cards .single-column.image-only {
+    width: calc((100% - 18px) / 2) !important;
+    max-width: calc((100% - 18px) / 2) !important;
+    flex-basis: calc((100% - 18px) / 2) !important;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  body.csa-site.page-id-332 .column-3-image-text-cards .single-column.image-only {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-basis: 100% !important;
+  }
+}
+
+/* Remove legacy footer blocks/placeholder links if present in cached markup. */
+body.csa-site #footer .social,
+body.csa-site #footer .be-ix-link-block,
+body.csa-site #footer .be-related-link-container {
+  display: none !important;
+}
+
+/* Rebalance footer columns for small-site link set. */
+body.csa-site #footer .links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px 34px;
+}
+
+body.csa-site #footer .links > div {
+  width: auto;
+  min-width: 170px;
+}
+
+@media screen and (min-width: 1200px) {
+  body.csa-site #footer .links {
+    justify-content: flex-start;
+    gap: 12px 56px;
+  }
+
+  body.csa-site #footer .links > div {
+    min-width: 190px;
+  }
+}
+
+/* Final nav-logo legibility pass: force larger desktop logo lane and render size. */
+@media only screen and (min-width: 1200px) {
+  body.csa-site #header {
+    box-sizing: border-box !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  body.csa-site #header .inner-container {
+    min-height: 118px !important;
+    width: calc(100% - 64px) !important;
+    max-width: min(1340px, calc(100vw - 64px)) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  body.csa-site #header .nav-left {
+    width: 302px !important;
+    min-width: 302px !important;
+    max-width: 302px !important;
+    padding-left: 0 !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    overflow: visible !important;
+  }
+
+  body.csa-site #header .nav-left .logo,
+  body.csa-site #header .nav-left .logo a {
+    height: 118px !important;
+    min-height: 118px !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    overflow: visible !important;
+  }
+
+  body.csa-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa-navbar.png"],
+  body.csa-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa.png"],
+  body.csa-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa-tree-navbar.png"],
+  body.csa-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa-tree.png"] {
+    width: auto !important;
+    height: 115px !important;
+    max-width: none !important;
+    max-height: 115px !important;
+    object-fit: contain !important;
+    object-position: left center !important;
+    transform: translateX(calc(-1 * var(--csa-nav-logo-optical-left-nudge))) !important;
+    filter: contrast(1.08) saturate(1.04);
+  }
+
+  /* Keep Elementor Site Identity swaps no-code friendly with the same large lane. */
+  body.csa-site #header .nav-left .logo a img {
+    width: auto !important;
+    height: 115px !important;
+    max-width: none !important;
+    max-height: 115px !important;
+    object-fit: contain !important;
+    object-position: left center !important;
+    transform: translateX(calc(-1 * var(--csa-nav-logo-optical-left-nudge))) !important;
+  }
+
+  body.csa-site #header .nav-right {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    margin-left: clamp(4px, 0.6vw, 12px) !important;
+    margin-right: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  body.csa-site #header .link-menu,
+  body.csa-site #header .main-nav {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  body.csa-site #header .main-nav {
+    display: flex !important;
+    justify-content: flex-end !important;
+  }
+
+  body.csa-site #header .main-nav .top-menu {
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 0 0 auto !important;
+    justify-content: flex-end !important;
+    gap: clamp(24px, 2.2vw, 52px) !important;
+  }
+
+  body.csa-site #header .main-nav .top-menu > li > .toplevel > a {
+    font-size: clamp(0.98rem, 1.08vw, 1.22rem) !important;
+    letter-spacing: 0.012em !important;
+    line-height: 1.02 !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.csa-site a:hover,
+  body.csa-site a:focus-visible,
+  body.csa-site button:hover,
+  body.csa-site button:focus-visible,
+  body.csa-site [role="button"]:hover,
+  body.csa-site [role="button"]:focus-visible,
+  body.csa-site input[type="button"]:hover,
+  body.csa-site input[type="button"]:focus-visible,
+  body.csa-site input[type="submit"]:hover,
+  body.csa-site input[type="submit"]:focus-visible,
+  body.csa-site .button:hover,
+  body.csa-site .button:focus-visible,
+  body.csa-site .button-round:hover,
+  body.csa-site .button-round:focus-visible,
+  body.csa-site .elementor-button:hover,
+  body.csa-site .elementor-button:focus-visible,
+  body.csa-site #header .main-nav .top-menu > li > .toplevel > a:hover,
+  body.csa-site #header .main-nav .top-menu > li > .toplevel > a:focus-visible {
+    cursor: url("assets/images/cursor-handprint.png?v=3") 8 6, pointer !important;
+  }
+}
+
+/* ==== Responsive hardening pass (Elementor-safe / no-code handoff safe) ==== */
+:root {
+  --csa-layout-gutter-mobile: clamp(14px, 4.5vw, 24px);
+  --csa-layout-gutter-tablet: clamp(18px, 3.4vw, 34px);
+  --csa-burger-cyan: #18aeea;
+  --csa-burger-yellow: #f4c640;
+  --csa-burger-magenta: #d94aa7;
+  --csa-burger-key: #2b2b2b;
+}
+
+@media only screen and (max-width: 1199px) {
+  body.csa-site {
+    padding-top: var(--csa-sticky-header-live, var(--csa-sticky-header-height-mobile)) !important;
+  }
+
+  body.csa-site #header {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    padding-inline: var(--csa-layout-gutter-mobile) !important;
+  }
+
+  body.csa-site #header .inner-container {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 88px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  body.csa-site #header .nav-left {
+    display: none !important;
+  }
+
+  body.csa-site #header .nav-right,
+  body.csa-site #header .link-menu {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.csa-site #header .nav-right {
+    overflow: visible !important;
+  }
+
+  body.csa-site #header .link-menu {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  body.csa-site #header .function-nav {
+    order: 1 !important;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 10px 0 !important;
+    margin: 0 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  body.csa-site #header .function-nav .mobile-logo {
+    display: flex !important;
+    align-items: center !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  body.csa-site #header .function-nav .mobile-logo a {
+    display: flex !important;
+    align-items: center !important;
+    line-height: 0 !important;
+  }
+
+  body.csa-site #header .function-nav .mobile-logo img {
+    width: auto !important;
+    height: clamp(56px, 8.4vw, 84px) !important;
+    max-width: min(68vw, 300px) !important;
+    max-height: clamp(56px, 8.4vw, 84px) !important;
+    object-fit: contain !important;
+    object-position: left center !important;
+  }
+
+  body.csa-site #header .expand-button.mobile-button {
+    margin-left: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 auto !important;
+    padding: 0 !important;
+  }
+
+  body.csa-site #header .expand-button.mobile-button #menu_checkbox {
+    position: absolute !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  body.csa-site #header .expand-button.mobile-button label {
+    width: 48px !important;
+    height: 48px !important;
+    padding: 10px 8px !important;
+    box-sizing: border-box !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    box-shadow: 0 2px 10px rgba(43, 43, 43, 0.09) !important;
+    display: grid !important;
+    align-content: center !important;
+    gap: 6px !important;
+    cursor: pointer !important;
+  }
+
+  /* CYMK crayon-style burger lines. */
+  body.csa-site #header .expand-button.mobile-button label div {
+    width: 100% !important;
+    height: 4px !important;
+    margin: 0 !important;
+    top: auto !important;
+    right: auto !important;
+    border-radius: 999px !important;
+    background-color: var(--csa-burger-key) !important;
+    box-shadow:
+      0 0 0 1px rgba(43, 43, 43, 0.25),
+      inset 0 -1px 0 rgba(43, 43, 43, 0.18) !important;
+    transition: transform 220ms ease, opacity 180ms ease, filter 180ms ease !important;
+    transform-origin: center !important;
+  }
+
+  body.csa-site #header .expand-button.mobile-button label div:nth-child(1) {
+    background-image: repeating-linear-gradient(-16deg, var(--csa-burger-cyan) 0 6px, #36c7f3 6px 10px) !important;
+  }
+
+  body.csa-site #header .expand-button.mobile-button label div:nth-child(2) {
+    background-image: repeating-linear-gradient(-13deg, var(--csa-burger-yellow) 0 6px, #ffda68 6px 10px) !important;
+  }
+
+  body.csa-site #header .expand-button.mobile-button label div:nth-child(3) {
+    background-image: repeating-linear-gradient(-19deg, var(--csa-burger-magenta) 0 6px, #ee74c4 6px 10px) !important;
+  }
+
+  body.csa-site #header .expand-button.mobile-button #menu_checkbox:checked + label div:nth-child(1) {
+    transform: translateY(10px) rotate(45deg) !important;
+    background: var(--csa-burger-key) !important;
+  }
+
+  body.csa-site #header .expand-button.mobile-button #menu_checkbox:checked + label div:nth-child(2) {
+    opacity: 0 !important;
+    transform: scaleX(0.25) !important;
+  }
+
+  body.csa-site #header .expand-button.mobile-button #menu_checkbox:checked + label div:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg) !important;
+    background: var(--csa-burger-key) !important;
+  }
+
+  body.csa-site #header .main-nav {
+    order: 2 !important;
+    display: none !important;
+    width: 100% !important;
+    margin: 8px 0 0 !important;
+    padding: 8px 0 10px !important;
+    background: var(--csa-white) !important;
+    border-top: 1px solid rgba(141, 110, 99, 0.22) !important;
+    border-bottom-left-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+    box-shadow: 0 8px 20px rgba(43, 43, 43, 0.08) !important;
+  }
+
+  body.csa-site.mobile-menu-open #header .main-nav {
+    display: block !important;
+  }
+
+  body.csa-site #header .main-nav .top-menu {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.csa-site #header .main-nav .top-menu > li {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+
+  body.csa-site #header .main-nav .top-menu > li > .toplevel {
+    padding: 0 !important;
+  }
+
+  body.csa-site #header .main-nav .top-menu > li > .toplevel > a {
+    display: block !important;
+    width: 100% !important;
+    padding: 12px 2px !important;
+    font-size: clamp(1.02rem, 3.8vw, 1.28rem) !important;
+    line-height: 1.08 !important;
+    text-align: left !important;
+  }
+
+  body.csa-site #hero,
+  body.csa-site .kms-dom-id-hero,
+  body.csa-site .animated-hero {
+    min-height: calc(100svh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-mobile))) !important;
+    height: calc(100svh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-mobile))) !important;
+    overflow: hidden !important;
+  }
+
+  body.csa-site #hero .copy,
+  body.csa-site .kms-dom-id-hero .copy,
+  body.csa-site .animated-hero .copy {
+    padding: 0 0 clamp(16px, 4.2vw, 24px) clamp(16px, 4.2vw, 24px) !important;
+  }
+
+  body.csa-site #hero .copy .headline,
+  body.csa-site #hero .copy h1.headline,
+  body.csa-site #hero .copy .headline .elementor-heading-title,
+  body.csa-site #hero .copy .headline h1,
+  body.csa-site .kms-dom-id-hero .copy .headline,
+  body.csa-site .kms-dom-id-hero .copy h1.headline,
+  body.csa-site .kms-dom-id-hero .copy .headline .elementor-heading-title,
+  body.csa-site .kms-dom-id-hero .copy .headline h1,
+  body.csa-site .animated-hero .copy .headline,
+  body.csa-site .animated-hero .copy h1.headline,
+  body.csa-site .animated-hero .copy .headline .elementor-heading-title,
+  body.csa-site .animated-hero .copy .headline h1 {
+    font-size: clamp(3.25rem, 12.8vw, 6.2rem) !important;
+    line-height: 0.86 !important;
+    letter-spacing: 0.012em !important;
+    max-width: min(90vw, 8.2ch) !important;
+    text-wrap: balance !important;
+  }
+
+  body.csa-site .content-wrapper,
+  body.csa-site .desktop-content-wrapper {
+    width: calc(100% - (var(--csa-layout-gutter-mobile) * 2)) !important;
+    max-width: none !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  body.csa-site #footer .company-info .logo img {
+    max-width: min(86vw, 340px) !important;
+    width: auto !important;
+    height: auto !important;
+  }
+}
+
+@media screen and (min-width: 680px) and (max-width: 1199px) {
+  body.csa-site #header {
+    padding-inline: var(--csa-layout-gutter-tablet) !important;
+  }
+
+  body.csa-site #header .function-nav .mobile-logo img {
+    max-width: 360px !important;
+  }
+
+  body.csa-site #header .main-nav .top-menu > li > .toplevel > a {
+    font-size: clamp(1.08rem, 2.3vw, 1.32rem) !important;
+    padding: 13px 4px !important;
+  }
+
+  body.csa-site #hero .copy .headline,
+  body.csa-site #hero .copy h1.headline,
+  body.csa-site #hero .copy .headline .elementor-heading-title,
+  body.csa-site #hero .copy .headline h1,
+  body.csa-site .kms-dom-id-hero .copy .headline,
+  body.csa-site .kms-dom-id-hero .copy h1.headline,
+  body.csa-site .kms-dom-id-hero .copy .headline .elementor-heading-title,
+  body.csa-site .kms-dom-id-hero .copy .headline h1,
+  body.csa-site .animated-hero .copy .headline,
+  body.csa-site .animated-hero .copy h1.headline,
+  body.csa-site .animated-hero .copy .headline .elementor-heading-title,
+  body.csa-site .animated-hero .copy .headline h1 {
+    font-size: clamp(4.8rem, 10.4vw, 8.8rem) !important;
+    max-width: 8ch !important;
+  }
+}
+
+

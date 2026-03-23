@@ -1,8 +1,8 @@
 <?php
 /**
- * Kiddie mock child theme functions.
+ * Chestnut mock child theme functions.
  *
- * @package HelloElementorKiddieMock
+ * @package HelloElementorChestnutMock
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return bool
  */
-function kiddie_mock_is_elementor_editor_context() {
+function csa_site_is_elementor_editor_context() {
 	if ( is_admin() ) {
 		return true;
 	}
@@ -37,60 +37,60 @@ function kiddie_mock_is_elementor_editor_context() {
 	return false;
 }
 
-function kiddie_mock_enqueue_assets() {
+function csa_site_enqueue_assets() {
 	$theme_version = wp_get_theme()->get( 'Version' );
 
 	wp_enqueue_style(
-		'kiddie-mock-core',
-		get_stylesheet_directory_uri() . '/assets/css/kiddie-core.css',
+		'csa-site-core',
+		get_stylesheet_directory_uri() . '/assets/css/csa-core.css',
 		array(),
 		$theme_version
 	);
 
 	wp_enqueue_style(
-		'kiddie-mock-core-footer',
-		get_stylesheet_directory_uri() . '/assets/css/kiddie-core-footer.css',
-		array( 'kiddie-mock-core' ),
+		'csa-site-core-footer',
+		get_stylesheet_directory_uri() . '/assets/css/csa-core-footer.css',
+		array( 'csa-site-core' ),
 		$theme_version
 	);
 
 	wp_enqueue_style(
-		'kiddie-mock-overrides',
-		get_stylesheet_directory_uri() . '/assets/css/kiddie-overrides.css',
-		array( 'kiddie-mock-core-footer' ),
+		'csa-site-overrides',
+		get_stylesheet_directory_uri() . '/assets/css/csa-overrides.css',
+		array( 'csa-site-core-footer' ),
 		$theme_version
 	);
 
 	wp_enqueue_style(
-		'kiddie-mock-theme',
+		'csa-site-theme',
 		get_stylesheet_uri(),
-		array( 'kiddie-mock-overrides' ),
+		array( 'csa-site-overrides' ),
 		$theme_version
 	);
 
-	if ( ! kiddie_mock_is_elementor_editor_context() ) {
+	if ( ! csa_site_is_elementor_editor_context() ) {
 		wp_enqueue_script(
-			'kiddie-mock-js',
-			get_stylesheet_directory_uri() . '/assets/js/kiddie-mock.js',
+			'csa-site-js',
+			get_stylesheet_directory_uri() . '/assets/js/csa-site.js',
 			array(),
 			$theme_version,
 			true
 		);
 	}
 }
-add_action( 'wp_enqueue_scripts', 'kiddie_mock_enqueue_assets', 20 );
+add_action( 'wp_enqueue_scripts', 'csa_site_enqueue_assets', 20 );
 
-function kiddie_mock_disable_page_title( $show ) {
+function csa_site_disable_page_title( $show ) {
 	if ( is_page() ) {
 		return false;
 	}
 
 	return $show;
 }
-add_filter( 'hello_elementor_page_title', 'kiddie_mock_disable_page_title' );
+add_filter( 'hello_elementor_page_title', 'csa_site_disable_page_title' );
 
-function kiddie_mock_add_body_classes( $classes ) {
-	$classes[] = 'kiddie-mock-site';
+function csa_site_add_body_classes( $classes ) {
+	$classes[] = 'csa-site';
 
 	if ( is_front_page() ) {
 		$classes[] = 'page-home';
@@ -98,27 +98,27 @@ function kiddie_mock_add_body_classes( $classes ) {
 
 	return $classes;
 }
-add_filter( 'body_class', 'kiddie_mock_add_body_classes' );
+add_filter( 'body_class', 'csa_site_add_body_classes' );
 
 /**
  * Register dashboard-editable menus used by header/footer.
  */
-function kiddie_mock_register_nav_menus() {
+function csa_site_register_nav_menus() {
 	register_nav_menus(
 		array(
-			'kiddie_primary'      => __( 'CSA Primary Navigation', 'hello-elementor-kiddie-mock' ),
-			'kiddie_footer_quick' => __( 'CSA Footer Quick Links', 'hello-elementor-kiddie-mock' ),
-			'kiddie_footer_contact' => __( 'CSA Footer Contact Links', 'hello-elementor-kiddie-mock' ),
+			'csa_primary'      => __( 'CSA Primary Navigation', 'hello-elementor-csa-site' ),
+			'csa_footer_quick' => __( 'CSA Footer Quick Links', 'hello-elementor-csa-site' ),
+			'csa_footer_contact' => __( 'CSA Footer Contact Links', 'hello-elementor-csa-site' ),
 		)
 	);
 }
-add_action( 'after_setup_theme', 'kiddie_mock_register_nav_menus', 20 );
+add_action( 'after_setup_theme', 'csa_site_register_nav_menus', 20 );
 
 /**
  * One-time seed for menu locations so non-technical owners start with editable menus.
  */
-function kiddie_mock_seed_default_nav_menus() {
-	if ( '1' === get_option( 'kiddie_mock_nav_seeded_v1', '0' ) ) {
+function csa_site_seed_default_nav_menus() {
+	if ( '1' === get_option( 'csa_site_nav_seeded_v1', '0' ) ) {
 		return;
 	}
 
@@ -128,7 +128,7 @@ function kiddie_mock_seed_default_nav_menus() {
 	}
 
 	$defs = array(
-		'kiddie_primary' => array(
+		'csa_primary' => array(
 			'name'  => 'CSA Primary Navigation',
 			'items' => array(
 				array(
@@ -149,7 +149,7 @@ function kiddie_mock_seed_default_nav_menus() {
 				),
 			),
 		),
-		'kiddie_footer_quick' => array(
+		'csa_footer_quick' => array(
 			'name'  => 'CSA Footer Quick Links',
 			'items' => array(
 				array(
@@ -174,7 +174,7 @@ function kiddie_mock_seed_default_nav_menus() {
 				),
 			),
 		),
-		'kiddie_footer_contact' => array(
+		'csa_footer_contact' => array(
 			'name'  => 'CSA Footer Contact Links',
 			'items' => array(
 				array(
@@ -237,16 +237,16 @@ function kiddie_mock_seed_default_nav_menus() {
 		set_theme_mod( 'nav_menu_locations', $locations );
 	}
 
-	update_option( 'kiddie_mock_nav_seeded_v1', '1' );
+	update_option( 'csa_site_nav_seeded_v1', '1' );
 }
-add_action( 'init', 'kiddie_mock_seed_default_nav_menus', 25 );
+add_action( 'init', 'csa_site_seed_default_nav_menus', 25 );
 
 /**
  * Return footer text defaults used in Theme Customizer.
  *
  * @return array<string,string>
  */
-function kiddie_mock_footer_text_defaults() {
+function csa_site_footer_text_defaults() {
 	return array(
 		'school_name' => 'Chestnut Square Academy',
 		'address_1'   => '402 S. Chestnut St.',
@@ -261,32 +261,32 @@ function kiddie_mock_footer_text_defaults() {
  *
  * @param WP_Customize_Manager $wp_customize Customizer manager.
  */
-function kiddie_mock_register_customizer_fields( $wp_customize ) {
+function csa_site_register_customizer_fields( $wp_customize ) {
 	if ( ! is_object( $wp_customize ) ) {
 		return;
 	}
 
-	$defaults = kiddie_mock_footer_text_defaults();
+	$defaults = csa_site_footer_text_defaults();
 
 	$wp_customize->add_section(
-		'kiddie_mock_footer_content',
+		'csa_site_footer_content',
 		array(
-			'title'       => __( 'CSA Footer Content', 'hello-elementor-kiddie-mock' ),
+			'title'       => __( 'CSA Footer Content', 'hello-elementor-csa-site' ),
 			'priority'    => 165,
-			'description' => __( 'Update footer business details without touching code.', 'hello-elementor-kiddie-mock' ),
+			'description' => __( 'Update footer business details without touching code.', 'hello-elementor-csa-site' ),
 		)
 	);
 
 	$fields = array(
-		'school_name' => __( 'School Name', 'hello-elementor-kiddie-mock' ),
-		'address_1'   => __( 'Address Line 1', 'hello-elementor-kiddie-mock' ),
-		'address_2'   => __( 'Address Line 2', 'hello-elementor-kiddie-mock' ),
-		'hours'       => __( 'Hours', 'hello-elementor-kiddie-mock' ),
-		'copyright'   => __( 'Copyright Text', 'hello-elementor-kiddie-mock' ),
+		'school_name' => __( 'School Name', 'hello-elementor-csa-site' ),
+		'address_1'   => __( 'Address Line 1', 'hello-elementor-csa-site' ),
+		'address_2'   => __( 'Address Line 2', 'hello-elementor-csa-site' ),
+		'hours'       => __( 'Hours', 'hello-elementor-csa-site' ),
+		'copyright'   => __( 'Copyright Text', 'hello-elementor-csa-site' ),
 	);
 
 	foreach ( $fields as $key => $label ) {
-		$setting_key = 'kiddie_mock_footer_' . $key;
+		$setting_key = 'csa_site_footer_' . $key;
 
 		$wp_customize->add_setting(
 			$setting_key,
@@ -301,19 +301,19 @@ function kiddie_mock_register_customizer_fields( $wp_customize ) {
 			$setting_key,
 			array(
 				'type'    => 'text',
-				'section' => 'kiddie_mock_footer_content',
+				'section' => 'csa_site_footer_content',
 				'label'   => $label,
 			)
 		);
 	}
 }
-add_action( 'customize_register', 'kiddie_mock_register_customizer_fields' );
+add_action( 'customize_register', 'csa_site_register_customizer_fields' );
 
 /**
  * Custom walker to preserve legacy navbar DOM shape while using dashboard menus.
  */
-if ( class_exists( 'Walker_Nav_Menu' ) && ! class_exists( 'Kiddie_Mock_Toplevel_Menu_Walker' ) ) {
-	class Kiddie_Mock_Toplevel_Menu_Walker extends Walker_Nav_Menu {
+if ( class_exists( 'Walker_Nav_Menu' ) && ! class_exists( 'csa_site_Toplevel_Menu_Walker' ) ) {
+	class csa_site_Toplevel_Menu_Walker extends Walker_Nav_Menu {
 		/**
 		 * Start submenu list.
 		 *
@@ -400,17 +400,17 @@ if ( class_exists( 'Walker_Nav_Menu' ) && ! class_exists( 'Kiddie_Mock_Toplevel_
 /**
  * Render primary header nav with dashboard menu fallback.
  */
-function kiddie_mock_render_primary_nav_menu() {
-	if ( has_nav_menu( 'kiddie_primary' ) ) {
+function csa_site_render_primary_nav_menu() {
+	if ( has_nav_menu( 'csa_primary' ) ) {
 		wp_nav_menu(
 			array(
-				'theme_location' => 'kiddie_primary',
+				'theme_location' => 'csa_primary',
 				'container'      => false,
 				'menu_class'     => 'one-row-flex top-menu',
 				'menu_id'        => 'menu-header-primary',
 				'depth'          => 2,
 				'fallback_cb'    => '__return_empty_string',
-				'walker'         => new Kiddie_Mock_Toplevel_Menu_Walker(),
+				'walker'         => new csa_site_Toplevel_Menu_Walker(),
 			)
 		);
 		return;
@@ -452,7 +452,7 @@ function kiddie_mock_render_primary_nav_menu() {
  * @param string                 $menu_id        Menu ID attribute.
  * @param array<int,array<string,string>> $fallback_items Fallback item list.
  */
-function kiddie_mock_render_footer_menu( $location, $menu_id, $fallback_items ) {
+function csa_site_render_footer_menu( $location, $menu_id, $fallback_items ) {
 	if ( has_nav_menu( $location ) ) {
 		wp_nav_menu(
 			array(
@@ -490,7 +490,7 @@ function kiddie_mock_render_footer_menu( $location, $menu_id, $fallback_items ) 
  *
  * @return string
  */
-function kiddie_mock_get_elementor_site_logo_url() {
+function csa_site_get_elementor_site_logo_url() {
 	$logo_id = 0;
 
 	if ( class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance->kits_manager ) ) {
@@ -525,7 +525,7 @@ function kiddie_mock_get_elementor_site_logo_url() {
  *
  * @return string
  */
-function kiddie_mock_academies_markup() {
+function csa_site_academies_markup() {
 	$root = trailingslashit( home_url() );
 
 	return <<<HTML
@@ -534,8 +534,8 @@ function kiddie_mock_academies_markup() {
 		<div class="kma-academies-hero-left" aria-hidden="true"></div>
 		<div class="kma-academies-hero-right">
 			<div class="kma-academies-hero-inner">
-				<h1>Find a Kiddie Academy&reg; Child Care Near You</h1>
-				<p>All across the country, Kiddie Academy Educational Child Care is helping prepare children for life. Find the most convenient of our 360+ locations near you.</p>
+				<h1>Find a Chestnut Square Academy&reg; Child Care Near You</h1>
+				<p>All across the country, Chestnut Square Academy Educational Child Care is helping prepare children for life. Find the most convenient of our 360+ locations near you.</p>
 				<div class="locator-small">
 					<div class="locator">
 						<div class="form">
@@ -573,7 +573,7 @@ function kiddie_mock_academies_markup() {
 		<div class="content-wrapper">
 			<div class="text-container">
 				<h4>Find an Academy Near You</h4>
-				<p>Kiddie Academy Educational Child Care helps children make the most of learning moments in locations across the country. Discover one near you.</p>
+				<p>Chestnut Square Academy Educational Child Care helps children make the most of learning moments in locations across the country. Discover one near you.</p>
 			</div>
 			<div class="locator">
 				<div class="form">
@@ -596,7 +596,7 @@ HTML;
  * @param int    $post_id Post ID.
  * @param string $html    HTML content.
  */
-function kiddie_mock_set_elementor_html( $post_id, $html ) {
+function csa_site_set_elementor_html( $post_id, $html ) {
 	if ( ! class_exists( '\\Elementor\\Plugin' ) ) {
 		return;
 	}
@@ -644,15 +644,15 @@ function kiddie_mock_set_elementor_html( $post_id, $html ) {
 /**
  * Runtime one-time page sync for parity-critical sections.
  */
-function kiddie_mock_allow_legacy_runtime_sync() {
-	return (bool) apply_filters( 'kiddie_mock_allow_legacy_runtime_sync', false );
+function csa_site_allow_legacy_runtime_sync() {
+	return (bool) apply_filters( 'csa_site_allow_legacy_runtime_sync', false );
 }
 
 /**
  * Runtime one-time page sync for legacy parity snapshots.
  */
-function kiddie_mock_runtime_page_sync() {
-	if ( ! kiddie_mock_allow_legacy_runtime_sync() ) {
+function csa_site_runtime_page_sync() {
+	if ( ! csa_site_allow_legacy_runtime_sync() ) {
 		return;
 	}
 
@@ -662,7 +662,7 @@ function kiddie_mock_runtime_page_sync() {
 		return;
 	}
 
-	if ( get_option( 'kiddie_mock_runtime_sync_ver' ) === '1.0.3' ) {
+	if ( get_option( 'csa_site_runtime_sync_ver' ) === '1.0.3' ) {
 		return;
 	}
 
@@ -694,12 +694,12 @@ function kiddie_mock_runtime_page_sync() {
 			);
 		}
 
-		kiddie_mock_set_elementor_html( (int) $home_page->ID, $home_content );
+		csa_site_set_elementor_html( (int) $home_page->ID, $home_content );
 	}
 
 	$academies_page = get_page_by_path( 'academies', OBJECT, 'page' );
 	if ( $academies_page instanceof WP_Post ) {
-		$academies_markup = kiddie_mock_academies_markup();
+		$academies_markup = csa_site_academies_markup();
 
 		$wpdb->update(
 			$wpdb->posts,
@@ -713,12 +713,12 @@ function kiddie_mock_runtime_page_sync() {
 			array( '%d' )
 		);
 
-		kiddie_mock_set_elementor_html( (int) $academies_page->ID, $academies_markup );
+		csa_site_set_elementor_html( (int) $academies_page->ID, $academies_markup );
 	}
 
-	update_option( 'kiddie_mock_runtime_sync_ver', '1.0.3' );
+	update_option( 'csa_site_runtime_sync_ver', '1.0.3' );
 }
-add_action( 'init', 'kiddie_mock_runtime_page_sync', 35 );
+add_action( 'init', 'csa_site_runtime_page_sync', 35 );
 
 /**
  * Render-time parity overrides for pages that may still hold legacy builder snapshots.
@@ -726,12 +726,12 @@ add_action( 'init', 'kiddie_mock_runtime_page_sync', 35 );
  * @param string $content Rendered content.
  * @return string
  */
-function kiddie_mock_render_parity_overrides( $content ) {
+function csa_site_render_parity_overrides( $content ) {
 	if ( ! is_string( $content ) ) {
 		return $content;
 	}
 
-	if ( ! kiddie_mock_allow_legacy_runtime_sync() ) {
+	if ( ! csa_site_allow_legacy_runtime_sync() ) {
 		return $content;
 	}
 
@@ -739,7 +739,7 @@ function kiddie_mock_render_parity_overrides( $content ) {
 		return $content;
 	}
 
-	if ( kiddie_mock_is_elementor_editor_context() ) {
+	if ( csa_site_is_elementor_editor_context() ) {
 		return $content;
 	}
 
@@ -764,7 +764,7 @@ function kiddie_mock_render_parity_overrides( $content ) {
 		if ( false !== strpos( $content, 'subpage-hero padding-bottom padding-top offset-bg-parent' ) && false !== strpos( $content, 'Find Your Academy' ) ) {
 			global $wpdb;
 			$post_id       = (int) get_queried_object_id();
-			$updated_markup = kiddie_mock_academies_markup();
+			$updated_markup = csa_site_academies_markup();
 
 			if ( $post_id > 0 ) {
 				$wpdb->update(
@@ -778,7 +778,7 @@ function kiddie_mock_render_parity_overrides( $content ) {
 					array( '%s', '%s', '%s' ),
 					array( '%d' )
 				);
-				kiddie_mock_set_elementor_html( $post_id, $updated_markup );
+				csa_site_set_elementor_html( $post_id, $updated_markup );
 			}
 
 			return $updated_markup;
@@ -787,4 +787,6 @@ function kiddie_mock_render_parity_overrides( $content ) {
 
 	return $content;
 }
-add_filter( 'the_content', 'kiddie_mock_render_parity_overrides', 99 );
+add_filter( 'the_content', 'csa_site_render_parity_overrides', 99 );
+
+

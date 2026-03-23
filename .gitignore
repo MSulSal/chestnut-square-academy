@@ -21,10 +21,10 @@
 !/app/public/wp-content/plugins/csa-launch-kit/**
 !/app/public/wp-content/themes/hello-elementor-csa/
 !/app/public/wp-content/themes/hello-elementor-csa/**
-!/app/public/wp-content/plugins/kiddie-mock-seed/
-!/app/public/wp-content/plugins/kiddie-mock-seed/**
-!/app/public/wp-content/themes/hello-elementor-kiddie-mock/
-!/app/public/wp-content/themes/hello-elementor-kiddie-mock/**
+!/app/public/wp-content/plugins/csa-site-tools/
+!/app/public/wp-content/plugins/csa-site-tools/**
+!/app/public/wp-content/themes/hello-elementor-csa-site/
+!/app/public/wp-content/themes/hello-elementor-csa-site/**
 
 # Keep docs and root project files
 !/docs/
@@ -36,3 +36,5 @@
 /docs/local-*.png
 /docs/live-*.png
 /docs/compare-*.png
+
+

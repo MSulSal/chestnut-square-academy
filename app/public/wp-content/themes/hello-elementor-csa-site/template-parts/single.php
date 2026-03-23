@@ -1,8 +1,8 @@
 <?php
 /**
- * Custom singular template for Kiddie mock pages.
+ * Custom singular template for Chestnut Square Academy pages.
  *
- * @package HelloElementorKiddieMock
+ * @package HelloElementorCSASite
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -15,3 +15,4 @@ while ( have_posts() ) :
 	<?php the_content(); ?>
 	<?php
 endwhile;
+

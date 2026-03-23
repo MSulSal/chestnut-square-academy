@@ -1,8 +1,8 @@
 <?php
 /**
- * Custom header for Kiddie mock theme.
+ * Custom header for Chestnut mock theme.
  *
- * @package HelloElementorKiddieMock
+ * @package HelloElementorChestnutMock
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $home_url                 = home_url( '/' );
 $desktop_logo_default     = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa-navbar.png';
 $mobile_logo_default      = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa-navbar.png';
-$elementor_site_logo      = function_exists( 'kiddie_mock_get_elementor_site_logo_url' ) ? trim( (string) kiddie_mock_get_elementor_site_logo_url() ) : '';
+$elementor_site_logo      = function_exists( 'csa_site_get_elementor_site_logo_url' ) ? trim( (string) csa_site_get_elementor_site_logo_url() ) : '';
 
 if ( '' !== $elementor_site_logo ) {
 	$desktop_logo = $elementor_site_logo;
@@ -49,8 +49,8 @@ if ( '' !== $elementor_site_logo ) {
 		<div class="nav-right">
 			<div class="link-menu">
 				<div class="main-nav">
-					<?php if ( function_exists( 'kiddie_mock_render_primary_nav_menu' ) ) : ?>
-						<?php kiddie_mock_render_primary_nav_menu(); ?>
+					<?php if ( function_exists( 'csa_site_render_primary_nav_menu' ) ) : ?>
+						<?php csa_site_render_primary_nav_menu(); ?>
 					<?php endif; ?>
 				</div>
 
@@ -90,3 +90,5 @@ if ( '' !== $elementor_site_logo ) {
 		</div>
 	</div>
 </header>
+
+
