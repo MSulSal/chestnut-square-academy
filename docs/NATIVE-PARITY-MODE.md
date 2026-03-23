@@ -81,3 +81,8 @@ Exact clone-level behavior can still vary because Elementor and third-party sour
   - Upgraded `csa-theme-guard` to override `template` and `stylesheet` at runtime via `pre_option_*` filters (safer than one-time switching).
   - Added persistence step to write corrected theme options once.
   - Added content-level replacements for old theme asset paths and legacy `Kiddie Academy`/`5/6` text so imported DB content cannot regress visuals or wording.
+- `fix(regression): restore post-migration visual parity after fallback drift`
+  - Root cause identified: runtime drift temporarily dropped `csa-site` body marker on some requests while stale mobile shell/card styles and oversized hero clamps remained, producing a barebones middle + oversized tagline.
+  - Added MU-plugin body-class guard to always provide `csa-site` and `page-home` markers on frontend.
+  - Restored mobile sticky/header baseline (`--csa-sticky-header-height-mobile: 76px`) and removed mobile navbar card shell styling (no rounded burger card, no menu panel rounding/shadow).
+  - Rebalanced hero headline clamp variables to non-overflow values and bumped child-theme version to `1.0.71`.

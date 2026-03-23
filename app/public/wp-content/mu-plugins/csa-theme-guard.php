@@ -114,3 +114,26 @@ function csa_theme_guard_replace_legacy_theme_paths( $content ) {
 }
 add_filter( 'the_content', 'csa_theme_guard_replace_legacy_theme_paths', 1 );
 add_filter( 'elementor/frontend/the_content', 'csa_theme_guard_replace_legacy_theme_paths', 1 );
+
+/**
+ * Ensure CSA body markers exist even if theme state drifts during migration.
+ *
+ * @param array<int,string> $classes Existing body classes.
+ * @return array<int,string>
+ */
+function csa_theme_guard_body_classes( $classes ) {
+	if ( ! is_array( $classes ) ) {
+		$classes = array();
+	}
+
+	if ( ! in_array( 'csa-site', $classes, true ) ) {
+		$classes[] = 'csa-site';
+	}
+
+	if ( is_front_page() && ! in_array( 'page-home', $classes, true ) ) {
+		$classes[] = 'page-home';
+	}
+
+	return $classes;
+}
+add_filter( 'body_class', 'csa_theme_guard_body_classes', 5 );
