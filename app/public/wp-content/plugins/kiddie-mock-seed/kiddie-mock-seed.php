@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name: Kiddie Mock Seed
- * Description: Builds a full Kiddie Academy style frontend mock across all key pages for WordPress + Elementor testing.
- * Version: 1.3.29
+ * Plugin Name: CSA Site Tools
+ * Description: Seeds and maintains the Chestnut Square Academy Elementor site with owner-friendly no-code tools.
+ * Version: 1.3.30
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: kiddie-mock-seed
  *
- * @package KiddieMockSeed
+ * @package CSASiteTools
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -1304,33 +1304,6 @@ function kms_upsert_page( $blueprint, $overwrite ) {
 	}
 
 	return (int) $page_id;
-}
-
-/**
- * Seed all pages and key reading options.
- *
- * @param bool $overwrite Overwrite existing content.
- */
-function kms_run_seed( $overwrite = true ) {
-	$blueprints = kms_sort_blueprints_by_depth( kms_get_page_blueprints() );
-
-	foreach ( $blueprints as $blueprint ) {
-		kms_upsert_page( $blueprint, $overwrite );
-	}
-
-	$home = get_page_by_path( 'home', OBJECT, 'page' );
-	if ( $home instanceof WP_Post ) {
-		update_option( 'show_on_front', 'page' );
-		update_option( 'page_on_front', (int) $home->ID );
-	}
-
-	$blog = get_page_by_path( 'newsroom', OBJECT, 'page' );
-	if ( $blog instanceof WP_Post ) {
-		update_option( 'page_for_posts', (int) $blog->ID );
-	}
-
-	kms_set_seed_profile( 'mock-parity' );
-	flush_rewrite_rules();
 }
 
 /**
@@ -3358,7 +3331,8 @@ function kms_runtime_reseed_once() {
 		return;
 	}
 
-	kms_run_seed( true );
+	kms_run_native_parity_seed( true );
+	kms_run_small_business_simplification( true );
 	update_option( 'kms_runtime_seed_version', '1.0.3' );
 }
 add_action( 'init', 'kms_runtime_reseed_once', 30 );
@@ -3460,7 +3434,8 @@ add_filter( 'the_content', 'kms_upgrade_legacy_seeded_content', 96 );
  * Activation callback.
  */
 function kms_activate() {
-	kms_run_seed( true );
+	kms_run_native_parity_seed( true );
+	kms_run_small_business_simplification( true );
 }
 register_activation_hook( __FILE__, 'kms_activate' );
 
@@ -3482,16 +3457,16 @@ function kms_pretty_asset_label( $raw_label ) {
  */
 function kms_add_admin_pages() {
 	add_management_page(
-		'Kiddie Mock Seed',
-		'Kiddie Mock Seed',
+		'CSA Site Tools',
+		'CSA Site Tools',
 		'manage_options',
 		'kiddie-mock-seed',
 		'kms_render_tools_page'
 	);
 
 	add_theme_page(
-		'Kiddie Mock Assets',
-		'Kiddie Mock Assets',
+		'CSA Site Assets',
+		'CSA Site Assets',
 		'manage_options',
 		'kiddie-mock-assets',
 		'kms_render_assets_page'
@@ -3626,24 +3601,6 @@ function kms_handle_tools_actions() {
 	}
 
 	$action = sanitize_key( wp_unslash( $_POST['kms_action'] ) );
-
-	if ( 'run_seed' === $action ) {
-		check_admin_referer( 'kms_run_seed' );
-
-		$overwrite = isset( $_POST['kms_overwrite'] ) && '1' === $_POST['kms_overwrite'];
-		kms_run_seed( $overwrite );
-
-		$redirect = add_query_arg(
-			array(
-				'page'   => 'kiddie-mock-seed',
-				'kms_ok' => '1',
-			),
-			admin_url( 'tools.php' )
-		);
-
-		wp_safe_redirect( $redirect );
-		exit;
-	}
 
 	if ( 'run_owner_seed' === $action ) {
 		check_admin_referer( 'kms_run_owner_seed' );
@@ -3818,7 +3775,6 @@ add_action( 'admin_init', 'kms_handle_tools_actions' );
  * Render admin tools page.
  */
 function kms_render_tools_page() {
-	$done            = isset( $_GET['kms_ok'] ) && '1' === $_GET['kms_ok'];
 	$owner_done      = isset( $_GET['kms_owner_ok'] ) && '1' === $_GET['kms_owner_ok'];
 	$native_done     = isset( $_GET['kms_native_ok'] ) && '1' === $_GET['kms_native_ok'];
 	$gallery_saved   = isset( $_GET['kms_gallery_ok'] ) && '1' === $_GET['kms_gallery_ok'];
@@ -3831,10 +3787,7 @@ function kms_render_tools_page() {
 	$docs_gallery_dir = kms_get_docs_life_gallery_dir();
 	?>
 	<div class="wrap">
-		<h1>Kiddie Mock Seed</h1>
-		<?php if ( $done ) : ?>
-			<div class="notice notice-success"><p>Seed completed successfully.</p></div>
-		<?php endif; ?>
+		<h1>CSA Site Tools</h1>
 		<?php if ( $owner_done ) : ?>
 			<div class="notice notice-success"><p>Owner Edit Mode seed completed successfully.</p></div>
 		<?php endif; ?>
@@ -3857,16 +3810,6 @@ function kms_render_tools_page() {
 		<p><strong>Active profile:</strong> <code><?php echo esc_html( $profile ); ?></code></p>
 
 		<hr>
-		<h2>Mock Parity Mode (Legacy / Not Recommended)</h2>
-		<p>Rebuild the full Kiddie-style mock page tree using layout-parity HTML sections. This mode can reduce Elementor component-level editability because it relies on HTML-heavy parity output.</p>
-		<form method="post" style="margin-bottom: 16px;">
-			<?php wp_nonce_field( 'kms_run_seed' ); ?>
-			<input type="hidden" name="kms_action" value="run_seed">
-			<p><label><input type="checkbox" name="kms_overwrite" value="1" checked> Overwrite existing page content</label></p>
-			<p><button type="submit" class="button">Run Full Mock Seed (Legacy)</button></p>
-		</form>
-
-		<hr>
 		<h2>Owner Edit Mode</h2>
 		<p>Apply stricter owner-edit templates built with native Elementor widgets for direct drag-and-drop editing on core pages.</p>
 		<form method="post">
@@ -3878,7 +3821,7 @@ function kms_render_tools_page() {
 
 		<hr>
 		<h2>Native Parity Mode (Recommended)</h2>
-		<p>Seed all pages with fully native Elementor widgets while preserving Kiddie Academy structure/content as closely as possible. This is the best mode for no-code owner handoff.</p>
+		<p>Seed all pages with fully native Elementor widgets while preserving the current site structure and styling as closely as possible. This is the best mode for no-code owner handoff.</p>
 		<form method="post">
 			<?php wp_nonce_field( 'kms_run_native_seed' ); ?>
 			<input type="hidden" name="kms_action" value="run_native_seed">
@@ -3975,7 +3918,7 @@ function kms_render_assets_page() {
 	$reset     = isset( $_GET['kms_assets_reset'] ) && '1' === $_GET['kms_assets_reset'];
 	?>
 	<div class="wrap">
-		<h1>Kiddie Mock Assets</h1>
+		<h1>CSA Site Assets</h1>
 
 		<?php if ( $saved ) : ?>
 			<div class="notice notice-success"><p>Asset replacements saved.</p></div>
@@ -3987,7 +3930,7 @@ function kms_render_assets_page() {
 
 		<p>
 			Use this screen to swap images without touching layout code.
-			Your client can update media here and keep the full mock design intact.
+			Your client can update media here while keeping the full site design intact.
 		</p>
 
 		<p>

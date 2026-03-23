@@ -1,27 +1,26 @@
 # Owner Edit Mode (Elementor Native)
 
 ## Purpose
-Owner Edit Mode replaces core mock pages with a stricter Elementor-native structure so a non-technical owner can drag, drop, and edit content directly.
+Owner Edit Mode gives non-technical users the safest drag-and-drop structure for ongoing updates.
 
 ## Core Pages Covered
 - `home`
+- `life-at-chestnut`
 - `company`
-- `our-curriculum`
 - `faq`
 - `contact-us`
-- `academies`
 
 ## How To Switch Modes
-1. In WordPress Admin, open `Tools > Kiddie Mock Seed`.
-2. To use drag-and-drop native editing, click `Run Owner Edit Mode Seed`.
-3. To return to reference-layout parity mode, click `Run Full Mock Seed`.
+1. In WordPress Admin, open `Tools > CSA Site Tools`.
+2. Click `Run Owner Edit Mode Seed`.
+3. Keep `Overwrite existing page content` enabled for full resets.
 
-The active mode is shown at the top of the tools page as:
+The active mode appears at the top of the tools screen as:
 - `owner-edit`
-- `mock-parity`
+- `native-parity`
 
 ## What Becomes Native
-In Owner Edit Mode, core pages use Elementor native widgets:
+Core page sections are built with Elementor widgets:
 - `heading`
 - `text-editor`
 - `image`
@@ -30,9 +29,6 @@ In Owner Edit Mode, core pages use Elementor native widgets:
 - `accordion`
 - `shortcode`
 
-Core pages intentionally avoid `HTML` widgets in this mode for easier owner editing.
-
 ## Notes
-- Owner Edit Mode uses plugin stylesheet: `kiddie-mock-seed/assets/css/owner-edit-mode.css`.
-- Frontend body class for this mode: `kms-owner-mode`.
-- If you do not see updates immediately, run `Elementor > Tools > Regenerate CSS & Data`, then hard refresh.
+- If updates do not appear immediately: run `Elementor > Tools > Regenerate CSS & Data`, then hard refresh.
+- This mode is intended for straightforward owner maintenance with minimal layout risk.
