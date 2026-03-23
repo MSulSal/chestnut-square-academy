@@ -11,7 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $home_url         = home_url( '/' );
 $contact_url      = home_url( '/contact-us/' );
-$privacy_url      = home_url( '/privacy-policy/' );
 $footer_logo_default = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa-tree.png';
 $footer_logo         = apply_filters( 'kms_asset_url', $footer_logo_default, 'footer_logo' );
 $defaults            = function_exists( 'csa_site_footer_text_defaults' ) ? csa_site_footer_text_defaults() : array();
@@ -32,7 +31,7 @@ $quick_fallback = array(
 	),
 	array(
 		'label' => 'About Us',
-		'url'   => home_url( '/company/' ),
+		'url'   => home_url( '/#about-home' ),
 	),
 	array(
 		'label' => 'FAQ',
@@ -54,10 +53,6 @@ $contact_fallback = array(
 		'label' => 'Schedule a Tour',
 		'url'   => $contact_url,
 	),
-	array(
-		'label' => 'Privacy Policy',
-		'url'   => $privacy_url,
-	),
 );
 ?>
 
@@ -75,9 +70,6 @@ $contact_fallback = array(
 			</p>
 			<div class="copyright">
 				<p><?php echo wp_kses_post( (string) $footer_copyright ); ?></p>
-				<div class="copyright-links">
-					<p><a class="pp" href="<?php echo esc_url( $privacy_url ); ?>">Privacy Policy</a></p>
-				</div>
 			</div>
 		</div>
 

@@ -5,7 +5,7 @@
  * Version: 1.3.30
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
- * Text Domain: csa-site-tools
+ * Text Domain: kiddie-mock-seed
  *
  * @package CSASiteTools
  */
@@ -228,7 +228,9 @@ function kms_replace_asset_urls_in_markup( $markup ) {
  * @return string
  */
 function kms_filter_the_content_assets( $content ) {
-	return kms_replace_asset_urls_in_markup( $content );
+	$content = kms_replace_asset_urls_in_markup( $content );
+
+	return kms_apply_real_data_text_replacements( $content );
 }
 add_filter( 'the_content', 'kms_filter_the_content_assets', 25 );
 
@@ -242,9 +244,12 @@ add_filter( 'the_content', 'kms_filter_the_content_assets', 25 );
 function kms_filter_elementor_widget_assets( $content, $widget ) {
 	unset( $widget );
 
-	return kms_replace_asset_urls_in_markup( $content );
+	$content = kms_replace_asset_urls_in_markup( $content );
+
+	return kms_apply_real_data_text_replacements( $content );
 }
 add_filter( 'elementor/widget/render_content', 'kms_filter_elementor_widget_assets', 10, 2 );
+add_filter( 'elementor/frontend/the_content', 'kms_apply_real_data_text_replacements', 20 );
 
 /**
  * Return all seeded pages and hierarchy paths.
@@ -260,7 +265,7 @@ function kms_get_page_blueprints() {
 		array( 'path' => 'our-curriculum', 'title' => 'Programs', 'template' => 'our-curriculum' ),
 		array( 'path' => 'company', 'title' => 'About Us', 'template' => 'company' ),
 		array( 'path' => 'contact-us', 'title' => 'Contact Us', 'template' => 'contact-us' ),
-		array( 'path' => 'faq', 'title' => 'Chestnut Square Academy FAQs', 'template' => 'faq' ),
+		array( 'path' => 'faq', 'title' => 'Kiddie Academy FAQs', 'template' => 'faq' ),
 		array( 'path' => 'parent-testimonials', 'title' => 'Parent Testimonials', 'template' => 'generic' ),
 		array( 'path' => 'newsroom', 'title' => 'Newsroom', 'template' => 'generic' ),
 		array( 'path' => 'academic-leadership', 'title' => 'Leadership', 'template' => 'generic' ),
@@ -358,7 +363,7 @@ function kms_get_generic_page_profile( $path, $title ) {
 		),
 		'newsroom'                         => array(
 			'eyebrow' => 'Latest Updates',
-			'subhead' => 'Explore news, announcements, and community stories from across the Chestnut Square Academy network.',
+			'subhead' => 'Explore news, announcements, and community stories from across the Kiddie Academy network.',
 		),
 		'academic-leadership'              => array(
 			'eyebrow' => 'Leadership',
@@ -391,7 +396,7 @@ function kms_get_generic_page_profile( $path, $title ) {
 	);
 
 	$defaults = array(
-		'eyebrow' => 'Chestnut Square Academy',
+		'eyebrow' => 'Kiddie Academy',
 		'subhead' => 'Explore information and resources tailored for families, educators, and community partners.',
 	);
 
@@ -401,9 +406,9 @@ function kms_get_generic_page_profile( $path, $title ) {
 		'title'      => $title,
 		'eyebrow'    => $profile['eyebrow'],
 		'subhead'    => $profile['subhead'],
-		'image_main' => 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg',
-		'image_alt'  => 'Children engaged in classroom learning at Chestnut Square Academy',
-		'image_side' => 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg',
+		'image_main' => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg',
+		'image_alt'  => 'Children engaged in classroom learning at Kiddie Academy',
+		'image_side' => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg',
 	);
 }
 
@@ -501,7 +506,7 @@ function kms_get_faq_html() {
 		<div class="links">
 			<div>
 				<p data-question="q1"><strong>What ages do you serve?</strong><i class="fa-solid fa-chevron-down"></i></p>
-				<div data-answer="q1" hidden><p>Chestnut Square Academy serves children from 6 weeks through 5/6 years with age-based classrooms and routines.</p></div>
+				<div data-answer="q1" hidden><p>Chestnut Square Academy serves children from 6 weeks through 4/5 years with age-based classrooms and routines.</p></div>
 			</div>
 			<div>
 				<p data-question="q2"><strong>Do you offer full-day and part-day options?</strong><i class="fa-solid fa-chevron-down"></i></p>
@@ -533,8 +538,8 @@ function kms_get_academies_html() {
 		<div class="kma-academies-hero-left" aria-hidden="true"></div>
 		<div class="kma-academies-hero-right">
 			<div class="kma-academies-hero-inner">
-				<h1>Find a Chestnut Square Academy&reg; Child Care Near You</h1>
-				<p>All across the country, Chestnut Square Academy Educational Child Care is helping prepare children for life. Find the most convenient of our 360+ locations near you.</p>
+				<h1>Find a Kiddie Academy&reg; Child Care Near You</h1>
+				<p>All across the country, Kiddie Academy Educational Child Care is helping prepare children for life. Find the most convenient of our 360+ locations near you.</p>
 				<div class="locator-small">
 					<div class="locator">
 						<div class="form">
@@ -574,7 +579,7 @@ function kms_get_academies_html() {
 		<div class="content-wrapper">
 			<div class="text-container">
 				<h4>Find an Academy Near You</h4>
-				<p>Chestnut Square Academy Educational Child Care helps children make the most of learning moments in locations across the country. Discover one near you.</p>
+				<p>Kiddie Academy Educational Child Care helps children make the most of learning moments in locations across the country. Discover one near you.</p>
 			</div>
 			<div class="locator">
 				<div class="form">
@@ -611,7 +616,7 @@ function kms_get_programs_index_html() {
 	<section id="curriculum" class="padding-top padding-bottom">
 		<div class="tan-bg"></div>
 		<div class="container content-wrapper">
-			<div class="intro"><h2>Learning for Every Age</h2></div>
+			<div class="intro"><h2>Learning by Age Group</h2></div>
 			<div class="slides desktop">
 				<div class="programs-list">
 					<div class="slide" data-program="infant"><a href="/academies/programs/infant-daycare/"><div class="detail-container"><p class="program-title">Infant</p><p class="overview">6 weeks to 12 months</p></div></a></div>
@@ -619,9 +624,9 @@ function kms_get_programs_index_html() {
 					<div class="slide" data-program="preschool"><a href="/academies/programs/preschool/"><div class="detail-container"><p class="program-title">Preschool</p><p class="overview">3-Year-Olds</p></div></a></div>
 				</div>
 				<div class="programs-image">
-					<img data-program="infant" data-lazy-src="https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg" alt="Infant Program" class="lazy" />
-					<img data-program="toddler" data-lazy-src="https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg" alt="Toddler Program" class="lazy" />
-					<img data-program="preschool" data-lazy-src="https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Preschool.jpg" alt="Preschool Program" class="lazy" />
+					<img data-program="infant" data-lazy-src="https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg" alt="Infant Program" class="lazy" />
+					<img data-program="toddler" data-lazy-src="https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg" alt="Toddler Program" class="lazy" />
+					<img data-program="preschool" data-lazy-src="https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Preschool.jpg" alt="Preschool Program" class="lazy" />
 				</div>
 			</div>
 		</div>
@@ -638,22 +643,22 @@ HTML;
  */
 function kms_get_program_detail_html( $title ) {
 	$title_html = esc_html( $title );
-	$image_url  = 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg';
+	$image_url  = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg';
 
 	if ( 'Toddler' === $title ) {
-		$image_url = 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg';
+		$image_url = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg';
 	} elseif ( 'Early Preschool' === $title ) {
-		$image_url = 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Early-Preschool.jpg';
+		$image_url = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Early-Preschool.jpg';
 	} elseif ( 'Preschool' === $title ) {
-		$image_url = 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Preschool.jpg';
+		$image_url = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Preschool.jpg';
 	} elseif ( 'Pre-Kindergarten' === $title ) {
-		$image_url = 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-PreK.jpg';
+		$image_url = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-PreK.jpg';
 	} elseif ( 'Kindergarten' === $title ) {
-		$image_url = 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Kindergarten.jpg';
+		$image_url = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Kindergarten.jpg';
 	} elseif ( 'School Age' === $title ) {
-		$image_url = 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-School-Aged.jpg';
+		$image_url = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-School-Aged.jpg';
 	} elseif ( 'Summer Camp' === $title ) {
-		$image_url = 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Summer-updated.jpg';
+		$image_url = 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Summer-updated.jpg';
 	}
 
 	$image_url = esc_url( $image_url );
@@ -695,42 +700,42 @@ function kms_get_life_gallery_default_items() {
 	return array(
 		array(
 			'image_id'     => 0,
-			'image_url'    => 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg',
+			'image_url'    => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg',
 			'title'        => 'Calm Beginnings',
 			'description'  => 'Warm care and comforting routines help our youngest learners feel safe and supported.',
 			'alt'          => 'Infant classroom moments',
 		),
 		array(
 			'image_id'     => 0,
-			'image_url'    => 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg',
+			'image_url'    => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg',
 			'title'        => 'Hands-On Discovery',
 			'description'  => 'Toddlers explore, move, and communicate through guided play and meaningful interactions.',
 			'alt'          => 'Toddler activity time',
 		),
 		array(
 			'image_id'     => 0,
-			'image_url'    => 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Preschool.jpg',
+			'image_url'    => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Preschool.jpg',
 			'title'        => 'Growing Confidence',
 			'description'  => 'Preschoolers build early academic and social skills with playful, age-appropriate learning.',
 			'alt'          => 'Preschool learning activity',
 		),
 		array(
 			'image_id'     => 0,
-			'image_url'    => 'https://chestnutsquareacademy.com/wp-content/uploads/2024/08/teacher-parent-circle-time.jpg',
+			'image_url'    => 'https://kiddieacademy.com/wp-content/uploads/2024/08/teacher-parent-circle-time.jpg',
 			'title'        => 'Trusted Relationships',
 			'description'  => 'Our team creates nurturing connections with every child and keeps families closely informed.',
 			'alt'          => 'Teacher and child during reading time',
 		),
 		array(
 			'image_id'     => 0,
-			'image_url'    => 'https://chestnutsquareacademy.com/wp-content/uploads/2024/08/learnon-classroom-group-activity.jpg',
+			'image_url'    => 'https://kiddieacademy.com/wp-content/uploads/2024/08/learnon-classroom-group-activity.jpg',
 			'title'        => 'Everyday Joy',
 			'description'  => 'Music, movement, art, and story time bring joyful learning moments into every day.',
 			'alt'          => 'Small group classroom project',
 		),
 		array(
 			'image_id'     => 0,
-			'image_url'    => 'https://chestnutsquareacademy.com/wp-content/uploads/2024/08/Chestnut-academy-center-exterior.jpg',
+			'image_url'    => 'https://kiddieacademy.com/wp-content/uploads/2024/08/kiddie-academy-center-exterior.jpg',
 			'title'        => 'Downtown McKinney Home',
 			'description'  => 'Located in Historic Downtown McKinney, our center is a welcoming neighborhood place for families.',
 			'alt'          => 'School exterior',
@@ -998,9 +1003,11 @@ function kms_import_life_gallery_from_docs() {
 function kms_get_life_at_chestnut_html() {
 	$items = kms_get_life_gallery_items();
 	$cards = '';
+	$image_pool = array();
 
 	foreach ( $items as $item ) {
-		$image_url   = isset( $item['image_url'] ) ? esc_url( (string) $item['image_url'] ) : '';
+		$image_source = isset( $item['image_url'] ) ? esc_url_raw( (string) $item['image_url'] ) : '';
+		$image_url   = '' !== $image_source ? esc_url( $image_source ) : '';
 		$title       = isset( $item['title'] ) ? esc_html( (string) $item['title'] ) : 'Life at Chestnut Moment';
 		$alt         = isset( $item['alt'] ) ? esc_attr( (string) $item['alt'] ) : esc_attr( $title );
 
@@ -1015,6 +1022,20 @@ function kms_get_life_at_chestnut_html() {
 				</div>
 			</div>
 HTML;
+
+		$image_pool[] = array(
+			'url' => $image_source,
+			'alt' => isset( $item['alt'] ) ? wp_strip_all_tags( (string) $item['alt'] ) : wp_strip_all_tags( (string) $title ),
+		);
+	}
+
+	$featured_image_url = isset( $image_pool[0]['url'] ) ? esc_url( (string) $image_pool[0]['url'] ) : 'https://kiddieacademy.com/wp-content/uploads/2024/08/teacher-parent-circle-time.jpg';
+	$featured_image_alt = isset( $image_pool[0]['alt'] ) ? (string) $image_pool[0]['alt'] : 'Children learning together at Chestnut Square Academy';
+	$featured_image_alt = esc_attr( $featured_image_alt );
+	$image_pool_json    = wp_json_encode( $image_pool );
+
+	if ( ! is_string( $image_pool_json ) || '' === $image_pool_json ) {
+		$image_pool_json = '[]';
 	}
 
 	return <<<HTML
@@ -1029,10 +1050,124 @@ HTML;
 	</div>
 </section>
 
+<section class="life-age-groups padding-top padding-bottom">
+	<style>
+		.life-age-groups .life-age-tabs { display:flex; flex-wrap:wrap; gap:10px; margin:0 0 18px; }
+		.life-age-groups .life-age-tab { border:1px solid #d0cac4; background:#fff; color:#24313A; padding:10px 16px; font-weight:800; cursor:pointer; border-radius:999px; }
+		.life-age-groups .life-age-tab.is-active { background:#2E7D32; color:#fff; border-color:#2E7D32; }
+		.life-age-groups .life-age-featured { margin:0 0 18px; max-width:860px; }
+		.life-age-groups .life-age-featured img { display:block; width:100%; height:auto; object-fit:cover; }
+		.life-age-groups .life-age-panel { display:none; border-left:3px solid #E0A96D; padding:4px 0 4px 14px; }
+		.life-age-groups .life-age-panel.is-active { display:block; }
+	</style>
+	<div class="content-wrapper">
+		<div class="intro">
+			<h2>Learning by Age Group</h2>
+		</div>
+		<div class="life-age-tabs" role="tablist" aria-label="Age group tabs">
+			<button class="life-age-tab is-active" type="button" data-life-tab="infants" role="tab" aria-selected="true">Infants</button>
+			<button class="life-age-tab" type="button" data-life-tab="toddlers" role="tab" aria-selected="false">Toddlers</button>
+			<button class="life-age-tab" type="button" data-life-tab="early-preschool" role="tab" aria-selected="false">Early Preschool</button>
+			<button class="life-age-tab" type="button" data-life-tab="preschool-prek" role="tab" aria-selected="false">Preschool &amp; Pre-K</button>
+		</div>
+		<div class="life-age-featured">
+			<img class="life-age-featured-img" src="{$featured_image_url}" data-lazy-src="{$featured_image_url}" alt="{$featured_image_alt}">
+		</div>
+		<div class="life-age-panels">
+			<div class="life-age-panel is-active" data-life-panel="infants" role="tabpanel">
+				<p>6 weeks to 12 months. Gentle routines, responsive care, and early developmental milestones in a calm classroom.</p>
+			</div>
+			<div class="life-age-panel" data-life-panel="toddlers" role="tabpanel">
+				<p>13 to 24 months. Language growth, movement, and social-emotional learning through guided play and exploration.</p>
+			</div>
+			<div class="life-age-panel" data-life-panel="early-preschool" role="tabpanel">
+				<p>2-year-olds. Structured discovery, growing independence, and consistent routines that support confidence.</p>
+			</div>
+			<div class="life-age-panel" data-life-panel="preschool-prek" role="tabpanel">
+				<p>3 to 5 years. Literacy, early math, creative expression, and school-readiness skills built through daily practice.</p>
+			</div>
+		</div>
+	</div>
+	<script>
+	(function () {
+		var scope = document.querySelector('.life-age-groups');
+		if (!scope) { return; }
+		var tabs = scope.querySelectorAll('.life-age-tab');
+		var panels = scope.querySelectorAll('.life-age-panel');
+		var featured = scope.querySelector('.life-age-featured-img');
+		var galleryImages = {$image_pool_json};
+		if (!tabs.length || !panels.length) { return; }
+		function pickRandomImage() {
+			if (!featured || !galleryImages || !galleryImages.length) { return; }
+			var next = galleryImages[Math.floor(Math.random() * galleryImages.length)];
+			if (!next || !next.url) { return; }
+			featured.setAttribute('src', next.url);
+			featured.setAttribute('data-lazy-src', next.url);
+			if (next.alt) { featured.setAttribute('alt', next.alt); }
+		}
+		tabs.forEach(function (tab) {
+			tab.addEventListener('click', function () {
+				var key = tab.getAttribute('data-life-tab');
+				tabs.forEach(function (t) {
+					t.classList.remove('is-active');
+					t.setAttribute('aria-selected', 'false');
+				});
+				panels.forEach(function (p) {
+					p.classList.remove('is-active');
+				});
+				tab.classList.add('is-active');
+				tab.setAttribute('aria-selected', 'true');
+				var panel = scope.querySelector('.life-age-panel[data-life-panel=\"' + key + '\"]');
+				if (panel) { panel.classList.add('is-active'); }
+				pickRandomImage();
+			});
+		});
+	})();
+	</script>
+</section>
+
 <section class="column-3-image-text-cards life-gallery-grid padding-top padding-bottom">
 	<div class="content-wrapper">
 		<div class="column-3">
 {$cards}
+		</div>
+	</div>
+</section>
+</main>
+HTML;
+}
+
+/**
+ * Build simplified Contact Us page HTML with one unified content block.
+ *
+ * @return string
+ */
+function kms_get_contact_us_html() {
+	return <<<HTML
+<main id="main-content">
+<section class="subpage-hero padding-bottom padding-top offset-bg-parent">
+	<div class="offset-bg tan extend-left round-bottom-right no-media"></div>
+	<div class="text-and-image content-wrapper no-media">
+		<div class="text-left">
+			<h1>Contact Us</h1>
+			<p>Tell us about your family and we will follow up with available tour times.</p>
+		</div>
+	</div>
+</section>
+
+<section id="contact-details" class="full-width-text margin-top left-aligned bg-default">
+	<div class="content-wrapper">
+		<div class="content">
+			<div class="text">
+				<h2>Visit Chestnut Square Academy</h2>
+				<div class="card-copy">
+					<p>402 S. Chestnut St., McKinney, TX</p>
+					<p>Hours: Monday-Friday, 6:00 AM-6:00 PM</p>
+					<p>Texas Rising Star daycare in Downtown McKinney.</p>
+					<p>Schedule a tour through our form and our team will contact you with current availability and next steps.</p>
+					<p><a href="https://maps.google.com/?q=402+S+Chestnut+St,+McKinney,+TX">Get Directions</a></p>
+				</div>
+			</div>
 		</div>
 	</div>
 </section>
@@ -1064,6 +1199,10 @@ function kms_sync_life_gallery_page() {
 function kms_get_page_html( $template, $title, $path ) {
 	if ( 'life-at-chestnut' === $template ) {
 		return kms_get_life_at_chestnut_html();
+	}
+
+	if ( 'contact-us' === $template ) {
+		return kms_get_contact_us_html();
 	}
 
 	if ( 'faq' === $template ) {
@@ -1105,15 +1244,15 @@ function kms_localize_internal_links( $html ) {
 	$root = trailingslashit( home_url() );
 
 	$replacements = array(
-		'href="https://chestnutsquareacademy.com/'   => 'href="' . $root,
-		"href='https://chestnutsquareacademy.com/"   => "href='" . $root,
-		'action="https://chestnutsquareacademy.com/' => 'action="' . $root,
-		"action='https://chestnutsquareacademy.com/" => "action='" . $root,
+		'href="https://kiddieacademy.com/'   => 'href="' . $root,
+		"href='https://kiddieacademy.com/"   => "href='" . $root,
+		'action="https://kiddieacademy.com/' => 'action="' . $root,
+		"action='https://kiddieacademy.com/" => "action='" . $root,
 		'href="/'                            => 'href="' . $root,
 		"href='/"                            => "href='" . $root,
 		'action="/'                          => 'action="' . $root,
 		"action='/"                          => "action='" . $root,
-		'®'                                  => '&reg;',
+		'Â®'                                  => '&reg;',
 	);
 
 	return strtr( $html, $replacements );
@@ -1607,12 +1746,12 @@ function kms_owner_shared_images() {
 
 	return array(
 		'hero'      => $theme_base . 'cover.png',
-		'classroom' => 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Preschool.jpg',
-		'infant'    => 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg',
-		'toddler'   => 'https://chestnutsquareacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg',
-		'staff'     => 'https://chestnutsquareacademy.com/wp-content/uploads/2024/08/teacher-parent-circle-time.jpg',
-		'activity'  => 'https://chestnutsquareacademy.com/wp-content/uploads/2024/08/learnon-classroom-group-activity.jpg',
-		'exterior'  => 'https://chestnutsquareacademy.com/wp-content/uploads/2024/08/Chestnut-academy-center-exterior.jpg',
+		'classroom' => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Preschool.jpg',
+		'infant'    => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg',
+		'toddler'   => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg',
+		'staff'     => 'https://kiddieacademy.com/wp-content/uploads/2024/08/teacher-parent-circle-time.jpg',
+		'activity'  => 'https://kiddieacademy.com/wp-content/uploads/2024/08/learnon-classroom-group-activity.jpg',
+		'exterior'  => 'https://kiddieacademy.com/wp-content/uploads/2024/08/kiddie-academy-center-exterior.jpg',
 	);
 }
 
@@ -1811,54 +1950,6 @@ function kms_build_owner_page_data( $path, $post_id ) {
 			array(
 				kms_owner_heading_widget( $post_id, $counter, 'A Small School with a Big Heart', 'h1' ),
 				kms_owner_text_widget( $post_id, $counter, '<p>Chestnut Square Academy is rooted in Downtown McKinney and built around close relationships with children and families.</p>' ),
-			),
-			'kms-owner-section kms-owner-hero'
-		),
-		kms_owner_make_container(
-			$post_id,
-			$counter,
-			array(
-				kms_owner_make_container(
-					$post_id,
-					$counter,
-					array(
-						kms_owner_make_container(
-							$post_id,
-							$counter,
-							array(
-								kms_owner_heading_widget( $post_id, $counter, 'Director Message', 'h2' ),
-								kms_owner_text_widget( $post_id, $counter, '<p>Welcome to our school community. We believe children thrive when they feel safe, known, and encouraged every day.</p>' ),
-								kms_owner_text_widget( $post_id, $counter, '<p>Our team is committed to partnering with families and making each classroom a place where learning and care go hand in hand.</p>' ),
-							),
-							'kms-owner-col',
-							'',
-							true,
-							'div'
-						),
-						kms_owner_make_container(
-							$post_id,
-							$counter,
-							array(
-								kms_owner_image_widget( $post_id, $counter, $images['staff'] ),
-							),
-							'kms-owner-col',
-							'',
-							true,
-							'div'
-						),
-					),
-					'kms-owner-grid kms-owner-grid-two',
-					'',
-					true,
-					'div'
-				),
-			),
-			'kms-owner-section'
-		),
-		kms_owner_make_container(
-			$post_id,
-			$counter,
-			array(
 				kms_owner_heading_widget( $post_id, $counter, 'Our Approach', 'h2' ),
 				kms_owner_icon_list_widget(
 					$post_id,
@@ -2685,7 +2776,7 @@ function kms_upsert_native_parity_page( $blueprint, $overwrite ) {
 }
 
 /**
- * Run native parity seed (fully native Elementor widgets + maximum Chestnut parity).
+ * Run native parity seed (fully native Elementor widgets + maximum Kiddie parity).
  *
  * @param bool $overwrite Overwrite content.
  */
@@ -2720,10 +2811,8 @@ function kms_get_small_business_blueprints() {
 	return array(
 		array( 'path' => 'home', 'title' => 'Home', 'template' => 'home' ),
 		array( 'path' => 'life-at-chestnut', 'title' => 'Life at Chestnut', 'template' => 'life-at-chestnut' ),
-		array( 'path' => 'company', 'title' => 'About Us', 'template' => 'company' ),
 		array( 'path' => 'faq', 'title' => 'Frequently Asked Questions', 'template' => 'faq' ),
 		array( 'path' => 'contact-us', 'title' => 'Contact Us', 'template' => 'contact-us' ),
-		array( 'path' => 'privacy-policy', 'title' => 'Privacy Policy', 'template' => 'generic' ),
 	);
 }
 
@@ -2785,6 +2874,14 @@ function kms_small_business_map_href( $href ) {
 		return home_url( '/life-at-chestnut/' );
 	}
 
+	if ( preg_match( '#^/company(?:/|$)#', $path ) ) {
+		return home_url( '/#about-home' );
+	}
+
+	if ( preg_match( '#^/privacy-policy(?:/|$)#', $path ) ) {
+		return home_url( '/contact-us/' );
+	}
+
 	if ( preg_match( '#^/(careers|franchising|corporate-careers)(?:/|$)#', $path ) ) {
 		return home_url( '/contact-us/' );
 	}
@@ -2801,6 +2898,62 @@ function kms_small_business_map_href( $href ) {
 }
 
 /**
+ * Return homepage About block markup used for one-page navigation.
+ *
+ * @return string
+ */
+function kms_get_home_about_section_html() {
+	return <<<HTML
+<section id="about-home" class="about-home full-width-text margin-top margin-bottom left-aligned bg-default">
+	<div class="content-wrapper">
+		<div class="content">
+			<div class="text">
+				<span id="about-home"></span>
+				<h2>A Small School with a Big Heart</h2>
+				<p>Chestnut Square Academy is located in the heart of Historic Downtown McKinney and serves children from 6 weeks through 4/5 years of age.</p>
+				<p>As a small center, we prioritize close relationships with families, consistent routines, and warm daily care.</p>
+				<p>CSA is part of the Texas Rising Star Program and committed to serving children and their families with dependable, community-centered support.</p>
+				<div class="card-copy">
+					<h3>Our Approach</h3>
+					<p>Our classrooms focus on:</p>
+					<ul>
+						<li>Warm, responsive care in every room</li>
+						<li>Age-appropriate learning experiences</li>
+						<li>Family partnership and communication</li>
+						<li>A neighborhood-centered school community in Downtown McKinney</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+HTML;
+}
+
+/**
+ * Redirect retired single-site routes to active destinations.
+ */
+function kms_redirect_retired_small_business_routes() {
+	if ( is_admin() ) {
+		return;
+	}
+
+	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? (string) $_SERVER['REQUEST_URI'] : '';
+	$request_uri = trim( wp_parse_url( $request_uri, PHP_URL_PATH ), '/' );
+
+	if ( 'company' === $request_uri ) {
+		wp_safe_redirect( home_url( '/#about-home' ), 301 );
+		exit;
+	}
+
+	if ( 'privacy-policy' === $request_uri ) {
+		wp_safe_redirect( home_url( '/contact-us/' ), 301 );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'kms_redirect_retired_small_business_routes', 1 );
+
+/**
  * Apply small-business section/component trimming without touching styles.
  *
  * @param string $path Page path.
@@ -2815,6 +2968,8 @@ function kms_trim_small_business_html( $path, $html ) {
 	$queries_map = array(
 		'home'           => array(
 			"//*[@id='hero']//*[contains(concat(' ', normalize-space(@class), ' '), ' locator ')]",
+			"//*[@id='curriculum']",
+			"//*[@id='why-kiddie']",
 			"//section[contains(translate(normalize-space(string(.)),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'learning with momentum')]",
 			"//*[@id='join-us']",
 			"//*[@id='start-your-career']",
@@ -2883,6 +3038,18 @@ function kms_trim_small_business_html( $path, $html ) {
 		libxml_use_internal_errors( $internal_errors );
 	}
 
+	if ( 'home' === $path && false === strpos( $html, 'id="about-home"' ) ) {
+		$about_section = kms_get_home_about_section_html();
+		$count         = 0;
+		$updated_home  = preg_replace( '/(<section id="hero"[\s\S]*?<\/section>)/i', '$1' . $about_section, $html, 1, $count );
+
+		if ( is_string( $updated_home ) && $count > 0 ) {
+			$html = $updated_home;
+		} else {
+			$html .= $about_section;
+		}
+	}
+
 	$internal_errors = libxml_use_internal_errors( true );
 	$document        = new DOMDocument( '1.0', 'UTF-8' );
 	$wrapped_html    = '<div id="kms-small-links-root">' . $html . '</div>';
@@ -2924,6 +3091,10 @@ function kms_trim_small_business_html( $path, $html ) {
 		'Where <span>Learning</span> Grows' => $hero_tagline_html,
 		'Rooted in Care. Growing Together.' => $hero_tagline_html,
 		'Rooted in Care.<br>Growing Together.' => $hero_tagline_html,
+		'Learning for Every Age' => 'Learning by Age Group',
+		'5/6 years of age' => '4/5 years of age',
+		'5/6 years old' => '4/5 years old',
+		'5/6 years' => '4/5 years',
 		'Programs at a Glance' => 'LIFE AT CHESTNUT',
 		'<p class="program-title">Pre-Kindergarten</p>' => '<p class="program-title">Pre-K</p>',
 		'aria-label="Pre-Kindergarten 4-Year-Olds"' => 'aria-label="Pre-K 4 to 5-Year-Olds"',
@@ -2931,72 +3102,188 @@ function kms_trim_small_business_html( $path, $html ) {
 		'alt="Pre-Kindergarten Program"' => 'alt="Pre-K Program"',
 		'Learning with momentum for every stage.' => '',
 		'Learning with momentum' => '',
-		'https://chestnutsquareacademy.com/wp-content/uploads/2024/09/landing-hero-jpg.avif' => trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/cover.png',
-		'https://chestnutsquareacademy.com/wp-content/uploads/2024/09/landing-hero-mobile-updated2-jpg.avif' => trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/cover.png',
-		'alt="Chestnut Square Academy"' => 'alt="Chestnut Square Academy"',
+		'https://kiddieacademy.com/wp-content/uploads/2024/09/landing-hero-jpg.avif' => trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/cover.png',
+		'https://kiddieacademy.com/wp-content/uploads/2024/09/landing-hero-mobile-updated2-jpg.avif' => trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/cover.png',
+		'alt="Kiddie Academy"' => 'alt="Chestnut Square Academy"',
 		'Find an Academy Near You'             => 'Schedule a Tour',
 		'Find Your Academy'                    => 'Schedule a Tour',
 		'View All Academies'                   => 'Schedule a Tour',
-		'Why Parents Love Chestnut Square Academy<sup>Â®</sup>' => 'Why Families Choose Chestnut Square Academy',
-		'Why Parents Love Chestnut Square Academy<sup>®</sup>' => 'Why Families Choose Chestnut Square Academy',
-		'The Chestnut Square Academy Difference'        => 'The Chestnut Square Academy Difference',
+		'Why Parents Love Kiddie Academy<sup>Ã‚Â®</sup>' => 'Why Families Choose Chestnut Square Academy',
+		'Why Parents Love Kiddie Academy<sup>Â®</sup>' => 'Why Families Choose Chestnut Square Academy',
+		'The Kiddie Academy Difference'        => 'The Chestnut Square Academy Difference',
 		'A Curriculum Focused on Outcomes'     => 'A Care-and-Learning Approach',
-		'Our educators nurture, educate, and inspire your child through our proprietary <em>Life Essentials<sup>Â®</sup></em> curriculum, which is designed to focus on the six outcomes that prepare children for life.' => 'Our teachers create calm, nurturing classrooms where children build confidence, routines, and early learning skills every day.',
+		'Our educators nurture, educate, and inspire your child through our proprietary <em>Life Essentials<sup>Ã‚Â®</sup></em> curriculum, which is designed to focus on the six outcomes that prepare children for life.' => 'Our teachers create calm, nurturing classrooms where children build confidence, routines, and early learning skills every day.',
 		'About Life Essentials'                => 'Our Approach',
-		'Your childâ€™s safety is our first priority. Every Chestnut Square Academy Educational Child Care features secure, restricted entries and employees are trained on health and safety protocols.' => 'Your child&rsquo;s safety is our first priority. Our team follows classroom safety procedures and daily supervision practices designed for young learners.',
+		'Your childÃ¢â‚¬â„¢s safety is our first priority. Every Kiddie Academy Educational Child Care features secure, restricted entries and employees are trained on health and safety protocols.' => 'Your child&rsquo;s safety is our first priority. Our team follows classroom safety procedures and daily supervision practices designed for young learners.',
 		'About Health & Safety'                => 'Health & Safety',
 		'We are a community where lifelong friendships and lasting memories are formed.' => 'As a small Downtown McKinney center, we build close relationships with children and families.',
-		'Community Begins Here<sup>Â®</sup>'    => 'A Neighborhood School Community',
+		'Community Begins Here<sup>Ã‚Â®</sup>'    => 'A Neighborhood School Community',
+		'Community Begins Here<sup>Â®</sup>'     => 'Rooted in Care',
 		'Making the Most of Every Learning Moment, from Day One' => 'Care, Learning, and Family Partnership in Downtown McKinney',
-		'Weâ€™ve been shaping, fueling, and nurturing childrenâ€™s natural curiosity since we opened our first Academy over 40 years ago. Weâ€™re driven to prepare children for life. Through our passion for early childhood education, community commitment, and our <em>Life Essentials</em><sup>Â®</sup> curriculum, weâ€™re here to educate and encourage your child to do more and be moreâ€”not just while theyâ€™re with us, but outside the classroom as well.' => 'Chestnut Square Academy is a small childcare center in Historic Downtown McKinney serving children from 6 weeks through 5/6 years. As a Texas Rising Star participant, we focus on warm relationships, reliable care, and strong early-learning foundations.',
+		'WeÃ¢â‚¬â„¢ve been shaping, fueling, and nurturing childrenÃ¢â‚¬â„¢s natural curiosity since we opened our first Academy over 40 years ago. WeÃ¢â‚¬â„¢re driven to prepare children for life. Through our passion for early childhood education, community commitment, and our <em>Life Essentials</em><sup>Ã‚Â®</sup> curriculum, weÃ¢â‚¬â„¢re here to educate and encourage your child to do more and be moreÃ¢â‚¬â€not just while theyÃ¢â‚¬â„¢re with us, but outside the classroom as well.' => 'Chestnut Square Academy is a small childcare center in Historic Downtown McKinney serving children from 6 weeks through 4/5 years. As a Texas Rising Star participant, we focus on warm relationships, reliable care, and strong early-learning foundations.',
+		'Weâ€™ve been shaping, fueling, and nurturing childrenâ€™s natural curiosity since we opened our first Academy over 40 years ago. Weâ€™re driven to prepare children for life. Through our passion for early childhood education, community commitment, and our <em>daily learning</em><sup>Â®</sup> curriculum, weâ€™re here to educate and encourage your child to do more and be moreâ€”not just while theyâ€™re with us, but outside the classroom as well.' => 'Chestnut Square Academy is a small childcare center in Historic Downtown McKinney serving children from 6 weeks through 4/5 years. As a Texas Rising Star daycare in Downtown McKinney, we focus on warm relationships, reliable care, and strong early-learning foundations.',
 		'Explore Our History'                  => 'Schedule a Tour',
 		'href="/about-us/timeline/"'          => 'href="/contact-us/"',
 		'Care and curriculum go hand in hand. We nurture and guide children, inspiring them to develop a life-long love of learning. Our proprietary curriculum, <em>Life Essentials</em>, was crafted to focus on <a href="/contact-us/" aria-label="Outcomes for Life - six key outcomes">six key outcomes</a>, preparing your child for life.' => 'Care and learning go hand in hand. We guide children with age-appropriate activities, supportive routines, and family communication that helps each child grow with confidence.',
-		'We are a community that nurtures, educates, and inspires children for the future in Chestnut Square Academy locations across the country.' => 'We are a close-knit school community that nurtures, educates, and inspires children in the heart of Downtown McKinney.',
-		'Founded in 1981, George and Pauline Miller combined their passion to create an educational child care brand that creates lasting memories. The Miller family continues to own and operate Chestnut Square Academy to this day. Over the years, they have empowered other families to own and operate Academies in their communities.' => 'Chestnut Square Academy is family-focused and community-centered, with a small enrollment that allows personal attention and strong relationships.',
+		'We are a community that nurtures, educates, and inspires children for the future in Kiddie Academy locations across the country.' => 'We are a close-knit school community that nurtures, educates, and inspires children in the heart of Downtown McKinney.',
+		'Founded in 1981, George and Pauline Miller combined their passion to create an educational child care brand that creates lasting memories. The Miller family continues to own and operate Kiddie Academy to this day. Over the years, they have empowered other families to own and operate Academies in their communities.' => 'Chestnut Square Academy is family-focused and community-centered, with a small enrollment that allows personal attention and strong relationships.',
 		'What are your teacher qualifications and training requirements?' => 'What are your teacher qualifications and training requirements?',
-		'All Chestnut Square Academy educators must meet or exceed the state requirements for child care providers, including background clearance, education qualifications, and ongoing professional development.' => 'Our educators meet Texas licensing requirements, including background checks, required training, and ongoing professional development.',
-		'How much is tuition at Chestnut Square Academy ?' => 'How can I learn about tuition and enrollment?',
-		'Tuition at Chestnut Square Academy is affected by your child&rsquo;s age, programs, days and hours your child attends, and location. Contact your local Academy for specific costs.' => 'Tuition depends on your child&rsquo;s age and weekly schedule. Contact us directly for current enrollment details.',
+		'All Kiddie Academy educators must meet or exceed the state requirements for child care providers, including background clearance, education qualifications, and ongoing professional development.' => 'Our educators meet Texas licensing requirements, including background checks, required training, and ongoing professional development.',
+		'How much is tuition at Kiddie Academy ?' => 'How can I learn about tuition and enrollment?',
+		'Tuition at Kiddie Academy is affected by your child&rsquo;s age, programs, days and hours your child attends, and location. Contact your local Academy for specific costs.' => 'Tuition depends on your child&rsquo;s age and weekly schedule. Contact us directly for current enrollment details.',
 		'Focused on six key outcomes for your child, our proprietary, developmentally-appropriate' => 'Our age-appropriate lessons combine teacher guidance, hands-on play, and social-emotional growth throughout the day.',
 		'Life Essentials'                      => 'daily learning',
-		'Chestnut Square Academy FAQs'                 => 'Chestnut Square Academy FAQs',
+		'Kiddie Academy FAQs'                 => 'Chestnut Square Academy FAQs',
 		'Programs vary by Academy location, with options organized by age and developmental stage from infants through school-age programs.' => 'Programs are organized by age and developmental stage from infancy through pre-k.',
 		'Scheduling options can differ by location and classroom availability. Contact your preferred Academy to review current enrollment options.' => 'Scheduling options depend on classroom availability. Contact us to review current openings and tour times.',
 		'What should we bring on the first day?' => 'What should we bring on the first day?',
 		'Your Academy will share a classroom-specific checklist before start date, including required forms, comfort items, and daily essentials.' => 'Our team will share a classroom checklist before your start date, including required forms and daily comfort items.',
 		'Learning with momentum'               => 'Schedule a Tour',
 		'Our approach to early education is to capture the momentum of curiosity and involve parents in every minute of it.' => 'We would love to meet your family, answer your questions, and help you explore the best classroom fit for your child.',
-		'Contact <br>Chestnut Square Academy Corporate' => 'Contact <br>Chestnut Square Academy',
-		'Chestnut Square Academy Corporate'             => 'Chestnut Square Academy',
+		'Contact <br>Kiddie Academy Corporate' => 'Contact <br>Chestnut Square Academy',
+		'Kiddie Academy Corporate'             => 'Chestnut Square Academy',
 		'3415 Box Hill Corporate Center Drive' => '402 S. Chestnut St.',
 		'Abingdon, MD 21009'                   => 'McKinney, TX',
-		'Chestnut Square Academy<sup>Â®</sup>'          => 'Chestnut Square Academy',
-		'Chestnut Square Academy<sup>®</sup>'           => 'Chestnut Square Academy',
+		'Kiddie Academy<sup>Ã‚Â®</sup>'          => 'Chestnut Square Academy',
+		'Kiddie Academy<sup>Â®</sup>'           => 'Chestnut Square Academy',
 		'Local: <a href="tel:410-515-0788"><b>410-515-0788</b></a>' => 'Hours: Monday-Friday, 6:00 AM-6:00 PM',
 		'Toll-free: <a href="tel:800-554-3343"><b>800-554-3343</b></a>' => '',
-		'To contact your local Chestnut Square Academy, <a href="/contact-us/"><b>find our nearest location here</b></a>.' => 'Schedule a tour and our team will contact you with current availability.',
-		'Chestnut Square Academy Educational Child Care' => 'Chestnut Square Academy',
-		'Chestnut Square Academy Parent'                => 'Chestnut Square Academy Family',
+		'To contact your local Kiddie Academy, <a href="/contact-us/"><b>find our nearest location here</b></a>.' => 'Schedule a tour and our team will contact you with current availability.',
+		'Kiddie Academy Educational Child Care' => 'Chestnut Square Academy',
+		'Kiddie Academy Parent'                => 'Chestnut Square Academy Family',
 		'Every Academy environment is designed to support age-appropriate learning, social development, and strong family partnership.' => 'Our classrooms support age-appropriate learning, social growth, and strong family partnership.',
 	);
 
 	$html = str_replace( array_keys( $text_replacements ), array_values( $text_replacements ), $html );
 
 	$html = preg_replace(
-		'/To contact your local Chestnut Square Academy,\s*<a[^>]*>\s*<b>find our nearest location here<\/b>\s*<\/a>\s*\.?/i',
+		'/To contact your local Kiddie Academy,\s*<a[^>]*>\s*<b>find our nearest location here<\/b>\s*<\/a>\s*\.?/i',
 		'Schedule a tour and our team will contact you with current availability.',
 		$html
 	);
 
 	$html = preg_replace(
-		'/Chestnut Square Academy<sup>\s*(?:Â)?®\s*<\/sup>/i',
+		'/Kiddie Academy<sup>\s*(?:Ã‚)?Â®\s*<\/sup>/i',
 		'Chestnut Square Academy',
 		$html
 	);
 
 	return $html;
 }
+
+/**
+ * Return targeted text-only replacements for real page data migration.
+ *
+ * @return array<string,string>
+ */
+function kms_get_real_data_text_replacements() {
+	return array(
+		'Learning for Every Age' => 'Learning by Age Group',
+		'Community Begins Here<sup>Ãƒâ€šÃ‚Â®</sup>' => 'Rooted in Care',
+		'Community Begins Here<sup>Ã‚Â®</sup>' => 'Rooted in Care',
+		'Community Begins Here<sup>Â®</sup>' => 'Rooted in Care',
+		'Community Begins Here Â®' => 'Rooted in Care',
+		'daily learning Â®' => 'daily learning',
+		'daily learning &reg;' => 'daily learning',
+		'Our educators nurture, educate, and inspire your child through our proprietary daily learning Â® curriculum, which is designed to focus on the six outcomes that prepare children for life.' => 'Our teachers create calm, nurturing classrooms where children build confidence, routines, and early learning skills every day.',
+		'Our proprietary curriculum, daily learning , was crafted to focus on six key outcomes , preparing your child for life.' => 'Our approach combines age-appropriate activities, supportive routines, and family communication that helps each child grow with confidence.',
+		'Your childâ€™s safety is our first priority. Every Chestnut Square Academy features secure, restricted entries and employees are trained on health and safety protocols.' => 'Your childâ€™s safety is our first priority. Our team follows classroom safety procedures and daily supervision practices designed for young learners.',
+		'Weâ€™ve been shaping, fueling, and nurturing childrenâ€™s natural curiosity since we opened our first Academy over 40 years ago. Weâ€™re driven to prepare children for life. Through our passion for early childhood education, community commitment, and our daily learning Â® curriculum, weâ€™re here to educate and encourage your child to do more and be moreâ€”not just while theyâ€™re with us, but outside the classroom as well.' => 'Chestnut Square Academy is a small childcare center in Historic Downtown McKinney serving children from 6 weeks through 4/5 years. As a Texas Rising Star daycare in Downtown McKinney, we focus on warm relationships, reliable care, and strong early-learning foundations.',
+		'We\'ve been shaping, fueling, and nurturing children\'s natural curiosity since we opened our first Academy over 40 years ago. We\'re driven to prepare children for life. Through our passion for early childhood education, community commitment, and our daily learning Â® curriculum, we\'re here to educate and encourage your child to do more and be more-not just while they\'re with us, but outside the classroom as well.' => 'Chestnut Square Academy is a small childcare center in Historic Downtown McKinney serving children from 6 weeks through 4/5 years. As a Texas Rising Star daycare in Downtown McKinney, we focus on warm relationships, reliable care, and strong early-learning foundations.',
+		'Kiddie Academy' => 'Chestnut Square Academy',
+	);
+}
+
+/**
+ * Apply text replacements to a string payload.
+ *
+ * @param string $value Raw text/HTML/JSON string.
+ * @return string
+ */
+function kms_apply_real_data_text_replacements( $value ) {
+	if ( ! is_string( $value ) || '' === $value ) {
+		return $value;
+	}
+
+	$replacements = kms_get_real_data_text_replacements();
+	$value        = str_replace( array_keys( $replacements ), array_values( $replacements ), $value );
+
+		$regex_replacements = array(
+		'/Learning for Every Age/iu' => 'Learning by Age Group',
+		'/\b5\s*\/\s*6\b/iu' => '4/5',
+		'/Community Begins Here(?:\s*<sup>.*?<\/sup>|\s*&reg;|\s*®|\s*Â®)?/isu' => 'Rooted in Care',
+		'/Our educators nurture, educate, and inspire your child through our proprietary(?:\s*<em>)?\s*daily learning(?:\s*<\/em>)?(?:\s*<sup>[^<]*<\/sup>|\s*&reg;|\s*®|\s*Â®)? curriculum, which is designed to focus on the six outcomes that prepare children for life\./iu' => 'Our teachers create calm, nurturing classrooms where children build confidence, routines, and early learning skills every day.',
+		'/Our proprietary curriculum,\s*daily learning\s*,\s*was crafted to focus on\s*six key outcomes\s*,\s*preparing your child for life\./iu' => 'Our approach combines age-appropriate activities, supportive routines, and family communication that helps each child grow with confidence.',
+		'/We.{0,16}ve been shaping, fueling, and nurturing children.{0,16}s natural curiosity since we opened our first Academy over 40 years ago\..*?outside the classroom as well(?:\.|!|<br\s*\/?>)?/isu' => 'Chestnut Square Academy is a small childcare center in Historic Downtown McKinney serving children from 6 weeks through 4/5 years. As a Texas Rising Star daycare in Downtown McKinney, we focus on warm relationships, reliable care, and strong early-learning foundations.',
+	);
+
+	foreach ( $regex_replacements as $pattern => $replacement ) {
+		$updated = preg_replace( $pattern, $replacement, $value );
+		if ( is_string( $updated ) ) {
+			$value = $updated;
+		}
+	}
+
+	return $value;
+}
+
+/**
+ * One-time migration: update real page content + Elementor document text.
+ *
+ * Text-only migration; does not alter layout structure.
+ */
+function kms_migrate_real_page_text_once() {
+	if ( '1.0.5' === (string) get_option( 'kms_real_text_migration_ver', '' ) ) {
+		return;
+	}
+
+	$pages = get_posts(
+		array(
+			'post_type'      => array( 'page', 'elementor_library', 'wp_template', 'wp_template_part' ),
+			'post_status'    => array( 'publish', 'private', 'draft', 'pending' ),
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+		)
+	);
+
+	if ( ! is_array( $pages ) || empty( $pages ) ) {
+		update_option( 'kms_real_text_migration_ver', '1.0.5' );
+		return;
+	}
+
+	foreach ( $pages as $page_id ) {
+		$page_id = (int) $page_id;
+		if ( $page_id <= 0 ) {
+			continue;
+		}
+
+		$post = get_post( $page_id );
+		if ( ! $post instanceof WP_Post ) {
+			continue;
+		}
+
+		$updated_content = kms_apply_real_data_text_replacements( (string) $post->post_content );
+		if ( $updated_content !== (string) $post->post_content ) {
+			wp_update_post(
+				array(
+					'ID'           => $page_id,
+					'post_content' => $updated_content,
+				)
+			);
+		}
+
+		$elementor_raw = get_post_meta( $page_id, '_elementor_data', true );
+		if ( is_string( $elementor_raw ) && '' !== $elementor_raw ) {
+			$updated_elementor = kms_apply_real_data_text_replacements( $elementor_raw );
+			if ( $updated_elementor !== $elementor_raw ) {
+				update_post_meta( $page_id, '_elementor_data', wp_slash( $updated_elementor ) );
+			}
+		}
+	}
+
+	update_option( 'kms_real_text_migration_ver', '1.0.5' );
+}
+add_action( 'init', 'kms_migrate_real_page_text_once', 54 );
 
 /**
  * Upsert one page using reduced native parity data.
@@ -3171,6 +3458,45 @@ function kms_refresh_home_hero_once() {
 add_action( 'init', 'kms_refresh_home_hero_once', 52 );
 
 /**
+ * One-time structural refresh:
+ * - Home: remove age-group/why sections and add About-on-home anchor sections
+ * - Life at Chestnut: add age-group tabs above gallery
+ * - Contact Us: simplify to one unified content block
+ * - Archive separate About/Privacy pages from nav flow
+ */
+function kms_refresh_structure_for_one_page_about_once() {
+	if ( '1.0.3' === (string) get_option( 'kms_structure_refresh_20260323_ver', '' ) ) {
+		return;
+	}
+
+	$blueprints = kms_get_small_business_blueprints();
+	$keep_paths = array();
+
+	foreach ( $blueprints as $blueprint ) {
+		$path = isset( $blueprint['path'] ) ? (string) $blueprint['path'] : '';
+		if ( '' === $path ) {
+			continue;
+		}
+
+		$keep_paths[] = $path;
+
+		if ( in_array( $path, array( 'home', 'life-at-chestnut', 'contact-us' ), true ) ) {
+			kms_upsert_small_business_page( $blueprint, true );
+		}
+	}
+
+	$home = get_page_by_path( 'home', OBJECT, 'page' );
+	if ( $home instanceof WP_Post ) {
+		update_option( 'show_on_front', 'page' );
+		update_option( 'page_on_front', (int) $home->ID );
+	}
+
+	kms_archive_non_small_business_pages( $keep_paths );
+	update_option( 'kms_structure_refresh_20260323_ver', '1.0.3' );
+}
+add_action( 'init', 'kms_refresh_structure_for_one_page_about_once', 53 );
+
+/**
  * One-time auto import from docs/life-at-chestnut when gallery option is empty.
  */
 function kms_auto_import_life_gallery_once() {
@@ -3240,7 +3566,7 @@ function kms_refresh_life_gallery_layout_once() {
 add_action( 'init', 'kms_refresh_life_gallery_layout_once', 55 );
 
 /**
- * Migrate legacy Chestnut/old-logo asset overrides to current CSA defaults.
+ * Migrate legacy Kiddie/old-logo asset overrides to current CSA defaults.
  */
 function kms_migrate_legacy_asset_overrides_once() {
 	if ( '1.0.4' === (string) get_option( 'kms_asset_override_migration_ver', '' ) ) {
@@ -3401,7 +3727,7 @@ function kms_upgrade_legacy_seeded_content( $content ) {
 			$new_content = kms_localize_internal_links( kms_get_faq_html() );
 		}
 	} elseif ( 'home' === $template ) {
-		$has_escaped_hero_css = false !== strpos( $content, '#hero .background-image {<br />' ) || false !== strpos( $content, '&#8216;https://chestnutsquareacademy.com/wp-content/uploads/2024/09/landing-hero' );
+		$has_escaped_hero_css = false !== strpos( $content, '#hero .background-image {<br />' ) || false !== strpos( $content, '&#8216;https://kiddieacademy.com/wp-content/uploads/2024/09/landing-hero' );
 
 		if ( $has_escaped_hero_css ) {
 			$needs_upgrade = true;
@@ -3460,7 +3786,7 @@ function kms_add_admin_pages() {
 		'CSA Site Tools',
 		'CSA Site Tools',
 		'manage_options',
-		'csa-site-tools',
+		'kiddie-mock-seed',
 		'kms_render_tools_page'
 	);
 
@@ -3468,7 +3794,7 @@ function kms_add_admin_pages() {
 		'CSA Site Assets',
 		'CSA Site Assets',
 		'manage_options',
-		'csa-site-assets',
+		'kiddie-mock-assets',
 		'kms_render_assets_page'
 	);
 }
@@ -3480,7 +3806,7 @@ add_action( 'admin_menu', 'kms_add_admin_pages' );
  * @param string $hook_suffix Current admin screen hook suffix.
  */
 function kms_enqueue_admin_assets( $hook_suffix ) {
-	if ( 'tools_page_csa-site-tools' === $hook_suffix ) {
+	if ( 'tools_page_kiddie-mock-seed' === $hook_suffix ) {
 		wp_enqueue_media();
 		wp_enqueue_script(
 			'kms-admin-life-gallery',
@@ -3491,7 +3817,7 @@ function kms_enqueue_admin_assets( $hook_suffix ) {
 		);
 	}
 
-	if ( 'appearance_page_csa-site-assets' !== $hook_suffix ) {
+	if ( 'appearance_page_kiddie-mock-assets' !== $hook_suffix ) {
 		return;
 	}
 
@@ -3610,7 +3936,7 @@ function kms_handle_tools_actions() {
 
 		$redirect = add_query_arg(
 			array(
-				'page'         => 'csa-site-tools',
+				'page'         => 'kiddie-mock-seed',
 				'kms_owner_ok' => '1',
 			),
 			admin_url( 'tools.php' )
@@ -3628,7 +3954,7 @@ function kms_handle_tools_actions() {
 
 		$redirect = add_query_arg(
 			array(
-				'page'          => 'csa-site-tools',
+				'page'          => 'kiddie-mock-seed',
 				'kms_native_ok' => '1',
 			),
 			admin_url( 'tools.php' )
@@ -3651,7 +3977,7 @@ function kms_handle_tools_actions() {
 
 		$redirect = add_query_arg(
 			array(
-				'page'            => 'csa-site-tools',
+				'page'            => 'kiddie-mock-seed',
 				'kms_gallery_ok'  => '1',
 			),
 			admin_url( 'tools.php' )
@@ -3669,7 +3995,7 @@ function kms_handle_tools_actions() {
 		if ( is_wp_error( $imported ) ) {
 			$redirect = add_query_arg(
 				array(
-					'page'            => 'csa-site-tools',
+					'page'            => 'kiddie-mock-seed',
 					'kms_gallery_err' => rawurlencode( $imported->get_error_message() ),
 				),
 				admin_url( 'tools.php' )
@@ -3683,7 +4009,7 @@ function kms_handle_tools_actions() {
 
 		$redirect = add_query_arg(
 			array(
-				'page'               => 'csa-site-tools',
+				'page'               => 'kiddie-mock-seed',
 				'kms_gallery_import' => '1',
 				'kms_gallery_count'  => (string) count( $imported ),
 			),
@@ -3700,7 +4026,7 @@ function kms_handle_tools_actions() {
 
 		$redirect = add_query_arg(
 			array(
-				'page'             => 'csa-site-tools',
+				'page'             => 'kiddie-mock-seed',
 				'kms_gallery_sync' => '1',
 			),
 			admin_url( 'tools.php' )
@@ -3743,7 +4069,7 @@ function kms_handle_tools_actions() {
 
 		$redirect = add_query_arg(
 			array(
-				'page'          => 'csa-site-assets',
+				'page'          => 'kiddie-mock-assets',
 				'kms_assets_ok' => '1',
 			),
 			admin_url( 'themes.php' )
@@ -3759,7 +4085,7 @@ function kms_handle_tools_actions() {
 
 		$redirect = add_query_arg(
 			array(
-				'page'             => 'csa-site-assets',
+				'page'             => 'kiddie-mock-assets',
 				'kms_assets_reset' => '1',
 			),
 			admin_url( 'themes.php' )
@@ -4020,5 +4346,4 @@ function kms_render_assets_page() {
 	</div>
 	<?php
 }
-
 

@@ -137,7 +137,7 @@ function csa_site_seed_default_nav_menus() {
 				),
 				array(
 					'title' => 'About Us',
-					'url'   => home_url( '/company/' ),
+					'url'   => home_url( '/#about-home' ),
 				),
 				array(
 					'title' => 'FAQ',
@@ -162,7 +162,7 @@ function csa_site_seed_default_nav_menus() {
 				),
 				array(
 					'title' => 'About Us',
-					'url'   => home_url( '/company/' ),
+					'url'   => home_url( '/#about-home' ),
 				),
 				array(
 					'title' => 'FAQ',
@@ -184,10 +184,6 @@ function csa_site_seed_default_nav_menus() {
 				array(
 					'title' => 'Schedule a Tour',
 					'url'   => home_url( '/contact-us/' ),
-				),
-				array(
-					'title' => 'Privacy Policy',
-					'url'   => home_url( '/privacy-policy/' ),
 				),
 			),
 		),
@@ -240,6 +236,144 @@ function csa_site_seed_default_nav_menus() {
 	update_option( 'csa_site_nav_seeded_v1', '1' );
 }
 add_action( 'init', 'csa_site_seed_default_nav_menus', 25 );
+
+/**
+ * One-time nav migration:
+ * - Route About links to home anchor (#about-home)
+ * - Remove legacy Privacy Policy links from footer contact menu
+ */
+function kiddie_mock_migrate_nav_links_once() {
+	if ( '1.0.3' === (string) get_option( 'kiddie_mock_nav_migration_20260323', '' ) ) {
+		return;
+	}
+
+	$anchor_url = home_url( '/#about-home' );
+	$locations  = get_nav_menu_locations();
+
+	if ( is_array( $locations ) && ! empty( $locations ) ) {
+		foreach ( $locations as $location => $menu_id ) {
+			$menu_id = (int) $menu_id;
+			if ( $menu_id <= 0 ) {
+				continue;
+			}
+
+			$items = wp_get_nav_menu_items( $menu_id );
+			if ( ! is_array( $items ) || empty( $items ) ) {
+				continue;
+			}
+
+			foreach ( $items as $item ) {
+				if ( ! $item instanceof WP_Post ) {
+					continue;
+				}
+
+				$title = trim( (string) $item->title );
+				$url   = trim( (string) $item->url );
+
+				$is_about = ( false !== stripos( $title, 'about' ) ) || ( false !== stripos( $url, '/company/' ) );
+				if ( $is_about ) {
+					wp_update_nav_menu_item(
+						$menu_id,
+						(int) $item->ID,
+						array(
+							'menu-item-title'  => $title,
+							'menu-item-url'    => $anchor_url,
+							'menu-item-status' => 'publish',
+						)
+					);
+					continue;
+				}
+
+				$is_privacy = ( false !== stripos( $title, 'privacy policy' ) ) || ( false !== stripos( $url, '/privacy-policy/' ) );
+				if ( 'kiddie_footer_contact' === (string) $location && $is_privacy ) {
+					wp_delete_post( (int) $item->ID, true );
+				}
+			}
+
+			// Ensure About Us is first in the primary navbar order.
+			if ( 'kiddie_primary' === (string) $location ) {
+				$fresh_items = wp_get_nav_menu_items( $menu_id );
+				if ( is_array( $fresh_items ) && ! empty( $fresh_items ) ) {
+					$ranked = array();
+
+					foreach ( $fresh_items as $fresh_item ) {
+						if ( ! $fresh_item instanceof WP_Post ) {
+							continue;
+						}
+
+						$item_title = strtolower( trim( (string) $fresh_item->title ) );
+						$item_url   = strtolower( trim( (string) $fresh_item->url ) );
+						$rank       = 99;
+
+						if ( false !== strpos( $item_title, 'about' ) || false !== strpos( $item_url, '#about-home' ) || false !== strpos( $item_url, '/company/' ) ) {
+							$rank = 1;
+						} elseif ( false !== strpos( $item_title, 'life at chestnut' ) ) {
+							$rank = 2;
+						} elseif ( 'faq' === $item_title ) {
+							$rank = 3;
+						} elseif ( false !== strpos( $item_title, 'contact' ) ) {
+							$rank = 4;
+						}
+
+						$ranked[] = array(
+							'id'         => (int) $fresh_item->ID,
+							'rank'       => $rank,
+							'menu_order' => isset( $fresh_item->menu_order ) ? (int) $fresh_item->menu_order : 0,
+						);
+					}
+
+					usort(
+						$ranked,
+						function ( $a, $b ) {
+							if ( $a['rank'] === $b['rank'] ) {
+								return $a['menu_order'] <=> $b['menu_order'];
+							}
+							return $a['rank'] <=> $b['rank'];
+						}
+					);
+
+					$position = 1;
+					foreach ( $ranked as $entry ) {
+						$item_obj = null;
+						foreach ( $fresh_items as $candidate ) {
+							if ( $candidate instanceof WP_Post && (int) $candidate->ID === (int) $entry['id'] ) {
+								$item_obj = $candidate;
+								break;
+							}
+						}
+
+						if ( ! $item_obj instanceof WP_Post ) {
+							continue;
+						}
+
+						wp_update_nav_menu_item(
+							$menu_id,
+							(int) $item_obj->ID,
+							array(
+								'menu-item-object-id' => isset( $item_obj->object_id ) ? (int) $item_obj->object_id : 0,
+								'menu-item-object'    => isset( $item_obj->object ) ? (string) $item_obj->object : '',
+								'menu-item-parent-id' => isset( $item_obj->menu_item_parent ) ? (int) $item_obj->menu_item_parent : 0,
+								'menu-item-position'  => $position,
+								'menu-item-type'      => isset( $item_obj->type ) ? (string) $item_obj->type : 'custom',
+								'menu-item-title'     => isset( $item_obj->title ) ? (string) $item_obj->title : '',
+								'menu-item-url'       => isset( $item_obj->url ) ? (string) $item_obj->url : '',
+								'menu-item-target'    => isset( $item_obj->target ) ? (string) $item_obj->target : '',
+								'menu-item-attr-title'=> isset( $item_obj->attr_title ) ? (string) $item_obj->attr_title : '',
+								'menu-item-classes'   => isset( $item_obj->classes ) && is_array( $item_obj->classes ) ? implode( ' ', array_filter( $item_obj->classes ) ) : '',
+								'menu-item-xfn'       => isset( $item_obj->xfn ) ? (string) $item_obj->xfn : '',
+								'menu-item-status'    => 'publish',
+							)
+						);
+						$position++;
+					}
+				}
+			}
+		}
+	}
+
+	update_option( 'kiddie_mock_nav_migration_20260323', '1.0.3' );
+}
+add_action( 'init', 'kiddie_mock_migrate_nav_links_once', 35 );
 
 /**
  * Return footer text defaults used in Theme Customizer.
@@ -423,7 +557,7 @@ function csa_site_render_primary_nav_menu() {
 		),
 		array(
 			'label' => 'About Us',
-			'url'   => home_url( '/company/' ),
+			'url'   => home_url( '/#about-home' ),
 		),
 		array(
 			'label' => 'FAQ',
@@ -444,6 +578,70 @@ function csa_site_render_primary_nav_menu() {
 	}
 	echo '</ul>';
 }
+
+/**
+ * Ensure primary navbar displays About first, then Life, FAQ, Contact.
+ *
+ * @param array<int,WP_Post> $items Menu items.
+ * @param stdClass           $args  Nav args.
+ * @return array<int,WP_Post>
+ */
+function kiddie_mock_sort_primary_nav_objects( $items, $args ) {
+	if ( ! is_array( $items ) || ! is_object( $args ) ) {
+		return $items;
+	}
+
+	$location = isset( $args->theme_location ) ? (string) $args->theme_location : '';
+	if ( 'kiddie_primary' !== $location ) {
+		return $items;
+	}
+
+	$rank_item = static function ( $item ) {
+		if ( ! $item instanceof WP_Post ) {
+			return 99;
+		}
+
+		$title = strtolower( trim( (string) $item->title ) );
+		$url   = strtolower( trim( (string) $item->url ) );
+
+		if ( false !== strpos( $title, 'about' ) || false !== strpos( $url, '#about-home' ) || false !== strpos( $url, '/company/' ) ) {
+			return 1;
+		}
+
+		if ( false !== strpos( $title, 'life at chestnut' ) ) {
+			return 2;
+		}
+
+		if ( 'faq' === $title ) {
+			return 3;
+		}
+
+		if ( false !== strpos( $title, 'contact' ) ) {
+			return 4;
+		}
+
+		return 99;
+	};
+
+	usort(
+		$items,
+		static function ( $a, $b ) use ( $rank_item ) {
+			$rank_a = $rank_item( $a );
+			$rank_b = $rank_item( $b );
+
+			if ( $rank_a === $rank_b ) {
+				$order_a = ( $a instanceof WP_Post && isset( $a->menu_order ) ) ? (int) $a->menu_order : 0;
+				$order_b = ( $b instanceof WP_Post && isset( $b->menu_order ) ) ? (int) $b->menu_order : 0;
+				return $order_a <=> $order_b;
+			}
+
+			return $rank_a <=> $rank_b;
+		}
+	);
+
+	return $items;
+}
+add_filter( 'wp_nav_menu_objects', 'kiddie_mock_sort_primary_nav_objects', 10, 2 );
 
 /**
  * Render footer nav list with dashboard menu fallback.

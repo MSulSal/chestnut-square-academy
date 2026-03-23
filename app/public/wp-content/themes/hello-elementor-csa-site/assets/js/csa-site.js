@@ -149,6 +149,146 @@
     });
   }
 
+  function bindLifeAgeTabs() {
+    function getFeaturedImage(scope) {
+      if (!scope) {
+        return null;
+      }
+
+      return (
+        scope.querySelector(".life-age-featured img") ||
+        scope.querySelector("img.life-age-featured-img") ||
+        scope.querySelector(".life-age-featured-img img")
+      );
+    }
+
+    function getGalleryImages() {
+      var nodes = document.querySelectorAll(
+        ".life-gallery-grid img, .column-3-image-text-cards img"
+      );
+      var seen = Object.create(null);
+      var images = [];
+
+      nodes.forEach(function (img) {
+        var src = img.getAttribute("src") || img.getAttribute("data-lazy-src");
+        if (!src || seen[src]) {
+          return;
+        }
+
+        seen[src] = true;
+        images.push({
+          src: src,
+          alt: img.getAttribute("alt") || "",
+        });
+      });
+
+      return images;
+    }
+
+    function bindScope(scope) {
+      if (!scope || scope.dataset.kmsLifeTabsBound === "1") {
+        return;
+      }
+
+      var tabs = Array.prototype.slice.call(scope.querySelectorAll(".life-age-tab"));
+      var panels = Array.prototype.slice.call(scope.querySelectorAll(".life-age-panel"));
+
+      if (!tabs.length || !panels.length) {
+        return;
+      }
+
+      var featured = getFeaturedImage(scope);
+      var galleryImages = getGalleryImages();
+
+      function resolvePanelIndex(tab, fallbackIndex) {
+        var key = tab && tab.getAttribute ? tab.getAttribute("data-life-tab") : "";
+        if (key) {
+          var keyedPanel = scope.querySelector('.life-age-panel[data-life-panel="' + key + '"]');
+          if (keyedPanel) {
+            var keyedIndex = panels.indexOf(keyedPanel);
+            if (keyedIndex >= 0) {
+              return keyedIndex;
+            }
+          }
+        }
+
+        return fallbackIndex;
+      }
+
+      function activateByIndex(nextIndex) {
+        var normalizedIndex = typeof nextIndex === "number" && nextIndex >= 0 ? nextIndex : 0;
+
+        tabs.forEach(function (tab, index) {
+          var active = index === normalizedIndex;
+          tab.classList.toggle("is-active", active);
+          tab.setAttribute("aria-selected", active ? "true" : "false");
+        });
+
+        panels.forEach(function (panel, index) {
+          var active = index === normalizedIndex;
+          panel.classList.toggle("is-active", active);
+          panel.style.display = active ? "" : "none";
+        });
+      }
+
+      function updateFeaturedImage() {
+        if (!featured || !galleryImages.length) {
+          return;
+        }
+
+        var currentSrc = featured.getAttribute("src") || featured.getAttribute("data-lazy-src") || "";
+        var next = galleryImages[Math.floor(Math.random() * galleryImages.length)];
+
+        if (galleryImages.length > 1 && next.src === currentSrc) {
+          next = galleryImages[(galleryImages.indexOf(next) + 1) % galleryImages.length];
+        }
+
+        featured.setAttribute("src", next.src);
+        featured.setAttribute("data-lazy-src", next.src);
+        if (next.alt) {
+          featured.setAttribute("alt", next.alt);
+        }
+      }
+
+      tabs.forEach(function (tab, index) {
+        if (tab.dataset.kmsLifeTabBound === "1") {
+          return;
+        }
+
+        tab.addEventListener("click", function (event) {
+          event.preventDefault();
+          var panelIndex = resolvePanelIndex(tab, index);
+          activateByIndex(panelIndex);
+          updateFeaturedImage();
+        });
+
+        tab.addEventListener("keydown", function (event) {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            var panelIndex = resolvePanelIndex(tab, index);
+            activateByIndex(panelIndex);
+            updateFeaturedImage();
+          }
+        });
+
+        tab.dataset.kmsLifeTabBound = "1";
+      });
+
+      var activeTab = scope.querySelector(".life-age-tab.is-active");
+      var activeIndex = activeTab ? tabs.indexOf(activeTab) : 0;
+      activateByIndex(activeIndex >= 0 ? activeIndex : 0);
+      scope.dataset.kmsLifeTabsBound = "1";
+    }
+
+    function initialize() {
+      document.querySelectorAll(".life-age-groups").forEach(bindScope);
+    }
+
+    initialize();
+    window.setTimeout(initialize, 240);
+    window.setTimeout(initialize, 920);
+  }
+
   function faqToggle() {
     if (document.body && document.body.classList.contains("kms-native-parity-mode")) {
       return;
@@ -281,6 +421,117 @@
     setTimeout(apply, 220);
   }
 
+  function bindAboutAnchorScroll() {
+    function normalizePath(pathname) {
+      var value = pathname || "/";
+      if (value.length > 1 && value.slice(-1) === "/") {
+        return value.slice(0, -1);
+      }
+      return value || "/";
+    }
+
+    function getAnchorTarget() {
+      return document.querySelector("section#about-home") || document.getElementById("about-home");
+    }
+
+    function getHeaderOffset() {
+      var header = document.getElementById("header");
+      var cssValue = 0;
+      var parsed = 0;
+      var root = document.documentElement;
+
+      if (root && window.getComputedStyle) {
+        cssValue = window.getComputedStyle(root).getPropertyValue("--csa-sticky-header-live");
+        parsed = parseFloat(cssValue);
+        if (!isNaN(parsed) && parsed > 0) {
+          cssValue = parsed;
+        } else {
+          cssValue = 0;
+        }
+      } else {
+        cssValue = 0;
+      }
+
+      if (!header) {
+        return cssValue || 0;
+      }
+
+      var rect = header.getBoundingClientRect();
+      var headerBottom = rect && rect.bottom ? rect.bottom : 0;
+      return Math.max(cssValue || 0, headerBottom || 0);
+    }
+
+    function scrollToAbout(behavior) {
+      var target = getAnchorTarget();
+      if (!target) {
+        return;
+      }
+
+      var offset = getHeaderOffset() + 10;
+      var y = target.getBoundingClientRect().top + window.pageYOffset - offset;
+      var top = Math.max(0, Math.round(y));
+      window.scrollTo({
+        top: top,
+        behavior: behavior || "smooth",
+      });
+    }
+
+    var links = document.querySelectorAll('a[href*="#about-home"]');
+    links.forEach(function (link) {
+      if (link.dataset.kmsAboutAnchorBound === "1") {
+        return;
+      }
+
+      link.addEventListener("click", function (event) {
+        var href = link.getAttribute("href") || "";
+        if (!href || href.indexOf("#about-home") === -1) {
+          return;
+        }
+
+        var url;
+        try {
+          url = new URL(href, window.location.href);
+        } catch (error) {
+          return;
+        }
+
+        if (url.hash !== "#about-home") {
+          return;
+        }
+
+        var samePath =
+          normalizePath(url.pathname) === normalizePath(window.location.pathname);
+
+        if (!samePath) {
+          return;
+        }
+
+        event.preventDefault();
+        if (window.history && window.history.pushState) {
+          window.history.pushState({}, "", url.href);
+        }
+        scrollToAbout("smooth");
+      });
+
+      link.dataset.kmsAboutAnchorBound = "1";
+    });
+
+    if (window.location.hash === "#about-home") {
+      setTimeout(function () {
+        scrollToAbout("auto");
+      }, 80);
+      setTimeout(function () {
+        scrollToAbout("auto");
+      }, 260);
+    }
+
+    window.addEventListener("hashchange", function () {
+      if (window.location.hash === "#about-home") {
+        scrollToAbout("smooth");
+      }
+    });
+  }
+
   ready(function () {
     hydrateLazyImages();
     toggleSearch();
@@ -288,8 +539,10 @@
     toggleSubmenus();
     curriculumDesktopSwitcher();
     disableCurriculumLinks();
+    bindLifeAgeTabs();
     faqToggle();
     scrollTopWidget();
     syncStickyHeaderMetrics();
+    bindAboutAnchorScroll();
   });
 })();

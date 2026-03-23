@@ -30,7 +30,7 @@ function csa_lk_get_business_defaults() {
 		'csa_lk_business_email'       => get_option( 'admin_email' ),
 		'csa_lk_business_hours'       => 'Monday-Friday, 6:00 AM-6:00 PM',
 		'csa_lk_business_map_embed'   => 'https://www.openstreetmap.org/export/embed.html?marker=33.1927,-96.6145',
-		'csa_lk_business_description' => 'Chestnut Square Academy is a Texas Rising Star daycare in Downtown McKinney, offering care for children from 6 weeks through age 5/6 in a small, family-focused center.',
+		'csa_lk_business_description' => 'Chestnut Square Academy is a Texas Rising Star daycare in Downtown McKinney, offering care for children from 6 weeks through age 4/5 in a small, family-focused center.',
 	);
 }
 
@@ -1269,7 +1269,7 @@ function csa_lk_get_page_blueprints() {
 <section class="csa-shell csa-age-stage">
   <div class="csa-section-head">
     <p class="csa-kicker">Now Enrolling</p>
-    <h2>Learning for Every Age</h2>
+    <h2>Learning by Age Group</h2>
   </div>
   <div class="csa-age-layout">
     <ul class="csa-age-stack">
@@ -1359,7 +1359,7 @@ function csa_lk_get_page_blueprints() {
   </div>
   <div class="csa-faq-list">
     <details open><summary>How can I find out more about Chestnut Square Academy?</summary><p>Submit a tour request below and our team will contact you with next steps and availability information.</p></details>
-    <details><summary>What ages do you serve?</summary><p>We offer care for children from 6 weeks to 5/6 years old.</p></details>
+    <details><summary>What ages do you serve?</summary><p>We offer care for children from 6 weeks to 4/5 years old.</p></details>
     <details><summary>What are your hours?</summary><p>We are open Monday through Friday, [csa_hours].</p></details>
     <details><summary>Are you part of Texas Rising Star?</summary><p>Yes. Chestnut Square Academy is part of the Texas Rising Star Program.</p></details>
     <details><summary>How large is the center?</summary><p>CSA is a small facility with occupancy of 46.</p></details>
@@ -1456,7 +1456,7 @@ HTML;
   <div class="csa-section-head">
     <h2>Our Story</h2>
   </div>
-  <p>Chestnut Square Academy is located in the heart of the Historic Chestnut Village area in Downtown McKinney. We offer care for children from 6 weeks to 5/6 years of age in a warm, family-first environment.</p>
+  <p>Chestnut Square Academy is located in the heart of the Historic Chestnut Village area in Downtown McKinney. We offer care for children from 6 weeks to 4/5 years of age in a warm, family-first environment.</p>
   <p>As a small center with occupancy of 46, our team provides personal attention, dependable routines, and close communication with families.</p>
 </section>
 
@@ -1522,7 +1522,7 @@ HTML;
 
 <section class="csa-shell csa-age-stage">
   <div class="csa-section-head">
-    <h2>Learning for Every Age</h2>
+    <h2>Learning by Age Group</h2>
   </div>
   <div class="csa-age-layout">
     <ul class="csa-age-stack">
@@ -1653,7 +1653,7 @@ HTML;
   <p>We are open Monday through Friday, [csa_hours].</p>
 
   <h2>What ages do you serve?</h2>
-  <p>Chestnut Square Academy offers care for children from 6 weeks to 5/6 years of age.</p>
+  <p>Chestnut Square Academy offers care for children from 6 weeks to 4/5 years of age.</p>
 
   <h2>Do you offer tours?</h2>
   <p>Yes. Families are encouraged to schedule a tour to meet staff and see classrooms.</p>
