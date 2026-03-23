@@ -154,6 +154,31 @@
     activate(slides[0].getAttribute("data-program"));
   }
 
+  function disableCurriculumLinks() {
+    var links = document.querySelectorAll("#curriculum .slides .slide a");
+
+    links.forEach(function (link) {
+      if (link.dataset.kmsNoNavBound) {
+        return;
+      }
+
+      link.setAttribute("aria-disabled", "true");
+      link.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      });
+
+      link.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      });
+
+      link.dataset.kmsNoNavBound = "1";
+    });
+  }
+
   function bindFaqToggle() {
     var questions = document.querySelectorAll("[data-question]");
     if (!questions.length) {
@@ -355,6 +380,7 @@
 
     stripElementorClassesForParity();
     bindCurriculumDesktopSwitcher();
+    disableCurriculumLinks();
     bindFaqToggle();
   }
 

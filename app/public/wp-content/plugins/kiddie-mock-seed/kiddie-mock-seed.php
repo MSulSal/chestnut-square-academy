@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kiddie Mock Seed
  * Description: Builds a full Kiddie Academy style frontend mock across all key pages for WordPress + Elementor testing.
- * Version: 1.3.23
+ * Version: 1.3.28
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: kiddie-mock-seed
@@ -41,8 +41,8 @@ function kms_get_theme_asset_defaults() {
 	$theme_base = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/';
 
 	return array(
-		'header_logo_desktop' => $theme_base . 'new-logo-csa.png',
-		'header_logo_mobile'  => $theme_base . 'new-logo-csa.png',
+		'header_logo_desktop' => $theme_base . 'new-logo-csa-navbar.png',
+		'header_logo_mobile'  => $theme_base . 'new-logo-csa-navbar.png',
 		'footer_logo'         => $theme_base . 'new-logo-csa-tree.png',
 	);
 }
@@ -687,6 +687,373 @@ HTML;
 }
 
 /**
+ * Default gallery items for the Life at Chestnut page.
+ *
+ * @return array<int,array<string,mixed>>
+ */
+function kms_get_life_gallery_default_items() {
+	return array(
+		array(
+			'image_id'     => 0,
+			'image_url'    => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Infant.jpg',
+			'title'        => 'Calm Beginnings',
+			'description'  => 'Warm care and comforting routines help our youngest learners feel safe and supported.',
+			'alt'          => 'Infant classroom moments',
+		),
+		array(
+			'image_id'     => 0,
+			'image_url'    => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Toddler.jpg',
+			'title'        => 'Hands-On Discovery',
+			'description'  => 'Toddlers explore, move, and communicate through guided play and meaningful interactions.',
+			'alt'          => 'Toddler activity time',
+		),
+		array(
+			'image_id'     => 0,
+			'image_url'    => 'https://kiddieacademy.com/academies/wp-content/uploads/2024/05/Learning-Age-Preschool.jpg',
+			'title'        => 'Growing Confidence',
+			'description'  => 'Preschoolers build early academic and social skills with playful, age-appropriate learning.',
+			'alt'          => 'Preschool learning activity',
+		),
+		array(
+			'image_id'     => 0,
+			'image_url'    => 'https://kiddieacademy.com/wp-content/uploads/2024/08/teacher-parent-circle-time.jpg',
+			'title'        => 'Trusted Relationships',
+			'description'  => 'Our team creates nurturing connections with every child and keeps families closely informed.',
+			'alt'          => 'Teacher and child during reading time',
+		),
+		array(
+			'image_id'     => 0,
+			'image_url'    => 'https://kiddieacademy.com/wp-content/uploads/2024/08/learnon-classroom-group-activity.jpg',
+			'title'        => 'Everyday Joy',
+			'description'  => 'Music, movement, art, and story time bring joyful learning moments into every day.',
+			'alt'          => 'Small group classroom project',
+		),
+		array(
+			'image_id'     => 0,
+			'image_url'    => 'https://kiddieacademy.com/wp-content/uploads/2024/08/kiddie-academy-center-exterior.jpg',
+			'title'        => 'Downtown McKinney Home',
+			'description'  => 'Located in Historic Downtown McKinney, our center is a welcoming neighborhood place for families.',
+			'alt'          => 'School exterior',
+		),
+	);
+}
+
+/**
+ * Sanitize life-gallery item rows from admin input.
+ *
+ * @param mixed $raw_items Raw submitted rows.
+ * @return array<int,array<string,mixed>>
+ */
+function kms_sanitize_life_gallery_items( $raw_items ) {
+	if ( ! is_array( $raw_items ) ) {
+		return array();
+	}
+
+	$items = array();
+
+	foreach ( $raw_items as $row ) {
+		if ( ! is_array( $row ) ) {
+			continue;
+		}
+
+		$image_id  = isset( $row['image_id'] ) ? absint( $row['image_id'] ) : 0;
+		$image_url = isset( $row['image_url'] ) ? esc_url_raw( trim( (string) $row['image_url'] ) ) : '';
+
+		if ( $image_id > 0 ) {
+			$attachment_url = wp_get_attachment_image_url( $image_id, 'full' );
+			if ( is_string( $attachment_url ) && '' !== $attachment_url ) {
+				$image_url = esc_url_raw( $attachment_url );
+			}
+		}
+
+		if ( 0 === $image_id && '' === $image_url ) {
+			continue;
+		}
+
+		$title       = isset( $row['title'] ) ? sanitize_text_field( $row['title'] ) : '';
+		$description = isset( $row['description'] ) ? sanitize_text_field( $row['description'] ) : '';
+		$alt         = isset( $row['alt'] ) ? sanitize_text_field( $row['alt'] ) : '';
+
+		if ( '' === $title ) {
+			$title = 'Life at Chestnut Moment';
+		}
+
+		if ( '' === $alt ) {
+			$alt = $title;
+		}
+
+		$items[] = array(
+			'image_id'    => $image_id,
+			'image_url'   => $image_url,
+			'title'       => $title,
+			'description' => $description,
+			'alt'         => $alt,
+		);
+	}
+
+	return $items;
+}
+
+/**
+ * Get currently configured life gallery rows (dashboard-managed).
+ *
+ * @return array<int,array<string,mixed>>
+ */
+function kms_get_life_gallery_items() {
+	$stored = get_option( 'kms_life_gallery_items', null );
+
+	if ( null === $stored ) {
+		return kms_get_life_gallery_default_items();
+	}
+
+	return kms_sanitize_life_gallery_items( $stored );
+}
+
+/**
+ * Humanize a file name into a readable title.
+ *
+ * @param string $filename Filename.
+ * @return string
+ */
+function kms_humanize_filename( $filename ) {
+	$name = preg_replace( '/\.[^.]+$/', '', (string) $filename );
+	$name = preg_replace( '/[_-]+/', ' ', (string) $name );
+	$name = preg_replace( '/\s+/', ' ', (string) $name );
+	$name = trim( (string) $name );
+
+	if ( '' === $name ) {
+		return 'Life at Chestnut Moment';
+	}
+
+	return ucwords( $name );
+}
+
+/**
+ * Locate local docs folder path for life-at-chestnut seed images.
+ *
+ * @return string
+ */
+function kms_get_docs_life_gallery_dir() {
+	$project_root = wp_normalize_path( (string) dirname( ABSPATH, 2 ) );
+	$legacy_root  = wp_normalize_path( (string) dirname( ABSPATH, 3 ) );
+	$candidates   = array(
+		$project_root . '/docs/life-at-chestnut',
+		$legacy_root . '/docs/life-at-chestnut',
+	);
+
+	foreach ( $candidates as $candidate ) {
+		if ( is_dir( $candidate ) ) {
+			return $candidate;
+		}
+	}
+
+	return $candidates[0];
+}
+
+/**
+ * Find previously imported life-gallery attachment by source hash.
+ *
+ * @param string $hash File hash.
+ * @return int
+ */
+function kms_find_life_gallery_attachment_by_hash( $hash ) {
+	if ( ! is_string( $hash ) || '' === $hash ) {
+		return 0;
+	}
+
+	$ids = get_posts(
+		array(
+			'post_type'      => 'attachment',
+			'post_status'    => 'inherit',
+			'fields'         => 'ids',
+			'posts_per_page' => 1,
+			'meta_key'       => '_kms_life_gallery_hash',
+			'meta_value'     => $hash,
+			'orderby'        => 'ID',
+			'order'          => 'DESC',
+		)
+	);
+
+	if ( is_array( $ids ) && ! empty( $ids[0] ) ) {
+		return absint( $ids[0] );
+	}
+
+	return 0;
+}
+
+/**
+ * Import image files from docs/life-at-chestnut into Media Library and gallery option.
+ *
+ * @return array<int,array<string,mixed>>|WP_Error
+ */
+function kms_import_life_gallery_from_docs() {
+	$dir = kms_get_docs_life_gallery_dir();
+
+	if ( ! is_dir( $dir ) ) {
+		return new WP_Error( 'kms_no_docs_gallery_dir', 'Could not find docs/life-at-chestnut directory.' );
+	}
+
+	$patterns = array( '*.jpg', '*.jpeg', '*.png', '*.webp', '*.avif' );
+	$files    = array();
+
+	foreach ( $patterns as $pattern ) {
+		$matches = glob( wp_normalize_path( trailingslashit( $dir ) . $pattern ) );
+		if ( is_array( $matches ) ) {
+			$files = array_merge( $files, $matches );
+		}
+	}
+
+	$files = array_values( array_unique( array_filter( $files, 'is_string' ) ) );
+	natsort( $files );
+	$files = array_values( $files );
+
+	if ( empty( $files ) ) {
+		return new WP_Error( 'kms_no_docs_gallery_images', 'No image files were found in docs/life-at-chestnut.' );
+	}
+
+	if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+	}
+	if ( ! function_exists( 'wp_handle_sideload' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+	}
+
+	$items = array();
+
+	foreach ( $files as $file_path ) {
+		$file_path = wp_normalize_path( (string) $file_path );
+		if ( '' === $file_path || ! file_exists( $file_path ) ) {
+			continue;
+		}
+
+		$filename = wp_basename( $file_path );
+		$title    = kms_humanize_filename( $filename );
+		$hash     = md5_file( $file_path );
+		$hash     = is_string( $hash ) && '' !== $hash ? $hash : md5( $filename );
+
+		$attachment_id = kms_find_life_gallery_attachment_by_hash( $hash );
+
+		if ( $attachment_id <= 0 ) {
+			$contents = file_get_contents( $file_path );
+			if ( false === $contents ) {
+				continue;
+			}
+
+			$upload = wp_upload_bits( $filename, null, $contents );
+			if ( ! is_array( $upload ) || ! empty( $upload['error'] ) || empty( $upload['file'] ) ) {
+				continue;
+			}
+
+			$filetype = wp_check_filetype( $upload['file'], null );
+
+			$attachment_id = wp_insert_attachment(
+				array(
+					'post_title'     => $title,
+					'post_status'    => 'inherit',
+					'post_mime_type' => isset( $filetype['type'] ) ? (string) $filetype['type'] : 'image/jpeg',
+				),
+				$upload['file']
+			);
+
+			if ( is_wp_error( $attachment_id ) || $attachment_id <= 0 ) {
+				continue;
+			}
+
+			$meta = wp_generate_attachment_metadata( $attachment_id, $upload['file'] );
+			if ( is_array( $meta ) ) {
+				wp_update_attachment_metadata( $attachment_id, $meta );
+			}
+
+			update_post_meta( $attachment_id, '_kms_life_gallery_hash', $hash );
+		}
+
+		$image_url = wp_get_attachment_image_url( $attachment_id, 'full' );
+		if ( ! is_string( $image_url ) || '' === $image_url ) {
+			continue;
+		}
+
+		$items[] = array(
+			'image_id'    => absint( $attachment_id ),
+			'image_url'   => esc_url_raw( $image_url ),
+			'title'       => $title,
+			'description' => '',
+			'alt'         => $title,
+		);
+	}
+
+	if ( empty( $items ) ) {
+		return new WP_Error( 'kms_docs_gallery_import_failed', 'No images could be imported from docs/life-at-chestnut.' );
+	}
+
+	update_option( 'kms_life_gallery_items', $items );
+
+	return $items;
+}
+
+/**
+ * Build Life at Chestnut page HTML from dashboard-managed gallery rows.
+ *
+ * @return string
+ */
+function kms_get_life_at_chestnut_html() {
+	$items = kms_get_life_gallery_items();
+	$cards = '';
+
+	foreach ( $items as $item ) {
+		$image_url   = isset( $item['image_url'] ) ? esc_url( (string) $item['image_url'] ) : '';
+		$title       = isset( $item['title'] ) ? esc_html( (string) $item['title'] ) : 'Life at Chestnut Moment';
+		$alt         = isset( $item['alt'] ) ? esc_attr( (string) $item['alt'] ) : esc_attr( $title );
+
+		if ( '' === $image_url ) {
+			continue;
+		}
+
+		$cards .= <<<HTML
+			<div class="single-column image-only">
+				<div class="image image-frame">
+					<img class="fill-container" data-lazy-src="{$image_url}" alt="{$alt}">
+				</div>
+			</div>
+HTML;
+	}
+
+	return <<<HTML
+<main id="main-content" class="life-gallery-page">
+<section class="subpage-hero padding-bottom padding-top offset-bg-parent">
+	<div class="offset-bg tan extend-left round-bottom-right no-media"></div>
+	<div class="text-and-image content-wrapper no-media">
+		<div class="text-left">
+			<h1>LIFE AT CHESTNUT</h1>
+			<p>A glimpse into our classrooms, daily rhythm, and warm community in Downtown McKinney.</p>
+		</div>
+	</div>
+</section>
+
+<section class="column-3-image-text-cards life-gallery-grid padding-top padding-bottom">
+	<div class="content-wrapper">
+		<div class="column-3">
+{$cards}
+		</div>
+	</div>
+</section>
+</main>
+HTML;
+}
+
+/**
+ * Refresh the Life at Chestnut page from gallery settings.
+ */
+function kms_sync_life_gallery_page() {
+	$blueprint = array(
+		'path'     => 'life-at-chestnut',
+		'title'    => 'Life at Chestnut',
+		'template' => 'life-at-chestnut',
+	);
+
+	kms_upsert_small_business_page( $blueprint, true );
+}
+
+/**
  * Resolve final page HTML for blueprint.
  *
  * @param string $template Template key.
@@ -695,6 +1062,10 @@ HTML;
  * @return string
  */
 function kms_get_page_html( $template, $title, $path ) {
+	if ( 'life-at-chestnut' === $template ) {
+		return kms_get_life_at_chestnut_html();
+	}
+
 	if ( 'faq' === $template ) {
 		return kms_get_faq_html();
 	}
@@ -2827,10 +3198,79 @@ function kms_refresh_home_hero_once() {
 add_action( 'init', 'kms_refresh_home_hero_once', 52 );
 
 /**
+ * One-time auto import from docs/life-at-chestnut when gallery option is empty.
+ */
+function kms_auto_import_life_gallery_once() {
+	if ( '1.0.2' === (string) get_option( 'kms_life_gallery_auto_import_ver', '' ) ) {
+		return;
+	}
+
+	$existing = kms_sanitize_life_gallery_items( get_option( 'kms_life_gallery_items', array() ) );
+	$should_import = empty( $existing );
+
+	$docs_dir   = kms_get_docs_life_gallery_dir();
+	$docs_files = array();
+	if ( is_dir( $docs_dir ) ) {
+		$docs_patterns = array( '*.jpg', '*.jpeg', '*.png', '*.webp', '*.avif' );
+		foreach ( $docs_patterns as $pattern ) {
+			$matches = glob( wp_normalize_path( trailingslashit( $docs_dir ) . $pattern ) );
+			if ( is_array( $matches ) ) {
+				$docs_files = array_merge( $docs_files, $matches );
+			}
+		}
+	}
+
+	$has_docs_files = ! empty( $docs_files );
+
+	if ( ! $should_import && $has_docs_files ) {
+		$has_local_uploads = false;
+		foreach ( $existing as $item ) {
+			$image_id  = isset( $item['image_id'] ) ? absint( $item['image_id'] ) : 0;
+			$image_url = isset( $item['image_url'] ) ? (string) $item['image_url'] : '';
+			if ( $image_id > 0 || false !== strpos( $image_url, '/wp-content/uploads/' ) ) {
+				$has_local_uploads = true;
+				break;
+			}
+		}
+
+		// If only remote fallback images are present, replace with local docs gallery set.
+		if ( ! $has_local_uploads ) {
+			$should_import = true;
+		}
+	}
+
+	if ( ! $should_import ) {
+		update_option( 'kms_life_gallery_auto_import_ver', '1.0.2' );
+		return;
+	}
+
+	$imported = kms_import_life_gallery_from_docs();
+	if ( ! is_wp_error( $imported ) && ! empty( $imported ) ) {
+		kms_sync_life_gallery_page();
+	}
+
+	update_option( 'kms_life_gallery_auto_import_ver', '1.0.2' );
+}
+add_action( 'init', 'kms_auto_import_life_gallery_once', 54 );
+
+/**
+ * One-time refresh to apply image-only Life at Chestnut gallery layout.
+ */
+function kms_refresh_life_gallery_layout_once() {
+	if ( '1.0.0' === (string) get_option( 'kms_life_gallery_layout_refresh_ver', '' ) ) {
+		return;
+	}
+
+	kms_sync_life_gallery_page();
+	update_option( 'kms_life_gallery_layout_refresh_ver', '1.0.0' );
+}
+add_action( 'init', 'kms_refresh_life_gallery_layout_once', 55 );
+
+/**
  * Migrate legacy Kiddie/old-logo asset overrides to current CSA defaults.
  */
 function kms_migrate_legacy_asset_overrides_once() {
-	if ( '1.0.3' === (string) get_option( 'kms_asset_override_migration_ver', '' ) ) {
+	if ( '1.0.4' === (string) get_option( 'kms_asset_override_migration_ver', '' ) ) {
 		return;
 	}
 
@@ -2856,6 +3296,7 @@ function kms_migrate_legacy_asset_overrides_once() {
 		if (
 			in_array( $slot, array( 'header_logo_desktop', 'header_logo_mobile' ), true ) &&
 			(
+				false !== stripos( $current, 'new-logo-csa.png' ) ||
 				false !== stripos( $current, 'new-logo-csa-navbar.png' ) ||
 				false !== stripos( $current, 'new-logo-csa-tree-navbar.png' ) ||
 				false !== stripos( $current, 'logo-square-navbar.png' ) ||
@@ -2871,7 +3312,7 @@ function kms_migrate_legacy_asset_overrides_once() {
 		kms_set_asset_overrides( $overrides );
 	}
 
-	update_option( 'kms_asset_override_migration_ver', '1.0.3' );
+	update_option( 'kms_asset_override_migration_ver', '1.0.4' );
 }
 add_action( 'init', 'kms_migrate_legacy_asset_overrides_once', 45 );
 
@@ -3064,6 +3505,17 @@ add_action( 'admin_menu', 'kms_add_admin_pages' );
  * @param string $hook_suffix Current admin screen hook suffix.
  */
 function kms_enqueue_admin_assets( $hook_suffix ) {
+	if ( 'tools_page_kiddie-mock-seed' === $hook_suffix ) {
+		wp_enqueue_media();
+		wp_enqueue_script(
+			'kms-admin-life-gallery',
+			plugin_dir_url( __FILE__ ) . 'assets/js/admin-life-gallery.js',
+			array( 'jquery' ),
+			'1.0.0',
+			true
+		);
+	}
+
 	if ( 'appearance_page_kiddie-mock-assets' !== $hook_suffix ) {
 		return;
 	}
@@ -3146,14 +3598,14 @@ function kms_enqueue_owner_edit_styles() {
 			'kms-native-parity-mode',
 			plugin_dir_url( __FILE__ ) . 'assets/css/native-parity-mode.css',
 			array(),
-			'1.4.6'
+			'1.4.7'
 		);
 		if ( ! kms_is_elementor_editor_context() ) {
 			wp_enqueue_script(
 				'kms-native-parity-front',
 				plugin_dir_url( __FILE__ ) . 'assets/js/native-parity-front.js',
 				array(),
-				'1.4.6',
+				'1.4.7',
 				true
 			);
 		}
@@ -3229,6 +3681,78 @@ function kms_handle_tools_actions() {
 		exit;
 	}
 
+	if ( 'save_life_gallery' === $action ) {
+		check_admin_referer( 'kms_save_life_gallery' );
+
+		$items = array();
+		if ( isset( $_POST['kms_life_gallery'] ) ) {
+			$items = kms_sanitize_life_gallery_items( wp_unslash( $_POST['kms_life_gallery'] ) );
+		}
+
+		update_option( 'kms_life_gallery_items', $items );
+		kms_sync_life_gallery_page();
+
+		$redirect = add_query_arg(
+			array(
+				'page'            => 'kiddie-mock-seed',
+				'kms_gallery_ok'  => '1',
+			),
+			admin_url( 'tools.php' )
+		);
+
+		wp_safe_redirect( $redirect );
+		exit;
+	}
+
+	if ( 'import_life_gallery_docs' === $action ) {
+		check_admin_referer( 'kms_import_life_gallery_docs' );
+
+		$imported = kms_import_life_gallery_from_docs();
+
+		if ( is_wp_error( $imported ) ) {
+			$redirect = add_query_arg(
+				array(
+					'page'            => 'kiddie-mock-seed',
+					'kms_gallery_err' => rawurlencode( $imported->get_error_message() ),
+				),
+				admin_url( 'tools.php' )
+			);
+
+			wp_safe_redirect( $redirect );
+			exit;
+		}
+
+		kms_sync_life_gallery_page();
+
+		$redirect = add_query_arg(
+			array(
+				'page'               => 'kiddie-mock-seed',
+				'kms_gallery_import' => '1',
+				'kms_gallery_count'  => (string) count( $imported ),
+			),
+			admin_url( 'tools.php' )
+		);
+
+		wp_safe_redirect( $redirect );
+		exit;
+	}
+
+	if ( 'sync_life_gallery_page' === $action ) {
+		check_admin_referer( 'kms_sync_life_gallery_page' );
+		kms_sync_life_gallery_page();
+
+		$redirect = add_query_arg(
+			array(
+				'page'             => 'kiddie-mock-seed',
+				'kms_gallery_sync' => '1',
+			),
+			admin_url( 'tools.php' )
+		);
+
+		wp_safe_redirect( $redirect );
+		exit;
+	}
+
 	if ( 'save_assets' === $action ) {
 		check_admin_referer( 'kms_save_assets' );
 
@@ -3294,10 +3818,17 @@ add_action( 'admin_init', 'kms_handle_tools_actions' );
  * Render admin tools page.
  */
 function kms_render_tools_page() {
-	$done        = isset( $_GET['kms_ok'] ) && '1' === $_GET['kms_ok'];
-	$owner_done  = isset( $_GET['kms_owner_ok'] ) && '1' === $_GET['kms_owner_ok'];
-	$native_done = isset( $_GET['kms_native_ok'] ) && '1' === $_GET['kms_native_ok'];
-	$profile     = kms_get_seed_profile();
+	$done            = isset( $_GET['kms_ok'] ) && '1' === $_GET['kms_ok'];
+	$owner_done      = isset( $_GET['kms_owner_ok'] ) && '1' === $_GET['kms_owner_ok'];
+	$native_done     = isset( $_GET['kms_native_ok'] ) && '1' === $_GET['kms_native_ok'];
+	$gallery_saved   = isset( $_GET['kms_gallery_ok'] ) && '1' === $_GET['kms_gallery_ok'];
+	$gallery_import  = isset( $_GET['kms_gallery_import'] ) && '1' === $_GET['kms_gallery_import'];
+	$gallery_sync    = isset( $_GET['kms_gallery_sync'] ) && '1' === $_GET['kms_gallery_sync'];
+	$gallery_count   = isset( $_GET['kms_gallery_count'] ) ? absint( $_GET['kms_gallery_count'] ) : 0;
+	$gallery_error   = isset( $_GET['kms_gallery_err'] ) ? sanitize_text_field( wp_unslash( rawurldecode( (string) $_GET['kms_gallery_err'] ) ) ) : '';
+	$gallery_items   = kms_get_life_gallery_items();
+	$profile         = kms_get_seed_profile();
+	$docs_gallery_dir = kms_get_docs_life_gallery_dir();
 	?>
 	<div class="wrap">
 		<h1>Kiddie Mock Seed</h1>
@@ -3309,6 +3840,18 @@ function kms_render_tools_page() {
 		<?php endif; ?>
 		<?php if ( $native_done ) : ?>
 			<div class="notice notice-success"><p>Native Parity Mode seed completed successfully.</p></div>
+		<?php endif; ?>
+		<?php if ( $gallery_saved ) : ?>
+			<div class="notice notice-success"><p>Life at Chestnut gallery saved and synced to the page.</p></div>
+		<?php endif; ?>
+		<?php if ( $gallery_import ) : ?>
+			<div class="notice notice-success"><p>Imported <?php echo esc_html( (string) $gallery_count ); ?> image(s) from docs/life-at-chestnut and synced the page.</p></div>
+		<?php endif; ?>
+		<?php if ( $gallery_sync ) : ?>
+			<div class="notice notice-success"><p>Life at Chestnut gallery page synced from saved dashboard items.</p></div>
+		<?php endif; ?>
+		<?php if ( '' !== $gallery_error ) : ?>
+			<div class="notice notice-error"><p><?php echo esc_html( $gallery_error ); ?></p></div>
 		<?php endif; ?>
 
 		<p><strong>Active profile:</strong> <code><?php echo esc_html( $profile ); ?></code></p>
@@ -3341,6 +3884,82 @@ function kms_render_tools_page() {
 			<input type="hidden" name="kms_action" value="run_native_seed">
 			<p><label><input type="checkbox" name="kms_overwrite" value="1" checked> Overwrite existing page content</label></p>
 			<p><button type="submit" class="button">Run Native Parity Seed</button></p>
+		</form>
+
+		<hr>
+		<h2>Life at Chestnut Gallery Manager</h2>
+		<p>Manage gallery images without code. Add/remove rows here, then click Save to sync the Life at Chestnut page.</p>
+		<p><strong>Source import folder:</strong> <code><?php echo esc_html( $docs_gallery_dir ); ?></code></p>
+
+		<form method="post" style="margin-bottom: 12px;">
+			<?php wp_nonce_field( 'kms_import_life_gallery_docs' ); ?>
+			<input type="hidden" name="kms_action" value="import_life_gallery_docs">
+			<p><button type="submit" class="button">Import All Images from docs/life-at-chestnut</button></p>
+		</form>
+
+		<form method="post">
+			<?php wp_nonce_field( 'kms_save_life_gallery' ); ?>
+			<input type="hidden" name="kms_action" value="save_life_gallery">
+
+			<table class="widefat striped" id="kms-life-gallery-table">
+				<thead>
+					<tr>
+						<th style="width: 20%;">Image</th>
+						<th style="width: 20%;">Preview</th>
+						<th style="width: 20%;">Title</th>
+						<th>Description</th>
+						<th style="width: 18%;">Alt Text</th>
+						<th style="width: 6%;">Remove</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $gallery_items as $index => $item ) : ?>
+						<?php
+						$image_id    = isset( $item['image_id'] ) ? absint( $item['image_id'] ) : 0;
+						$image_url   = isset( $item['image_url'] ) ? (string) $item['image_url'] : '';
+						$title       = isset( $item['title'] ) ? (string) $item['title'] : '';
+						$description = isset( $item['description'] ) ? (string) $item['description'] : '';
+						$alt         = isset( $item['alt'] ) ? (string) $item['alt'] : '';
+						?>
+						<tr class="kms-life-gallery-row">
+							<td>
+								<input type="hidden" name="kms_life_gallery[<?php echo esc_attr( (string) $index ); ?>][image_id]" value="<?php echo esc_attr( (string) $image_id ); ?>" class="kms-life-image-id">
+								<input type="url" name="kms_life_gallery[<?php echo esc_attr( (string) $index ); ?>][image_url]" value="<?php echo esc_attr( $image_url ); ?>" class="regular-text code kms-life-image-url" style="width: 100%;">
+								<p>
+									<button type="button" class="button kms-life-select-media">Choose</button>
+									<button type="button" class="button kms-life-clear-media">Clear</button>
+								</p>
+							</td>
+							<td>
+								<img src="<?php echo esc_url( $image_url ); ?>" class="kms-life-preview" alt="" style="width: 140px; height: 92px; object-fit: cover; border: 1px solid #dcdcde; border-radius: 4px; background: #f6f7f7;">
+							</td>
+							<td>
+								<input type="text" name="kms_life_gallery[<?php echo esc_attr( (string) $index ); ?>][title]" value="<?php echo esc_attr( $title ); ?>" class="regular-text" style="width: 100%;">
+							</td>
+							<td>
+								<input type="text" name="kms_life_gallery[<?php echo esc_attr( (string) $index ); ?>][description]" value="<?php echo esc_attr( $description ); ?>" class="regular-text" style="width: 100%;">
+							</td>
+							<td>
+								<input type="text" name="kms_life_gallery[<?php echo esc_attr( (string) $index ); ?>][alt]" value="<?php echo esc_attr( $alt ); ?>" class="regular-text" style="width: 100%;">
+							</td>
+							<td style="text-align:center;">
+								<button type="button" class="button-link-delete kms-life-remove-row">Remove</button>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+
+			<p style="margin-top: 10px;">
+				<button type="button" class="button kms-life-add-row">Add Gallery Item</button>
+				<button type="submit" class="button button-primary">Save Gallery and Sync Page</button>
+			</p>
+		</form>
+
+		<form method="post" style="margin-top: 6px;">
+			<?php wp_nonce_field( 'kms_sync_life_gallery_page' ); ?>
+			<input type="hidden" name="kms_action" value="sync_life_gallery_page">
+			<p><button type="submit" class="button">Sync Life at Chestnut Page Only</button></p>
 		</form>
 	</div>
 	<?php

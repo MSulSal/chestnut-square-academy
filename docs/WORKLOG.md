@@ -256,4 +256,72 @@
 - style(hero-tagline): enlarged homepage tagline and tightened left inset for a more balanced left/top/bottom rhythm.
 - chore(versioning): bumped theme version to `1.0.19`, plugin version to `1.3.23`, and native parity frontend asset versions to `1.4.6` for cache-safe rollout.
 - docs(readme): updated Owner Edit Mode core page list to use `life-at-chestnut` instead of `our-curriculum`.
+- fix(hero-viewport-height): updated hero rules to target native parity class-based markup (`.kms-dom-id-hero` / `.animated-hero`) in addition to `#hero`, so container-level sizing consistently applies after Elementor/native transforms.
+- style(hero-viewport-height): enforced hero section `height` + `min-height` to `calc(100dvh - sticky-header-height)` (mobile/desktop breakpoints) so the hero section itself extends to viewport bottom under the sticky navbar.
+- chore(versioning): bumped child theme header version to `1.0.32` for cache-safe rollout of the hero section sizing fix.
+- fix(gallery-import-path): corrected `docs/life-at-chestnut` resolver in `kiddie-mock-seed` to prioritize project root (`dirname(ABSPATH, 2)`) with legacy fallback, so dashboard/auto-import can find local gallery files reliably.
+- chore(gallery-populate): re-triggered the one-time life-gallery auto-import flow and synced `Life at Chestnut` from local docs assets; gallery now loads 32 uploaded images from `/wp-content/uploads/`.
+- feat(gallery-layout): switched Life at Chestnut cards to image-only rendering (removed title/description text blocks) while keeping gallery management no-code in the existing admin tool.
+- style(gallery-layout): removed rounded corners/shadows for Life at Chestnut gallery image tiles to match the requested square-edge photo grid treatment.
+- feat(runtime-refresh): added one-time `kms_refresh_life_gallery_layout_once` hook so existing installs automatically resync the page to the new image-only gallery markup.
+- chore(versioning): bumped `kiddie-mock-seed` plugin version to `1.3.27` and child theme version to `1.0.33` for traceable rollout/cache refresh.
+- style(gallery-spacing): added explicit grid `row-gap`/`column-gap` for Life at Chestnut image tiles so photos have visible bottom spacing between rows.
+- style(gallery-sizing): normalized gallery images to a consistent `4:3` frame with `object-fit: cover` and full-width/height fill for cleaner, better-sized tiles across desktop/mobile.
+- chore(versioning): bumped child theme version to `1.0.34` for cache-safe rollout of gallery spacing/sizing polish.
+- fix(gallery-css-targeting): corrected gallery spacing/sizing selectors to match the currently rendered Life at Chestnut DOM on `page-id-332` (`.column-3-image-text-cards .column-3 .single-column.image-only`) after parity transformations.
+- style(gallery-live-grid): enforced live page image grid with consistent `4:3` tiles, explicit row/column gaps, and responsive 3/2/1 columns so bottom spacing and sizing are visibly applied.
+- chore(versioning): bumped child theme version to `1.0.35` for cache-safe rollout of the corrected gallery selector pass.
+- fix(gallery-layout-regression): replaced mixed grid/flex gallery rules with a single page-scoped hard override on `page-id-332` using explicit flex-basis math for 3/2/1 columns, eliminating horizontal spacing/sizing conflicts.
+- style(gallery-tiles): normalized Life at Chestnut image tiles to consistent `5:4` aspect ratio, no internal padding/margins, square edges, and cover-fit rendering.
+- chore(versioning): bumped child theme version to `1.0.36` for cache-safe rollout of the gallery layout hard-fix.
+- fix(hero-viewport-fit): updated Home hero height math to use a live-measured sticky-header CSS variable (`--csa-sticky-header-live`) so hero section reliably fills to viewport bottom beneath the fixed navbar.
+- feat(hero-runtime-metrics): added `syncStickyHeaderMetrics()` in `kiddie-mock.js` to measure `#header` height on load/resize and sync it to CSS for consistent hero sizing across responsive states.
+- style(hero-edge-anchor): increased hero tagline scale and set equal left/bottom inset via shared `--csa-hero-edge-pad`, ensuring the headline sits with balanced edge spacing from hero borders.
+- chore(versioning): bumped child theme version to `1.0.37` for cache-safe rollout of hero viewport + typography adjustments.
+- fix(hero-headline-targeting): applied hero typography rules directly to `.headline .elementor-heading-title`/`h1` so Elementor heading widget defaults no longer override requested larger tagline sizing.
+- fix(home-overlap): removed negative/translated overlap behavior on Home curriculum intro (`#curriculum` / `.kms-dom-id-curriculum .intro`) so the next section no longer intrudes into the hero viewport area.
+- style(hero-edge-padding): hard-anchored Home hero copy inset with matching left + bottom padding using shared `--csa-hero-edge-pad` for equal border spacing.
+- chore(versioning): bumped child theme version to `1.0.38` for cache-safe rollout of hero headline + overlap corrections.
+- style(hero-tagline-scale): increased Home hero headline scale again (desktop + mobile clamps) for a stronger visual anchor while preserving current edge padding and placement.
+- chore(versioning): bumped child theme version to `1.0.39` for cache-safe rollout of tagline size increase.
+- analysis(hero-image-quality): audited current hero source and found effective resolution bottleneck (`cover.png` at `1024x1536`) being stretched/cropped across wide desktop hero surfaces.
+- feat(hero-image-enhancement): added `scripts/enhance-hero-cover.ps1` to generate a higher-resolution sharpened derivative (`cover-hd.jpg`, `2048x3072`, JPEG quality `92`) from the existing cover source.
+- style(hero-image-source): switched Home hero background to `assets/images/cover-hd.jpg` via high-priority CSS override, preserving current layout/flip behavior while improving perceived sharpness.
+- chore(versioning): bumped child theme version to `1.0.40` for cache-safe rollout of the HD hero image source.
+- fix(hero-tagline-override): added page-scoped hard-size `!important` rules for Home hero `h1.elementor-heading-title` / `h1.headline` selectors (desktop + mobile) to bypass competing Elementor/parity style paths and ensure visibly larger tagline rendering.
+- chore(versioning): bumped child theme version to `1.0.41` for cache-safe rollout of forced hero tagline enlargement.
+- style(hero-tagline-scale): increased Home hero headline scale further using explicit root tokens (`--csa-hero-headline-size-desktop`, `--csa-hero-headline-size-mobile`) and retained hard `!important` selector targeting on rendered heading nodes.
+- style(nav-logo-readability): enlarged desktop navbar logo lane and image fit (`500px` lane, `196px` image height, no transform scaling) so full logo text, including the "child care" line, remains legible.
+- chore(versioning): bumped child theme version to `1.0.42` for cache-safe rollout of navbar logo + tagline sizing pass.
+- fix(nav-logo-source): switched header desktop/mobile default logo source to `new-logo-csa-navbar.png` (theme fallback + seed asset defaults), replacing the blurrier `new-logo-csa.png` in navbar contexts.
+- fix(nav-logo-migration): bumped asset-override migration gate to `1.0.4` so saved legacy header-logo overrides re-align to the new navbar-focused source automatically.
+- style(nav-logo-legibility-pass2): added a final high-specificity desktop override (`560px` logo lane, `212px` image height) to force larger logo rendering and improve "child care" readability.
+- chore(versioning): bumped child theme version to `1.0.43` and plugin header version to `1.3.28` for cache-safe rollout of the nav-logo legibility pass.
+- style(nav-logo-scale): reduced final forced desktop navbar logo treatment to ~60% (`336px` logo lane, `128px` image height) per visual calibration request.
+- style(nav-alignment): aligned header brand lane to viewport-left and rebalanced desktop tab rail width/spacing (`top-menu` constrained to `min(980px, calc(100vw - 336px - 90px))` with `space-between`) to better match content rhythm.
+- chore(versioning): bumped child theme version to `1.0.45` for cache-safe rollout of nav scale + alignment adjustments.
+- style(nav-padding): added desktop edge breathing room for both sides of the header (`nav-left` left padding + increased `nav-right` right padding) so logo/tabs are not hard-flush to viewport edges.
+- chore(versioning): bumped child theme version to `1.0.46` for cache-safe rollout of navbar side-padding refinement.
+- style(nav-container-padding): moved horizontal edge spacing to the navbar container itself (`#header` left/right padding) and removed internal content padding on `nav-left`/`nav-right` for cleaner structural alignment.
+- feat(nav-hover-cursor): added a desktop-only custom finger-paint hand cursor (`assets/images/cursor-fingerpaint-hand.svg`) on navbar tab hover/focus-visible with pointer fallback.
+- chore(versioning): bumped child theme version to `1.0.47` for cache-safe rollout of container-padding + cursor-hover pass.
+- feat(cursor-asset): created cursor-safe handprint asset (`assets/images/cursor-handprint.png`, 48x48) derived from user-provided `docs/Colorful handprint artwork on canvas.png`.
+- feat(cursor-global-hover): expanded custom handprint cursor behavior from navbar-only to site-wide interactive hover/focus states (`a`, `button`, submit/button inputs, `.button`, `.button-round`, `.elementor-button`, role buttons) for desktop pointer devices.
+- chore(versioning): bumped child theme version to `1.0.48` for cache-safe rollout of global handprint cursor styling.
+- fix(cursor-transparency): rebuilt `cursor-handprint.png` to strip the light checker/white backdrop and keep only the handprint mark with transparent background.
+- chore(versioning): bumped child theme version to `1.0.49` and cache-busted cursor URL (`cursor-handprint.png?v=2`) so updated cursor artwork loads immediately.
+- style(nav-padding-pass2): increased navbar container left/right padding and slightly reduced logo-to-menu lane gap so logo and tabs sit closer while preserving no-code-safe structure.
+- chore(versioning): bumped child theme version to `1.0.50` for cache-safe rollout of the navbar spacing refinement.
+- style(hero-pop-pass): tuned Home hero media to feel less washed-out by adding controlled saturation/contrast/brightness filters and reducing overlay heaviness while preserving text readability with subtle headline/body text shadows.
+- chore(versioning): bumped child theme version to `1.0.51` for cache-safe rollout of the hero visual “pop” pass.
+- tweak(hero-pop-balance): reduced hero saturation/contrast to a softer midpoint (`desktop: saturate 1.16 / contrast 1.10`, `mobile: saturate 1.10 / contrast 1.07`) while retaining the brighter, less-drab look.
+- chore(versioning): bumped child theme version to `1.0.52` for cache-safe rollout of hero color-balance refinement.
+- fix(cursor-edge-cleanup): rebuilt `cursor-handprint.png` from source with improved background knockout + fringe cleanup to remove visible white cutout borders.
+- chore(tooling): added `scripts/build-hand-cursor.ps1` so cursor asset can be regenerated consistently from the docs source image.
+- chore(versioning): bumped child theme version to `1.0.53` and updated cursor cache key to `?v=3` for immediate pickup of cleaned cursor artwork.
+- style(nav-alignment-balance): aligned navbar outer insets to hero tagline inset by using `--csa-hero-edge-pad` for both header left and right padding, creating balanced viewport-edge spacing.
+- style(nav-logo-scale-10pct): reduced desktop navbar logo lane/image treatment by ~10% (`336px -> 302px` lane, `128px -> 115px` image; header lane height adjusted to `118px`) and slightly tightened logo-to-tabs gap.
+- chore(versioning): bumped child theme version to `1.0.54` for cache-safe rollout of navbar alignment + logo scale refinement.
+- tweak(nav-optical-balance): added logo-art optical nudge token (`--csa-nav-logo-optical-left-nudge: 8px`) and applied a subtle left translation to desktop logo rendering so painted logo content balances the right-edge nav text by eye.
+- chore(versioning): bumped child theme version to `1.0.55` for cache-safe rollout of optical-balance adjustment.
 

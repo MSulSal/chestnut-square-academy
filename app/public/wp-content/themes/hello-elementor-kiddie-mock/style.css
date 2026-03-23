@@ -4,7 +4,7 @@ Theme URI: https://example.local/kiddie-mock
 Description: Full-site Kiddie Academy style mock theme for Elementor-based frontend replication.
 Author: CSA Web Team
 Template: hello-elementor
-Version: 1.0.19
+Version: 1.0.55
 Text Domain: hello-elementor-kiddie-mock
 */
 
@@ -25,6 +25,8 @@ Text Domain: hello-elementor-kiddie-mock
   --csa-border-soft: #d8ccbc;
   --csa-footer-bg: #245b2d;
   --csa-shadow-soft: 0 10px 28px rgba(43, 43, 43, 0.08);
+  --csa-sticky-header-height-mobile: 95px;
+  --csa-sticky-header-height-desktop: 184px;
 
   /* Backward-compatible aliases used by legacy mock styles. */
   --kiddie-navy: var(--csa-text-primary);
@@ -211,6 +213,22 @@ body.kiddie-mock-site a:hover {
 body.kiddie-mock-site #header {
   background-color: var(--csa-white);
   box-shadow: 0 1px 0 rgba(43, 43, 43, 0.08);
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 10000;
+}
+
+body.admin-bar.kiddie-mock-site #header {
+  top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+  body.admin-bar.kiddie-mock-site #header {
+    top: 46px;
+  }
 }
 
 body.kiddie-mock-site #header .support-nav,
@@ -384,18 +402,30 @@ body.kiddie-mock-site .kma-state-strip h2 {
 }
 
 /* Hero */
-body.kiddie-mock-site #hero .hero-overlay {
+body.kiddie-mock-site #hero .hero-overlay,
+body.kiddie-mock-site .kms-dom-id-hero .hero-overlay,
+body.kiddie-mock-site .animated-hero .hero-overlay {
   background: linear-gradient(90deg, rgba(43, 43, 43, 0.3) 0%, rgba(43, 43, 43, 0.12) 56%, rgba(43, 43, 43, 0) 100%);
 }
 
 body.kiddie-mock-site #hero .copy h1,
 body.kiddie-mock-site #hero .copy p,
 body.kiddie-mock-site #hero .copy a,
-body.kiddie-mock-site #hero .locator .get-current-location {
+body.kiddie-mock-site #hero .locator .get-current-location,
+body.kiddie-mock-site .kms-dom-id-hero .copy h1,
+body.kiddie-mock-site .kms-dom-id-hero .copy p,
+body.kiddie-mock-site .kms-dom-id-hero .copy a,
+body.kiddie-mock-site .kms-dom-id-hero .locator .get-current-location,
+body.kiddie-mock-site .animated-hero .copy h1,
+body.kiddie-mock-site .animated-hero .copy p,
+body.kiddie-mock-site .animated-hero .copy a,
+body.kiddie-mock-site .animated-hero .locator .get-current-location {
   color: var(--csa-white);
 }
 
-body.kiddie-mock-site #hero .copy h1 .headline-highlight {
+body.kiddie-mock-site #hero .copy h1 .headline-highlight,
+body.kiddie-mock-site .kms-dom-id-hero .copy h1 .headline-highlight,
+body.kiddie-mock-site .animated-hero .copy h1 .headline-highlight {
   color: var(--csa-tan-accent) !important;
 }
 
@@ -620,6 +650,8 @@ body.kiddie-mock-site .locator-small .locator .get-current-location {
 }
 
 body.kiddie-mock-site #hero .locator .get-current-location,
+body.kiddie-mock-site .kms-dom-id-hero .locator .get-current-location,
+body.kiddie-mock-site .animated-hero .locator .get-current-location,
 body.kiddie-mock-site .find-academy .locator .get-current-location,
 body.kiddie-mock-site .contact-us-academy .locator .get-current-location {
   color: var(--csa-white);
@@ -676,6 +708,13 @@ body.kiddie-mock-site #scroll-top:hover {
   --csa-crayon-magenta: #d94aa7;
   --csa-crayon-yellow: #b68a00;
   --csa-crayon-key: #2b2b2b;
+  --csa-sticky-header-live: var(--csa-sticky-header-height-mobile);
+  --csa-hero-edge-pad: clamp(22px, 3.2vw, 64px);
+  --csa-hero-headline-size-desktop: clamp(10rem, 23vw, 24rem);
+  --csa-hero-headline-size-mobile: clamp(8rem, 32vw, 14rem);
+  --csa-hero-media-filter-desktop: saturate(1.16) contrast(1.1) brightness(1.06);
+  --csa-hero-media-filter-mobile: saturate(1.1) contrast(1.07) brightness(1.05);
+  --csa-nav-logo-optical-left-nudge: 8px;
 }
 
 /* Hide accessibility bubble if any legacy markup remains cached. */
@@ -687,8 +726,8 @@ body.kiddie-mock-site #scroll-top:hover {
 /* Crayon-style nav typography and CMYK tab color sequence. */
 body.kiddie-mock-site #header .main-nav .top-menu > li > .toplevel > a {
   font-family: "Childhood", "Permanent Marker", "Comic Sans MS", cursive !important;
-  font-size: clamp(1.04rem, 1.26vw, 1.52rem);
-  font-weight: 700 !important;
+  font-size: clamp(1.14rem, 1.4vw, 1.64rem);
+  font-weight: 900 !important;
   letter-spacing: 0.02em;
   line-height: 1.05;
   text-decoration: none !important;
@@ -719,96 +758,350 @@ body.kiddie-mock-site #header .main-nav .top-menu > li.active > .toplevel > a {
 }
 
 @media only screen and (min-width: 1200px) {
+  body.kiddie-mock-site {
+    padding-top: var(--csa-sticky-header-live, 184px) !important;
+  }
+
+  body.kiddie-mock-site #header .inner-container {
+    max-width: min(1340px, calc(100vw - 64px));
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(100% - 64px);
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   body.kiddie-mock-site #header .nav-left {
-    width: 390px;
-    min-width: 390px;
+    width: 500px;
+    min-width: 500px;
+    left: 0 !important;
+    justify-content: flex-start;
+    align-items: center;
   }
 
   body.kiddie-mock-site #header .nav-left .logo {
-    height: 166px;
+    height: 198px;
+    justify-content: flex-start;
+    overflow: visible;
+  }
+
+  body.kiddie-mock-site #header .nav-left .logo a {
+    justify-content: flex-start;
+    overflow: visible;
+  }
+
+  body.kiddie-mock-site #header .nav-right {
+    margin-left: 0 !important;
+    flex: 1 1 auto;
+    width: auto;
+  }
+
+  body.kiddie-mock-site #header .link-menu {
+    width: 100%;
+  }
+
+  body.kiddie-mock-site #header .main-nav {
+    width: 100%;
+    max-width: none;
+    margin: 0;
   }
 
   body.kiddie-mock-site #header .main-nav .top-menu {
-    gap: clamp(28px, 4vw, 84px);
+    width: 100%;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  body.kiddie-mock-site #header .main-nav .top-menu li {
+    margin: 0 !important;
   }
 
   body.kiddie-mock-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa.png"],
   body.kiddie-mock-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa-tree.png"] {
-    width: 370px;
-    height: 164px;
-    max-width: 370px;
-    max-height: 164px;
+    width: 500px;
+    height: 196px;
+    max-width: 500px;
+    max-height: 196px;
     object-fit: contain;
-    object-position: center center;
+    object-position: left center;
+    transform: none;
+  }
+
+  /* Keep Elementor Site Identity/logo swaps large too (source-agnostic, no-code). */
+  body.kiddie-mock-site #header .nav-left .logo a img {
+    width: auto !important;
+    height: 196px !important;
+    max-height: 196px !important;
+    max-width: none !important;
+    object-fit: contain;
+    object-position: left center;
+    transform: none;
   }
 }
 
 body.kiddie-mock-site #header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa.png"],
 body.kiddie-mock-site #header .function-nav .mobile-logo img[src*="assets/images/new-logo-csa-tree.png"] {
-  width: 174px;
-  height: 100px;
+  width: 198px;
+  height: 116px;
   max-width: none;
   object-fit: contain;
-  object-position: center center;
+  object-position: left center;
 }
 
 /* Hero cleanup: remove location finder and rebalance tagline placement. */
 body.kiddie-mock-site #hero .locator,
-body.kiddie-mock-site #hero .sub_content {
+body.kiddie-mock-site #hero .sub_content,
+body.kiddie-mock-site .kms-dom-id-hero .locator,
+body.kiddie-mock-site .kms-dom-id-hero .sub_content,
+body.kiddie-mock-site .animated-hero .locator,
+body.kiddie-mock-site .animated-hero .sub_content {
   display: none !important;
 }
 
-body.kiddie-mock-site #hero {
-  min-height: clamp(520px, 74vh, 760px);
+body.kiddie-mock-site #hero,
+body.kiddie-mock-site .kms-dom-id-hero,
+body.kiddie-mock-site .animated-hero {
+  height: calc(100vh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-mobile))) !important;
+  height: calc(100dvh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-mobile))) !important;
+  min-height: calc(100vh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-mobile))) !important;
+  min-height: calc(100dvh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-mobile))) !important;
+  position: relative;
+  overflow: hidden;
 }
 
-body.kiddie-mock-site #hero .copy {
+body.kiddie-mock-site #hero .copy,
+body.kiddie-mock-site .kms-dom-id-hero .copy,
+body.kiddie-mock-site .animated-hero .copy {
+  position: absolute !important;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  z-index: 2;
   min-height: inherit;
   display: flex;
-  align-items: flex-start;
-  --csa-hero-inset: clamp(16px, 3.4vw, 48px);
-  padding: var(--csa-hero-inset);
+  justify-content: flex-start;
+  align-items: flex-end;
+  padding: 0 0 var(--csa-hero-edge-pad) var(--csa-hero-edge-pad);
 }
 
-body.kiddie-mock-site #hero .copy .container {
-  width: 100%;
-  margin: 0;
-  max-width: none;
+body.kiddie-mock-site #hero .copy .container,
+body.kiddie-mock-site .kms-dom-id-hero .copy .container,
+body.kiddie-mock-site .animated-hero .copy .container {
+  width: auto;
+  margin: 0 !important;
+  max-width: none !important;
   padding: 0;
   text-align: left;
 }
 
 body.kiddie-mock-site #hero .copy .headline,
-body.kiddie-mock-site #hero .copy h1.headline {
+body.kiddie-mock-site #hero .copy h1.headline,
+body.kiddie-mock-site #hero .copy .headline .elementor-heading-title,
+body.kiddie-mock-site #hero .copy .headline h1,
+body.kiddie-mock-site .kms-dom-id-hero .copy .headline,
+body.kiddie-mock-site .kms-dom-id-hero .copy h1.headline,
+body.kiddie-mock-site .kms-dom-id-hero .copy .headline .elementor-heading-title,
+body.kiddie-mock-site .kms-dom-id-hero .copy .headline h1,
+body.kiddie-mock-site .animated-hero .copy .headline,
+body.kiddie-mock-site .animated-hero .copy h1.headline,
+body.kiddie-mock-site .animated-hero .copy .headline .elementor-heading-title,
+body.kiddie-mock-site .animated-hero .copy .headline h1 {
   font-family: "Childhood", "Permanent Marker", "Comic Sans MS", cursive !important;
-  font-size: clamp(3.6rem, 9.2vw, 9.4rem);
-  line-height: 0.88;
+  font-size: clamp(8rem, 18.5vw, 19.5rem);
+  line-height: 0.8;
   letter-spacing: 0.012em;
-  max-width: 9.6ch;
+  max-width: 7.7ch;
   margin: 0;
   text-align: left;
   margin-inline: 0;
   text-wrap: balance;
 }
 
-body.kiddie-mock-site #hero .copy .headline .headline-highlight {
+body.kiddie-mock-site #hero .copy .headline .headline-highlight,
+body.kiddie-mock-site .kms-dom-id-hero .copy .headline .headline-highlight,
+body.kiddie-mock-site .animated-hero .copy .headline .headline-highlight {
   display: block;
   margin-top: 8px;
 }
 
+body.kiddie-mock-site.page-home #hero .background-image,
+body.kiddie-mock-site.home #hero .background-image,
+body.kiddie-mock-site.page-home .kms-dom-id-hero .background-image,
+body.kiddie-mock-site.home .kms-dom-id-hero .background-image,
+body.kiddie-mock-site.page-home .animated-hero .background-image,
+body.kiddie-mock-site.home .animated-hero .background-image {
+  background-image: url('/wp-content/themes/hello-elementor-kiddie-mock/assets/images/cover-hd.jpg') !important;
+  background-size: cover;
+  background-position: center center;
+  transform: scaleX(-1);
+  transform-origin: center center;
+  filter: var(--csa-hero-media-filter-desktop);
+  transition: none !important;
+  animation: none !important;
+}
+
+body.kiddie-mock-site.home #hero .hero-overlay,
+body.kiddie-mock-site.page-home #hero .hero-overlay,
+body.kiddie-mock-site.home .kms-dom-id-hero .hero-overlay,
+body.kiddie-mock-site.page-home .kms-dom-id-hero .hero-overlay,
+body.kiddie-mock-site.home .animated-hero .hero-overlay,
+body.kiddie-mock-site.page-home .animated-hero .hero-overlay {
+  background: linear-gradient(90deg, rgba(20, 32, 24, 0.16) 0%, rgba(20, 32, 24, 0.08) 42%, rgba(20, 32, 24, 0.02) 62%, rgba(20, 32, 24, 0) 76%) !important;
+}
+
+body.kiddie-mock-site.home #hero .copy h1,
+body.kiddie-mock-site.page-home #hero .copy h1,
+body.kiddie-mock-site.home .kms-dom-id-hero .copy h1,
+body.kiddie-mock-site.page-home .kms-dom-id-hero .copy h1,
+body.kiddie-mock-site.home .animated-hero .copy h1,
+body.kiddie-mock-site.page-home .animated-hero .copy h1 {
+  text-shadow: 0 4px 16px rgba(16, 24, 19, 0.44);
+}
+
+body.kiddie-mock-site.home #hero .copy p,
+body.kiddie-mock-site.page-home #hero .copy p,
+body.kiddie-mock-site.home .kms-dom-id-hero .copy p,
+body.kiddie-mock-site.page-home .kms-dom-id-hero .copy p,
+body.kiddie-mock-site.home .animated-hero .copy p,
+body.kiddie-mock-site.page-home .animated-hero .copy p {
+  text-shadow: 0 2px 10px rgba(16, 24, 19, 0.34);
+}
+
+/* Home-specific viewport-fit + edge anchoring for the hero headline. */
+body.kiddie-mock-site.home .kms-dom-id-hero,
+body.kiddie-mock-site.page-home .kms-dom-id-hero,
+body.kiddie-mock-site.home .animated-hero,
+body.kiddie-mock-site.page-home .animated-hero {
+  margin-bottom: 0 !important;
+}
+
 @media screen and (max-width: 991px) {
-  body.kiddie-mock-site #hero .copy {
-    align-items: flex-start;
-    --csa-hero-inset: clamp(14px, 5.2vw, 30px);
+  :root {
+    --csa-hero-edge-pad: clamp(12px, 4vw, 20px);
+  }
+
+  body.kiddie-mock-site #hero .copy,
+  body.kiddie-mock-site .kms-dom-id-hero .copy,
+  body.kiddie-mock-site .animated-hero .copy {
+    justify-content: flex-start;
+    align-items: flex-end;
+    padding: 0 0 var(--csa-hero-edge-pad) var(--csa-hero-edge-pad);
   }
 
   body.kiddie-mock-site #hero .copy .headline,
-  body.kiddie-mock-site #hero .copy h1.headline {
-    font-size: clamp(3.2rem, 15vw, 5.9rem);
-    line-height: 0.9;
-    max-width: 9.8ch;
+  body.kiddie-mock-site #hero .copy h1.headline,
+  body.kiddie-mock-site #hero .copy .headline .elementor-heading-title,
+  body.kiddie-mock-site #hero .copy .headline h1,
+  body.kiddie-mock-site .kms-dom-id-hero .copy .headline,
+  body.kiddie-mock-site .kms-dom-id-hero .copy h1.headline,
+  body.kiddie-mock-site .kms-dom-id-hero .copy .headline .elementor-heading-title,
+  body.kiddie-mock-site .kms-dom-id-hero .copy .headline h1,
+  body.kiddie-mock-site .animated-hero .copy .headline,
+  body.kiddie-mock-site .animated-hero .copy h1.headline,
+  body.kiddie-mock-site .animated-hero .copy .headline .elementor-heading-title,
+  body.kiddie-mock-site .animated-hero .copy .headline h1 {
+    font-size: clamp(6.4rem, 24.5vw, 11.8rem);
+    line-height: 0.82;
+    max-width: 7.9ch;
+    text-align: left;
     margin-inline: 0;
   }
+
+  body.kiddie-mock-site.page-home #hero .background-image,
+  body.kiddie-mock-site.home #hero .background-image,
+  body.kiddie-mock-site.page-home .kms-dom-id-hero .background-image,
+  body.kiddie-mock-site.home .kms-dom-id-hero .background-image,
+  body.kiddie-mock-site.page-home .animated-hero .background-image,
+  body.kiddie-mock-site.home .animated-hero .background-image {
+    filter: var(--csa-hero-media-filter-mobile);
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  :root {
+    --csa-sticky-header-live: var(--csa-sticky-header-height-desktop);
+    --csa-hero-edge-pad: clamp(26px, 3.6vw, 72px);
+  }
+
+  body.kiddie-mock-site #hero,
+  body.kiddie-mock-site .kms-dom-id-hero,
+  body.kiddie-mock-site .animated-hero {
+    height: calc(100vh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-desktop))) !important;
+    height: calc(100dvh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-desktop))) !important;
+    min-height: calc(100vh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-desktop))) !important;
+    min-height: calc(100dvh - var(--csa-sticky-header-live, var(--csa-sticky-header-height-desktop))) !important;
+  }
+}
+
+/* Home hero hard-fix: no overlap from following section + exact edge-anchored headline. */
+body.kiddie-mock-site.home .kms-dom-id-curriculum,
+body.kiddie-mock-site.page-home .kms-dom-id-curriculum,
+body.kiddie-mock-site.home #curriculum,
+body.kiddie-mock-site.page-home #curriculum {
+  margin-top: 0 !important;
+  top: 0 !important;
+  transform: none !important;
+  position: relative;
+  z-index: 2;
+}
+
+body.kiddie-mock-site.home .kms-dom-id-curriculum .intro,
+body.kiddie-mock-site.page-home .kms-dom-id-curriculum .intro,
+body.kiddie-mock-site.home #curriculum .intro,
+body.kiddie-mock-site.page-home #curriculum .intro {
+  margin-top: 0 !important;
+  top: 0 !important;
+  transform: none !important;
+}
+
+body.kiddie-mock-site.home .kms-dom-id-hero .copy,
+body.kiddie-mock-site.page-home .kms-dom-id-hero .copy,
+body.kiddie-mock-site.home .animated-hero .copy,
+body.kiddie-mock-site.page-home .animated-hero .copy {
+  padding-left: var(--csa-hero-edge-pad) !important;
+  padding-bottom: var(--csa-hero-edge-pad) !important;
+}
+
+/* Home hero tagline hard-size override (post-Elementor + post-parity safe). */
+body.kiddie-mock-site.home .kms-dom-id-hero .copy h1.elementor-heading-title,
+body.kiddie-mock-site.page-home .kms-dom-id-hero .copy h1.elementor-heading-title,
+body.kiddie-mock-site.home .animated-hero .copy h1.elementor-heading-title,
+body.kiddie-mock-site.page-home .animated-hero .copy h1.elementor-heading-title,
+body.kiddie-mock-site.home .kms-dom-id-hero .copy h1.headline,
+body.kiddie-mock-site.page-home .kms-dom-id-hero .copy h1.headline,
+body.kiddie-mock-site.home .animated-hero .copy h1.headline,
+body.kiddie-mock-site.page-home .animated-hero .copy h1.headline {
+  font-size: var(--csa-hero-headline-size-desktop) !important;
+  line-height: 0.76 !important;
+}
+
+@media screen and (max-width: 991px) {
+  body.kiddie-mock-site.home .kms-dom-id-hero .copy h1.elementor-heading-title,
+  body.kiddie-mock-site.page-home .kms-dom-id-hero .copy h1.elementor-heading-title,
+  body.kiddie-mock-site.home .animated-hero .copy h1.elementor-heading-title,
+  body.kiddie-mock-site.page-home .animated-hero .copy h1.elementor-heading-title,
+  body.kiddie-mock-site.home .kms-dom-id-hero .copy h1.headline,
+  body.kiddie-mock-site.page-home .kms-dom-id-hero .copy h1.headline,
+  body.kiddie-mock-site.home .animated-hero .copy h1.headline,
+  body.kiddie-mock-site.page-home .animated-hero .copy h1.headline {
+    font-size: var(--csa-hero-headline-size-mobile) !important;
+    line-height: 0.78 !important;
+  }
+}
+
+/* FAQ spacing polish: keep existing structure, add only inner padding. */
+body.kiddie-mock-site .faq-preview-section .links {
+  padding: 12px 18px 10px;
+}
+
+body.kiddie-mock-site .faq-preview-section .links > div p[data-question] {
+  margin: 0;
+}
+
+body.kiddie-mock-site .faq-preview-section .links > div [data-answer],
+body.kiddie-mock-site .faq-preview-section .links > div [class*="kms-data-answer-"] {
+  margin-top: 8px;
 }
 
 /* Footer logo alignment and sizing. */
@@ -816,7 +1109,7 @@ body.kiddie-mock-site #footer .company-info .logo {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   margin: 0 0 8px;
   padding: 0;
 }
@@ -825,21 +1118,209 @@ body.kiddie-mock-site #footer .company-info .logo img {
   display: block;
   width: auto;
   height: auto;
-  max-width: min(228px, 62vw);
-  max-height: 112px;
+  max-width: min(340px, 76vw);
+  max-height: 156px;
   object-fit: contain;
-  object-position: left center;
+  object-position: center center;
 }
 
 @media screen and (min-width: 1200px) {
+  body.kiddie-mock-site #footer .content-wrapper {
+    align-items: flex-start;
+  }
+
+  body.kiddie-mock-site #footer .company-info {
+    align-items: center;
+    text-align: center;
+    margin-top: 0;
+  }
+
   body.kiddie-mock-site #footer .company-info .logo {
-    margin: 0 0 6px;
+    margin: 0 0 8px;
     padding: 0;
   }
 
   body.kiddie-mock-site #footer .company-info .logo img {
-    max-width: 248px;
-    max-height: 116px;
+    max-width: 374px;
+    max-height: 172px;
+  }
+
+  body.kiddie-mock-site #footer .company-info p,
+  body.kiddie-mock-site #footer .company-info .copyright {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Life at Chestnut: image-only gallery tiles, no rounded corners. */
+body.kiddie-mock-site .life-gallery-page .life-gallery-grid .single-column .text {
+  display: none !important;
+}
+
+body.kiddie-mock-site .life-gallery-page .life-gallery-grid .single-column.image-only .image-frame,
+body.kiddie-mock-site .life-gallery-page .life-gallery-grid .single-column.image-only .image-frame img,
+body.kiddie-mock-site .life-gallery-page .life-gallery-grid .single-column.image-only .fill-container {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+body.kiddie-mock-site .life-gallery-page .life-gallery-grid .single-column.image-only .image-frame {
+  overflow: hidden;
+}
+
+/* Life at Chestnut spacing/sizing polish: add vertical breathing room and stronger image framing. */
+body.kiddie-mock-site .life-gallery-page .life-gallery-grid .column-3 {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(14px, 1.8vw, 24px);
+  row-gap: clamp(18px, 2.2vw, 30px);
+  align-items: start;
+}
+
+body.kiddie-mock-site .life-gallery-page .life-gallery-grid .single-column.image-only {
+  margin: 0;
+}
+
+body.kiddie-mock-site .life-gallery-page .life-gallery-grid .single-column.image-only .image-frame {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  margin: 0;
+}
+
+body.kiddie-mock-site .life-gallery-page .life-gallery-grid .single-column.image-only .image-frame .elementor-widget-image,
+body.kiddie-mock-site .life-gallery-page .life-gallery-grid .single-column.image-only .image-frame .elementor-widget-container {
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.kiddie-mock-site .life-gallery-page .life-gallery-grid .single-column.image-only .image-frame img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+@media screen and (max-width: 1100px) {
+  body.kiddie-mock-site .life-gallery-page .life-gallery-grid .column-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 680px) {
+  body.kiddie-mock-site .life-gallery-page .life-gallery-grid .column-3 {
+    grid-template-columns: 1fr;
+    row-gap: 16px;
+  }
+}
+
+/* Life at Chestnut hard-target (current rendered DOM): enforce spacing/sizing on live page markup. */
+body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .column-3 {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(14px, 1.8vw, 24px);
+  row-gap: clamp(18px, 2.2vw, 30px);
+  align-items: start;
+}
+
+body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .single-column.image-only {
+  margin: 0 !important;
+}
+
+body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .single-column.image-only .image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .single-column.image-only .fill-container,
+body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .single-column.image-only .fill-container .elementor-widget-container {
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .single-column.image-only img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 0 !important;
+}
+
+@media screen and (max-width: 1100px) {
+  body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .column-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 680px) {
+  body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .column-3 {
+    grid-template-columns: 1fr;
+    row-gap: 16px;
+  }
+}
+
+/* Life at Chestnut gallery hard-fix: one predictable layout system only. */
+body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .column-3 {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+  gap: 18px !important;
+}
+
+body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .single-column.image-only {
+  box-sizing: border-box;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: calc((100% - 36px) / 3) !important;
+  max-width: calc((100% - 36px) / 3) !important;
+  flex: 0 0 calc((100% - 36px) / 3) !important;
+}
+
+body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .single-column.image-only .image {
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .single-column.image-only .fill-container,
+body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .single-column.image-only .fill-container .elementor-widget-container {
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .single-column.image-only img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0 !important;
+}
+
+@media screen and (max-width: 1100px) {
+  body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .single-column.image-only {
+    width: calc((100% - 18px) / 2) !important;
+    max-width: calc((100% - 18px) / 2) !important;
+    flex-basis: calc((100% - 18px) / 2) !important;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  body.kiddie-mock-site.page-id-332 .column-3-image-text-cards .single-column.image-only {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-basis: 100% !important;
   }
 }
 
@@ -871,5 +1352,118 @@ body.kiddie-mock-site #footer .links > div {
 
   body.kiddie-mock-site #footer .links > div {
     min-width: 190px;
+  }
+}
+
+/* Final nav-logo legibility pass: force larger desktop logo lane and render size. */
+@media only screen and (min-width: 1200px) {
+  body.kiddie-mock-site #header {
+    box-sizing: border-box !important;
+    padding-left: var(--csa-hero-edge-pad) !important;
+    padding-right: var(--csa-hero-edge-pad) !important;
+  }
+
+  body.kiddie-mock-site #header .inner-container {
+    min-height: 118px !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  body.kiddie-mock-site #header .nav-left {
+    width: 302px !important;
+    min-width: 302px !important;
+    max-width: 302px !important;
+    padding-left: 0 !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    overflow: visible !important;
+  }
+
+  body.kiddie-mock-site #header .nav-left .logo,
+  body.kiddie-mock-site #header .nav-left .logo a {
+    height: 118px !important;
+    min-height: 118px !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    overflow: visible !important;
+  }
+
+  body.kiddie-mock-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa-navbar.png"],
+  body.kiddie-mock-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa.png"],
+  body.kiddie-mock-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa-tree-navbar.png"],
+  body.kiddie-mock-site #header .nav-left .logo a img[src*="assets/images/new-logo-csa-tree.png"] {
+    width: auto !important;
+    height: 115px !important;
+    max-width: none !important;
+    max-height: 115px !important;
+    object-fit: contain !important;
+    object-position: left center !important;
+    transform: translateX(calc(-1 * var(--csa-nav-logo-optical-left-nudge))) !important;
+    filter: contrast(1.08) saturate(1.04);
+  }
+
+  /* Keep Elementor Site Identity swaps no-code friendly with the same large lane. */
+  body.kiddie-mock-site #header .nav-left .logo a img {
+    width: auto !important;
+    height: 115px !important;
+    max-width: none !important;
+    max-height: 115px !important;
+    object-fit: contain !important;
+    object-position: left center !important;
+    transform: translateX(calc(-1 * var(--csa-nav-logo-optical-left-nudge))) !important;
+  }
+
+  body.kiddie-mock-site #header .nav-right {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    margin-left: clamp(8px, 1vw, 18px) !important;
+    margin-right: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  body.kiddie-mock-site #header .link-menu,
+  body.kiddie-mock-site #header .main-nav {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  body.kiddie-mock-site #header .main-nav {
+    display: flex !important;
+    justify-content: flex-end !important;
+  }
+
+  body.kiddie-mock-site #header .main-nav .top-menu {
+    width: 100% !important;
+    max-width: 980px !important;
+    margin: 0 0 0 auto !important;
+    justify-content: space-between !important;
+    gap: 0 !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.kiddie-mock-site a:hover,
+  body.kiddie-mock-site a:focus-visible,
+  body.kiddie-mock-site button:hover,
+  body.kiddie-mock-site button:focus-visible,
+  body.kiddie-mock-site [role="button"]:hover,
+  body.kiddie-mock-site [role="button"]:focus-visible,
+  body.kiddie-mock-site input[type="button"]:hover,
+  body.kiddie-mock-site input[type="button"]:focus-visible,
+  body.kiddie-mock-site input[type="submit"]:hover,
+  body.kiddie-mock-site input[type="submit"]:focus-visible,
+  body.kiddie-mock-site .button:hover,
+  body.kiddie-mock-site .button:focus-visible,
+  body.kiddie-mock-site .button-round:hover,
+  body.kiddie-mock-site .button-round:focus-visible,
+  body.kiddie-mock-site .elementor-button:hover,
+  body.kiddie-mock-site .elementor-button:focus-visible,
+  body.kiddie-mock-site #header .main-nav .top-menu > li > .toplevel > a:hover,
+  body.kiddie-mock-site #header .main-nav .top-menu > li > .toplevel > a:focus-visible {
+    cursor: url("assets/images/cursor-handprint.png?v=3") 8 6, pointer !important;
   }
 }

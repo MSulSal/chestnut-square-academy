@@ -124,6 +124,31 @@
     activate(slides[0].getAttribute("data-program"));
   }
 
+  function disableCurriculumLinks() {
+    var links = document.querySelectorAll("#curriculum .slides .slide a");
+
+    links.forEach(function (link) {
+      if (link.dataset.kmsNoNavBound) {
+        return;
+      }
+
+      link.setAttribute("aria-disabled", "true");
+      link.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      });
+
+      link.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      });
+
+      link.dataset.kmsNoNavBound = "1";
+    });
+  }
+
   function faqToggle() {
     if (document.body && document.body.classList.contains("kms-native-parity-mode")) {
       return;
@@ -234,13 +259,37 @@
     });
   }
 
+  function syncStickyHeaderMetrics() {
+    var header = document.getElementById("header");
+    if (!header) {
+      return;
+    }
+
+    var root = document.documentElement;
+
+    function apply() {
+      var rect = header.getBoundingClientRect();
+      var height = Math.ceil(rect && rect.height ? rect.height : header.offsetHeight || 0);
+      if (height > 0) {
+        root.style.setProperty("--csa-sticky-header-live", height + "px");
+      }
+    }
+
+    apply();
+    window.addEventListener("resize", apply, { passive: true });
+    window.addEventListener("load", apply, { passive: true });
+    setTimeout(apply, 220);
+  }
+
   ready(function () {
     hydrateLazyImages();
     toggleSearch();
     toggleMobileMenu();
     toggleSubmenus();
     curriculumDesktopSwitcher();
+    disableCurriculumLinks();
     faqToggle();
     scrollTopWidget();
+    syncStickyHeaderMetrics();
   });
 })();
