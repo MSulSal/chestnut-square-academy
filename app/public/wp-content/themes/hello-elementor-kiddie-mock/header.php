@@ -23,10 +23,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php
 $home_url                 = home_url( '/' );
-$life_at_chestnut_url     = home_url( '/life-at-chestnut/' );
-$company_url              = home_url( '/company/' );
-$faq_url                  = home_url( '/faq/' );
-$contact_url              = home_url( '/contact-us/' );
 $desktop_logo_default     = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa-navbar.png';
 $mobile_logo_default      = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa-navbar.png';
 $elementor_site_logo      = function_exists( 'kiddie_mock_get_elementor_site_logo_url' ) ? trim( (string) kiddie_mock_get_elementor_site_logo_url() ) : '';
@@ -53,12 +49,9 @@ if ( '' !== $elementor_site_logo ) {
 		<div class="nav-right">
 			<div class="link-menu">
 				<div class="main-nav">
-					<ul class="one-row-flex top-menu">
-						<li><span class="toplevel"><a href="<?php echo esc_url( $life_at_chestnut_url ); ?>">LIFE AT CHESTNUT</a></span></li>
-						<li><span class="toplevel"><a href="<?php echo esc_url( $company_url ); ?>">About Us</a></span></li>
-						<li><span class="toplevel"><a href="<?php echo esc_url( $faq_url ); ?>">FAQ</a></span></li>
-						<li><span class="toplevel"><a href="<?php echo esc_url( $contact_url ); ?>">Contact Us</a></span></li>
-					</ul>
+					<?php if ( function_exists( 'kiddie_mock_render_primary_nav_menu' ) ) : ?>
+						<?php kiddie_mock_render_primary_nav_menu(); ?>
+					<?php endif; ?>
 				</div>
 
 				<div class="function-nav">

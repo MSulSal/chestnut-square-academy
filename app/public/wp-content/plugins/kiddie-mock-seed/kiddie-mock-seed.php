@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kiddie Mock Seed
  * Description: Builds a full Kiddie Academy style frontend mock across all key pages for WordPress + Elementor testing.
- * Version: 1.3.28
+ * Version: 1.3.29
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
  * Text Domain: kiddie-mock-seed
@@ -1339,9 +1339,9 @@ function kms_run_seed( $overwrite = true ) {
  * @return string
  */
 function kms_get_seed_profile() {
-	$profile = get_option( 'kms_seed_profile', 'mock-parity' );
+	$profile = get_option( 'kms_seed_profile', 'native-parity' );
 
-	return is_string( $profile ) ? $profile : 'mock-parity';
+	return is_string( $profile ) ? $profile : 'native-parity';
 }
 
 /**
@@ -3857,13 +3857,13 @@ function kms_render_tools_page() {
 		<p><strong>Active profile:</strong> <code><?php echo esc_html( $profile ); ?></code></p>
 
 		<hr>
-		<h2>Mock Parity Mode</h2>
-		<p>Rebuild the full Kiddie-style mock page tree using layout-parity HTML sections.</p>
+		<h2>Mock Parity Mode (Legacy / Not Recommended)</h2>
+		<p>Rebuild the full Kiddie-style mock page tree using layout-parity HTML sections. This mode can reduce Elementor component-level editability because it relies on HTML-heavy parity output.</p>
 		<form method="post" style="margin-bottom: 16px;">
 			<?php wp_nonce_field( 'kms_run_seed' ); ?>
 			<input type="hidden" name="kms_action" value="run_seed">
 			<p><label><input type="checkbox" name="kms_overwrite" value="1" checked> Overwrite existing page content</label></p>
-			<p><button type="submit" class="button button-primary">Run Full Mock Seed</button></p>
+			<p><button type="submit" class="button">Run Full Mock Seed (Legacy)</button></p>
 		</form>
 
 		<hr>
@@ -3877,13 +3877,13 @@ function kms_render_tools_page() {
 		</form>
 
 		<hr>
-		<h2>Native Parity Mode</h2>
-		<p>Seed all pages with fully native Elementor widgets while preserving Kiddie Academy structure/content as closely as possible.</p>
+		<h2>Native Parity Mode (Recommended)</h2>
+		<p>Seed all pages with fully native Elementor widgets while preserving Kiddie Academy structure/content as closely as possible. This is the best mode for no-code owner handoff.</p>
 		<form method="post">
 			<?php wp_nonce_field( 'kms_run_native_seed' ); ?>
 			<input type="hidden" name="kms_action" value="run_native_seed">
 			<p><label><input type="checkbox" name="kms_overwrite" value="1" checked> Overwrite existing page content</label></p>
-			<p><button type="submit" class="button">Run Native Parity Seed</button></p>
+			<p><button type="submit" class="button button-primary">Run Native Parity Seed</button></p>
 		</form>
 
 		<hr>

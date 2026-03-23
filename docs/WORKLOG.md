@@ -344,4 +344,13 @@
 - style(mobile-menu-layout): reordered mobile header stack (`function-nav` row first, flyout nav second) for clearer no-code owner behavior and cleaner logo/burger-to-menu flow.
 - fix(hero-mobile-clipping): reduced phone hero headline clamp and width constraints so the longest crayon words no longer clip on narrow viewports while preserving desktop/tablet scale.
 - chore(versioning): bumped child theme version to `1.0.61` for cache-safe rollout of burger/menu/hero responsive fixes.
+- feat(no-code-nav): converted header navigation to dashboard-editable WordPress menu location (`kiddie_primary`) while preserving existing Kiddie-style DOM (`.top-menu` + `.toplevel`) via a custom walker for CSS parity.
+- feat(no-code-footer): converted footer Quick Links and Contact lists to dashboard-editable menu locations (`kiddie_footer_quick`, `kiddie_footer_contact`) with resilient fallbacks.
+- feat(no-code-seed): added one-time auto-seeding for the three theme menu locations so non-technical owners start with editable menus without manual setup.
+- feat(no-code-footer-content): added Customizer fields for footer business details (school name, address lines, hours, copyright text) so owners can update global footer copy without code.
+- fix(no-code-safety): disabled legacy child-theme runtime parity sync/overwrite paths by default (can only run if explicitly re-enabled via `kiddie_mock_allow_legacy_runtime_sync` filter), preventing future HTML-widget regression from auto-hooks.
+- chore(seed-default): changed `kiddie-mock-seed` default profile fallback to `native-parity` (from `mock-parity`) so new installs default to component-level Elementor editability.
+- docs(admin-ux): relabeled Tools seed actions to mark full mock parity as legacy/not recommended and promoted Native Parity as the no-code recommended path.
+- chore(versioning): bumped `kiddie-mock-seed` plugin header version to `1.3.29` for this no-code handoff hardening pass.
+- chore(verification): re-ran preview widget audits on `/`, `/life-at-chestnut/`, `/company/`, `/faq/`, `/contact-us/`; confirmed `htmlWidgets: 0` on all audited core pages.
 

@@ -10,13 +10,55 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $home_url         = home_url( '/' );
-$life_url         = home_url( '/life-at-chestnut/' );
-$company_url      = home_url( '/company/' );
-$faq_url          = home_url( '/faq/' );
 $contact_url      = home_url( '/contact-us/' );
 $privacy_url      = home_url( '/privacy-policy/' );
 $footer_logo_default = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/new-logo-csa-tree.png';
 $footer_logo         = apply_filters( 'kms_asset_url', $footer_logo_default, 'footer_logo' );
+$defaults            = function_exists( 'kiddie_mock_footer_text_defaults' ) ? kiddie_mock_footer_text_defaults() : array();
+$footer_school_name  = get_theme_mod( 'kiddie_mock_footer_school_name', isset( $defaults['school_name'] ) ? $defaults['school_name'] : 'Chestnut Square Academy' );
+$footer_address_1    = get_theme_mod( 'kiddie_mock_footer_address_1', isset( $defaults['address_1'] ) ? $defaults['address_1'] : '402 S. Chestnut St.' );
+$footer_address_2    = get_theme_mod( 'kiddie_mock_footer_address_2', isset( $defaults['address_2'] ) ? $defaults['address_2'] : 'McKinney, TX' );
+$footer_hours        = get_theme_mod( 'kiddie_mock_footer_hours', isset( $defaults['hours'] ) ? $defaults['hours'] : 'Monday-Friday: 6:00 AM-6:00 PM' );
+$footer_copyright    = get_theme_mod( 'kiddie_mock_footer_copyright', isset( $defaults['copyright'] ) ? $defaults['copyright'] : '&copy; ' . gmdate( 'Y' ) . ' Chestnut Square Academy. All rights reserved.' );
+
+$quick_fallback = array(
+	array(
+		'label' => 'Home',
+		'url'   => $home_url,
+	),
+	array(
+		'label' => 'Life at Chestnut',
+		'url'   => home_url( '/life-at-chestnut/' ),
+	),
+	array(
+		'label' => 'About Us',
+		'url'   => home_url( '/company/' ),
+	),
+	array(
+		'label' => 'FAQ',
+		'url'   => home_url( '/faq/' ),
+	),
+	array(
+		'label' => 'Contact Us',
+		'url'   => $contact_url,
+	),
+);
+
+$contact_fallback = array(
+	array(
+		'label'    => 'Get Directions',
+		'url'      => 'https://maps.google.com/?q=402+S+Chestnut+St,+McKinney,+TX',
+		'external' => true,
+	),
+	array(
+		'label' => 'Schedule a Tour',
+		'url'   => $contact_url,
+	),
+	array(
+		'label' => 'Privacy Policy',
+		'url'   => $privacy_url,
+	),
+);
 ?>
 
 <footer id="footer" class="padding-top padding-bottom clearfix">
@@ -26,13 +68,13 @@ $footer_logo         = apply_filters( 'kms_asset_url', $footer_logo_default, 'fo
 				<img src="<?php echo esc_url( $footer_logo ); ?>" alt="Chestnut Square Academy">
 			</div>
 			<p>
-				<span class="bold">Chestnut Square Academy</span><br>
-				402 S. Chestnut St.<br>
-				McKinney, TX<br>
-				Monday-Friday: 6:00 AM-6:00 PM
+				<span class="bold"><?php echo esc_html( (string) $footer_school_name ); ?></span><br>
+				<?php echo esc_html( (string) $footer_address_1 ); ?><br>
+				<?php echo esc_html( (string) $footer_address_2 ); ?><br>
+				<?php echo esc_html( (string) $footer_hours ); ?>
 			</p>
 			<div class="copyright">
-				<p>&copy; 2026 Chestnut Square Academy. All rights reserved.</p>
+				<p><?php echo wp_kses_post( (string) $footer_copyright ); ?></p>
 				<div class="copyright-links">
 					<p><a class="pp" href="<?php echo esc_url( $privacy_url ); ?>">Privacy Policy</a></p>
 				</div>
@@ -42,21 +84,15 @@ $footer_logo         = apply_filters( 'kms_asset_url', $footer_logo_default, 'fo
 		<div class="links">
 			<div class="quick-links">
 				<p class="eyebrow">Quick Links</p>
-				<ul id="menu-footer-quick" class="menu">
-					<li><a href="<?php echo esc_url( $home_url ); ?>">Home</a></li>
-					<li><a href="<?php echo esc_url( $life_url ); ?>">Life at Chestnut</a></li>
-					<li><a href="<?php echo esc_url( $company_url ); ?>">About Us</a></li>
-					<li><a href="<?php echo esc_url( $faq_url ); ?>">FAQ</a></li>
-					<li><a href="<?php echo esc_url( $contact_url ); ?>">Contact Us</a></li>
-				</ul>
+				<?php if ( function_exists( 'kiddie_mock_render_footer_menu' ) ) : ?>
+					<?php kiddie_mock_render_footer_menu( 'kiddie_footer_quick', 'menu-footer-quick', $quick_fallback ); ?>
+				<?php endif; ?>
 			</div>
 			<div class="contact">
 				<p class="eyebrow">Contact</p>
-				<ul id="menu-footer-contact" class="menu">
-					<li><a href="https://maps.google.com/?q=402+S+Chestnut+St,+McKinney,+TX" target="_blank" rel="noopener noreferrer">Get Directions</a></li>
-					<li><a href="<?php echo esc_url( $contact_url ); ?>">Schedule a Tour</a></li>
-					<li><a href="<?php echo esc_url( $privacy_url ); ?>">Privacy Policy</a></li>
-				</ul>
+				<?php if ( function_exists( 'kiddie_mock_render_footer_menu' ) ) : ?>
+					<?php kiddie_mock_render_footer_menu( 'kiddie_footer_contact', 'menu-footer-contact', $contact_fallback ); ?>
+				<?php endif; ?>
 			</div>
 		</div>
 	</div>

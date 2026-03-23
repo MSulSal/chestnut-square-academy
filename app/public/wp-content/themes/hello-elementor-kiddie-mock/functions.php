@@ -101,6 +101,391 @@ function kiddie_mock_add_body_classes( $classes ) {
 add_filter( 'body_class', 'kiddie_mock_add_body_classes' );
 
 /**
+ * Register dashboard-editable menus used by header/footer.
+ */
+function kiddie_mock_register_nav_menus() {
+	register_nav_menus(
+		array(
+			'kiddie_primary'      => __( 'CSA Primary Navigation', 'hello-elementor-kiddie-mock' ),
+			'kiddie_footer_quick' => __( 'CSA Footer Quick Links', 'hello-elementor-kiddie-mock' ),
+			'kiddie_footer_contact' => __( 'CSA Footer Contact Links', 'hello-elementor-kiddie-mock' ),
+		)
+	);
+}
+add_action( 'after_setup_theme', 'kiddie_mock_register_nav_menus', 20 );
+
+/**
+ * One-time seed for menu locations so non-technical owners start with editable menus.
+ */
+function kiddie_mock_seed_default_nav_menus() {
+	if ( '1' === get_option( 'kiddie_mock_nav_seeded_v1', '0' ) ) {
+		return;
+	}
+
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+	if ( ! is_array( $locations ) ) {
+		$locations = array();
+	}
+
+	$defs = array(
+		'kiddie_primary' => array(
+			'name'  => 'CSA Primary Navigation',
+			'items' => array(
+				array(
+					'title' => 'LIFE AT CHESTNUT',
+					'url'   => home_url( '/life-at-chestnut/' ),
+				),
+				array(
+					'title' => 'About Us',
+					'url'   => home_url( '/company/' ),
+				),
+				array(
+					'title' => 'FAQ',
+					'url'   => home_url( '/faq/' ),
+				),
+				array(
+					'title' => 'Contact Us',
+					'url'   => home_url( '/contact-us/' ),
+				),
+			),
+		),
+		'kiddie_footer_quick' => array(
+			'name'  => 'CSA Footer Quick Links',
+			'items' => array(
+				array(
+					'title' => 'Home',
+					'url'   => home_url( '/' ),
+				),
+				array(
+					'title' => 'Life at Chestnut',
+					'url'   => home_url( '/life-at-chestnut/' ),
+				),
+				array(
+					'title' => 'About Us',
+					'url'   => home_url( '/company/' ),
+				),
+				array(
+					'title' => 'FAQ',
+					'url'   => home_url( '/faq/' ),
+				),
+				array(
+					'title' => 'Contact Us',
+					'url'   => home_url( '/contact-us/' ),
+				),
+			),
+		),
+		'kiddie_footer_contact' => array(
+			'name'  => 'CSA Footer Contact Links',
+			'items' => array(
+				array(
+					'title' => 'Get Directions',
+					'url'   => 'https://maps.google.com/?q=402+S+Chestnut+St,+McKinney,+TX',
+				),
+				array(
+					'title' => 'Schedule a Tour',
+					'url'   => home_url( '/contact-us/' ),
+				),
+				array(
+					'title' => 'Privacy Policy',
+					'url'   => home_url( '/privacy-policy/' ),
+				),
+			),
+		),
+	);
+
+	$changed = false;
+
+	foreach ( $defs as $location => $def ) {
+		if ( ! empty( $locations[ $location ] ) ) {
+			continue;
+		}
+
+		$menu_obj = wp_get_nav_menu_object( $def['name'] );
+		$menu_id  = $menu_obj ? (int) $menu_obj->term_id : 0;
+
+		if ( $menu_id <= 0 ) {
+			$menu_id = (int) wp_create_nav_menu( $def['name'] );
+		}
+
+		if ( $menu_id <= 0 ) {
+			continue;
+		}
+
+		$existing_items = wp_get_nav_menu_items( $menu_id );
+		if ( ! is_array( $existing_items ) || 0 === count( $existing_items ) ) {
+			foreach ( $def['items'] as $item ) {
+				if ( empty( $item['title'] ) || empty( $item['url'] ) ) {
+					continue;
+				}
+				wp_update_nav_menu_item(
+					$menu_id,
+					0,
+					array(
+						'menu-item-title'  => $item['title'],
+						'menu-item-url'    => $item['url'],
+						'menu-item-status' => 'publish',
+					)
+				);
+			}
+		}
+
+		$locations[ $location ] = $menu_id;
+		$changed                = true;
+	}
+
+	if ( $changed ) {
+		set_theme_mod( 'nav_menu_locations', $locations );
+	}
+
+	update_option( 'kiddie_mock_nav_seeded_v1', '1' );
+}
+add_action( 'init', 'kiddie_mock_seed_default_nav_menus', 25 );
+
+/**
+ * Return footer text defaults used in Theme Customizer.
+ *
+ * @return array<string,string>
+ */
+function kiddie_mock_footer_text_defaults() {
+	return array(
+		'school_name' => 'Chestnut Square Academy',
+		'address_1'   => '402 S. Chestnut St.',
+		'address_2'   => 'McKinney, TX',
+		'hours'       => 'Monday-Friday: 6:00 AM-6:00 PM',
+		'copyright'   => sprintf( '&copy; %s Chestnut Square Academy. All rights reserved.', gmdate( 'Y' ) ),
+	);
+}
+
+/**
+ * Register footer text fields for no-code dashboard editing.
+ *
+ * @param WP_Customize_Manager $wp_customize Customizer manager.
+ */
+function kiddie_mock_register_customizer_fields( $wp_customize ) {
+	if ( ! is_object( $wp_customize ) ) {
+		return;
+	}
+
+	$defaults = kiddie_mock_footer_text_defaults();
+
+	$wp_customize->add_section(
+		'kiddie_mock_footer_content',
+		array(
+			'title'       => __( 'CSA Footer Content', 'hello-elementor-kiddie-mock' ),
+			'priority'    => 165,
+			'description' => __( 'Update footer business details without touching code.', 'hello-elementor-kiddie-mock' ),
+		)
+	);
+
+	$fields = array(
+		'school_name' => __( 'School Name', 'hello-elementor-kiddie-mock' ),
+		'address_1'   => __( 'Address Line 1', 'hello-elementor-kiddie-mock' ),
+		'address_2'   => __( 'Address Line 2', 'hello-elementor-kiddie-mock' ),
+		'hours'       => __( 'Hours', 'hello-elementor-kiddie-mock' ),
+		'copyright'   => __( 'Copyright Text', 'hello-elementor-kiddie-mock' ),
+	);
+
+	foreach ( $fields as $key => $label ) {
+		$setting_key = 'kiddie_mock_footer_' . $key;
+
+		$wp_customize->add_setting(
+			$setting_key,
+			array(
+				'default'           => $defaults[ $key ],
+				'sanitize_callback' => 'sanitize_text_field',
+				'transport'         => 'refresh',
+			)
+		);
+
+		$wp_customize->add_control(
+			$setting_key,
+			array(
+				'type'    => 'text',
+				'section' => 'kiddie_mock_footer_content',
+				'label'   => $label,
+			)
+		);
+	}
+}
+add_action( 'customize_register', 'kiddie_mock_register_customizer_fields' );
+
+/**
+ * Custom walker to preserve legacy navbar DOM shape while using dashboard menus.
+ */
+if ( class_exists( 'Walker_Nav_Menu' ) && ! class_exists( 'Kiddie_Mock_Toplevel_Menu_Walker' ) ) {
+	class Kiddie_Mock_Toplevel_Menu_Walker extends Walker_Nav_Menu {
+		/**
+		 * Start submenu list.
+		 *
+		 * @param string   $output Used to append additional content.
+		 * @param int      $depth  Depth of menu item.
+		 * @param stdClass $args   Additional args.
+		 */
+		public function start_lvl( &$output, $depth = 0, $args = null ) {
+			$indent  = str_repeat( "\t", (int) $depth );
+			$output .= "\n{$indent}<ul class=\"submenu\">\n";
+		}
+
+		/**
+		 * End submenu list.
+		 *
+		 * @param string   $output Used to append additional content.
+		 * @param int      $depth  Depth of menu item.
+		 * @param stdClass $args   Additional args.
+		 */
+		public function end_lvl( &$output, $depth = 0, $args = null ) {
+			$indent  = str_repeat( "\t", (int) $depth );
+			$output .= "{$indent}</ul>\n";
+		}
+
+		/**
+		 * Start one menu item.
+		 *
+		 * @param string   $output Used to append additional content.
+		 * @param WP_Post  $item   Menu item object.
+		 * @param int      $depth  Depth of menu item.
+		 * @param stdClass $args   Additional args.
+		 * @param int      $id     Current item ID.
+		 */
+		public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
+			unset( $id, $args );
+
+			if ( ! $item instanceof WP_Post ) {
+				return;
+			}
+
+			$classes = is_array( $item->classes ) ? $item->classes : array();
+			$classes = array_filter( array_map( 'sanitize_html_class', $classes ) );
+			$classes[] = 'menu-item-' . (int) $item->ID;
+			$class_attr = implode( ' ', array_filter( $classes ) );
+
+			$output .= '<li class="' . esc_attr( trim( $class_attr ) ) . '">';
+
+			$attrs = '';
+			if ( ! empty( $item->url ) ) {
+				$attrs .= ' href="' . esc_url( $item->url ) . '"';
+			}
+			if ( ! empty( $item->target ) ) {
+				$attrs .= ' target="' . esc_attr( $item->target ) . '"';
+			}
+			if ( ! empty( $item->xfn ) ) {
+				$attrs .= ' rel="' . esc_attr( $item->xfn ) . '"';
+			}
+
+			$title = apply_filters( 'the_title', $item->title, $item->ID );
+			$link  = '<a' . $attrs . '>' . esc_html( $title ) . '</a>';
+
+			if ( 0 === (int) $depth ) {
+				$output .= '<span class="toplevel">' . $link . '</span>';
+			} else {
+				$output .= $link;
+			}
+		}
+
+		/**
+		 * End one menu item.
+		 *
+		 * @param string   $output Used to append additional content.
+		 * @param WP_Post  $item   Menu item object.
+		 * @param int      $depth  Depth of menu item.
+		 * @param stdClass $args   Additional args.
+		 */
+		public function end_el( &$output, $item, $depth = 0, $args = null ) {
+			unset( $item, $depth, $args );
+			$output .= '</li>';
+		}
+	}
+}
+
+/**
+ * Render primary header nav with dashboard menu fallback.
+ */
+function kiddie_mock_render_primary_nav_menu() {
+	if ( has_nav_menu( 'kiddie_primary' ) ) {
+		wp_nav_menu(
+			array(
+				'theme_location' => 'kiddie_primary',
+				'container'      => false,
+				'menu_class'     => 'one-row-flex top-menu',
+				'menu_id'        => 'menu-header-primary',
+				'depth'          => 2,
+				'fallback_cb'    => '__return_empty_string',
+				'walker'         => new Kiddie_Mock_Toplevel_Menu_Walker(),
+			)
+		);
+		return;
+	}
+
+	$items = array(
+		array(
+			'label' => 'LIFE AT CHESTNUT',
+			'url'   => home_url( '/life-at-chestnut/' ),
+		),
+		array(
+			'label' => 'About Us',
+			'url'   => home_url( '/company/' ),
+		),
+		array(
+			'label' => 'FAQ',
+			'url'   => home_url( '/faq/' ),
+		),
+		array(
+			'label' => 'Contact Us',
+			'url'   => home_url( '/contact-us/' ),
+		),
+	);
+
+	echo '<ul id="menu-header-primary" class="one-row-flex top-menu">';
+	foreach ( $items as $item ) {
+		if ( empty( $item['label'] ) || empty( $item['url'] ) ) {
+			continue;
+		}
+		echo '<li><span class="toplevel"><a href="' . esc_url( $item['url'] ) . '">' . esc_html( $item['label'] ) . '</a></span></li>';
+	}
+	echo '</ul>';
+}
+
+/**
+ * Render footer nav list with dashboard menu fallback.
+ *
+ * @param string                 $location       Menu location key.
+ * @param string                 $menu_id        Menu ID attribute.
+ * @param array<int,array<string,string>> $fallback_items Fallback item list.
+ */
+function kiddie_mock_render_footer_menu( $location, $menu_id, $fallback_items ) {
+	if ( has_nav_menu( $location ) ) {
+		wp_nav_menu(
+			array(
+				'theme_location' => $location,
+				'container'      => false,
+				'menu_class'     => 'menu',
+				'menu_id'        => $menu_id,
+				'depth'          => 1,
+				'fallback_cb'    => '__return_empty_string',
+			)
+		);
+		return;
+	}
+
+	echo '<ul id="' . esc_attr( $menu_id ) . '" class="menu">';
+	foreach ( $fallback_items as $item ) {
+		if ( empty( $item['label'] ) || empty( $item['url'] ) ) {
+			continue;
+		}
+
+		$target = '';
+		$rel    = '';
+		if ( ! empty( $item['external'] ) ) {
+			$target = ' target="_blank"';
+			$rel    = ' rel="noopener noreferrer"';
+		}
+
+		echo '<li><a href="' . esc_url( $item['url'] ) . '"' . $target . $rel . '>' . esc_html( $item['label'] ) . '</a></li>';
+	}
+	echo '</ul>';
+}
+
+/**
  * Resolve site logo URL from Elementor Site Settings (fallback: WP custom logo).
  *
  * @return string
@@ -259,7 +644,18 @@ function kiddie_mock_set_elementor_html( $post_id, $html ) {
 /**
  * Runtime one-time page sync for parity-critical sections.
  */
+function kiddie_mock_allow_legacy_runtime_sync() {
+	return (bool) apply_filters( 'kiddie_mock_allow_legacy_runtime_sync', false );
+}
+
+/**
+ * Runtime one-time page sync for legacy parity snapshots.
+ */
 function kiddie_mock_runtime_page_sync() {
+	if ( ! kiddie_mock_allow_legacy_runtime_sync() ) {
+		return;
+	}
+
 	global $wpdb;
 
 	if ( function_exists( 'kms_get_seed_profile' ) && 'mock-parity' !== kms_get_seed_profile() ) {
@@ -332,6 +728,10 @@ add_action( 'init', 'kiddie_mock_runtime_page_sync', 35 );
  */
 function kiddie_mock_render_parity_overrides( $content ) {
 	if ( ! is_string( $content ) ) {
+		return $content;
+	}
+
+	if ( ! kiddie_mock_allow_legacy_runtime_sync() ) {
 		return $content;
 	}
 
