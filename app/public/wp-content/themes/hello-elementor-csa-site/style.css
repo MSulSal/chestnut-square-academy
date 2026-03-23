@@ -4,7 +4,7 @@ Theme URI: https://chestnutsquareacademy.local
 Description: Full-site Chestnut Square Academy theme for Elementor-based no-code editing.
 Author: CSA Web Team
 Template: hello-elementor
-Version: 1.0.71
+Version: 1.0.72
 Text Domain: hello-elementor-csa-site
 */
 
@@ -710,8 +710,8 @@ body.csa-site #scroll-top:hover {
   --csa-crayon-key: #2b2b2b;
   --csa-sticky-header-live: var(--csa-sticky-header-height-mobile);
   --csa-hero-edge-pad: clamp(22px, 3.2vw, 64px);
-  --csa-hero-headline-size-desktop: clamp(4.4rem, 8.6vw, 8rem);
-  --csa-hero-headline-size-mobile: clamp(3rem, 12.2vw, 5.3rem);
+  --csa-hero-headline-size-desktop: clamp(10rem, 23vw, 24rem);
+  --csa-hero-headline-size-mobile: clamp(8rem, 32vw, 14rem);
   --csa-hero-media-filter-desktop: saturate(1.16) contrast(1.1) brightness(1.06);
   --csa-hero-media-filter-mobile: saturate(1.1) contrast(1.07) brightness(1.05);
   --csa-nav-logo-optical-left-nudge: 8px;
@@ -908,7 +908,7 @@ body.csa-site .animated-hero .copy h1.headline,
 body.csa-site .animated-hero .copy .headline .elementor-heading-title,
 body.csa-site .animated-hero .copy .headline h1 {
   font-family: "Childhood", "Permanent Marker", "Comic Sans MS", cursive !important;
-  font-size: var(--csa-hero-headline-size-desktop);
+  font-size: clamp(8rem, 18.5vw, 19.5rem);
   line-height: 0.8;
   letter-spacing: 0.012em;
   max-width: 7.7ch;
@@ -1001,7 +1001,7 @@ body.csa-site.page-home .animated-hero {
   body.csa-site .animated-hero .copy h1.headline,
   body.csa-site .animated-hero .copy .headline .elementor-heading-title,
   body.csa-site .animated-hero .copy .headline h1 {
-    font-size: var(--csa-hero-headline-size-mobile);
+    font-size: clamp(6.4rem, 24.5vw, 11.8rem);
     line-height: 0.82;
     max-width: 7.9ch;
     text-align: left;
@@ -1490,13 +1490,9 @@ body.csa-site #footer .links > div {
   }
 
   body.csa-site #header {
-    top: 0 !important;
     box-sizing: border-box !important;
     width: 100% !important;
     padding-inline: var(--csa-layout-gutter-mobile) !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    margin-top: 0 !important;
   }
 
   body.csa-site #header .inner-container {
@@ -1507,8 +1503,6 @@ body.csa-site #footer .links > div {
     padding: 0 !important;
     display: flex !important;
     align-items: center !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
   }
 
   body.csa-site #header .nav-left {
@@ -1547,7 +1541,7 @@ body.csa-site #footer .links > div {
     align-items: center !important;
     justify-content: space-between !important;
     gap: 12px !important;
-    padding: 0 !important;
+    padding: 10px 0 !important;
     margin: 0 !important;
     min-height: 0 !important;
     max-height: none !important;
@@ -1598,9 +1592,9 @@ body.csa-site #footer .links > div {
     height: 48px !important;
     padding: 10px 8px !important;
     box-sizing: border-box !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    box-shadow: 0 2px 10px rgba(43, 43, 43, 0.09) !important;
     display: grid !important;
     align-content: center !important;
     gap: 6px !important;
@@ -1654,13 +1648,13 @@ body.csa-site #footer .links > div {
     order: 2 !important;
     display: none !important;
     width: 100% !important;
-    margin: 0 !important;
+    margin: 8px 0 0 !important;
     padding: 8px 0 10px !important;
     background: var(--csa-white) !important;
     border-top: 1px solid rgba(141, 110, 99, 0.22) !important;
-    border-bottom-left-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-    box-shadow: none !important;
+    border-bottom-left-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+    box-shadow: 0 8px 20px rgba(43, 43, 43, 0.08) !important;
   }
 
   body.csa-site.mobile-menu-open #header .main-nav {
@@ -1690,18 +1684,6 @@ body.csa-site #footer .links > div {
     font-size: clamp(1.02rem, 3.8vw, 1.28rem) !important;
     line-height: 1.08 !important;
     text-align: left !important;
-  }
-
-  /* Prevent any residual first-section white band under mobile sticky header. */
-  body.csa-site main#main-content {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-  }
-
-  body.csa-site main#main-content > .e-con.e-child:first-child,
-  body.csa-site main#main-content > section:first-child {
-    margin-top: 0 !important;
-    top: 0 !important;
   }
 
   body.csa-site #hero,
@@ -1780,6 +1762,90 @@ body.csa-site #footer .links > div {
   body.csa-site .animated-hero .copy .headline h1 {
     font-size: clamp(4.8rem, 10.4vw, 8.8rem) !important;
     max-width: 8ch !important;
+  }
+}
+
+/* ===== Deployment Stability Overrides (hero + mobile shell) ===== */
+body.csa-site .kms-dom-id-hero,
+body.csa-site .animated-hero {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+body.csa-site .kms-dom-id-hero > .background-image,
+body.csa-site .animated-hero > .background-image {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  z-index: 1 !important;
+  background-size: cover !important;
+  background-position: center center !important;
+}
+
+body.csa-site .kms-dom-id-hero .hero-overlay,
+body.csa-site .animated-hero .hero-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+}
+
+body.csa-site .kms-dom-id-hero > .copy,
+body.csa-site .animated-hero > .copy {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 3 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  align-items: flex-start !important;
+  padding: 0 0 clamp(16px, 3vw, 34px) clamp(16px, 3vw, 34px) !important;
+  margin: 0 !important;
+}
+
+body.csa-site .kms-dom-id-hero > .copy .headline,
+body.csa-site .kms-dom-id-hero > .copy .headline .elementor-heading-title,
+body.csa-site .animated-hero > .copy .headline,
+body.csa-site .animated-hero > .copy .headline .elementor-heading-title {
+  font-size: clamp(3.2rem, 6.7vw, 6.2rem) !important;
+  line-height: 0.84 !important;
+  max-width: 8.4ch !important;
+  margin: 0 !important;
+  text-align: left !important;
+}
+
+@media only screen and (max-width: 1199px) {
+  body.csa-site #header {
+    top: 0 !important;
+    margin-top: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  body.csa-site #header .inner-container,
+  body.csa-site #header .function-nav,
+  body.csa-site #header .main-nav {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  body.csa-site #header .expand-button.mobile-button label {
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  body.csa-site .kms-dom-id-hero > .copy .headline,
+  body.csa-site .kms-dom-id-hero > .copy .headline .elementor-heading-title,
+  body.csa-site .animated-hero > .copy .headline,
+  body.csa-site .animated-hero > .copy .headline .elementor-heading-title {
+    font-size: clamp(2.5rem, 12.4vw, 4.6rem) !important;
+    line-height: 0.86 !important;
   }
 }
 

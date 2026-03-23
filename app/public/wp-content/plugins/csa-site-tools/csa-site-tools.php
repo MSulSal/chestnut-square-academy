@@ -15,39 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * One-time safety alignment: ensure the intended CSA child theme is active.
- *
- * This prevents barebones rendering if WordPress is still pointing at an older
- * theme folder that no longer carries full runtime templates/styles.
- */
-function kms_ensure_csa_site_theme_active_once() {
-	if ( '1.0.0' === (string) get_option( 'kms_theme_alignment_ver', '' ) ) {
-		return;
-	}
-
-	$target_stylesheet = 'hello-elementor-csa-site';
-	$target_template   = 'hello-elementor';
-	$current_theme     = wp_get_theme();
-
-	if ( ! $current_theme instanceof WP_Theme ) {
-		return;
-	}
-
-	$current_stylesheet = (string) $current_theme->get_stylesheet();
-	$current_template   = (string) $current_theme->get_template();
-
-	if ( $current_stylesheet !== $target_stylesheet || $current_template !== $target_template ) {
-		$target_theme = wp_get_theme( $target_stylesheet );
-		if ( $target_theme instanceof WP_Theme && $target_theme->exists() ) {
-			switch_theme( $target_stylesheet, $target_template );
-		}
-	}
-
-	update_option( 'kms_theme_alignment_ver', '1.0.0' );
-}
-add_action( 'init', 'kms_ensure_csa_site_theme_active_once', 1 );
-
-/**
  * Build a stable asset slot key from source URL.
  *
  * @param string $url Source URL.

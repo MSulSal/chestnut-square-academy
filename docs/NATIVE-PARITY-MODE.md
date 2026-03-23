@@ -72,17 +72,8 @@ Exact clone-level behavior can still vary because Elementor and third-party sour
   - Added mobile flush overrides so `main` and first hero section cannot introduce extra top spacing.
   - Kept sticky behavior and no-code Elementor structure unchanged; CSS-only adjustment.
   - Bumped child-theme version to `1.0.69`.
-- `fix(migration): enforce CSA active theme and remove legacy child themes`
-  - Added MU plugin `csa-theme-guard` so migrated installs always switch to `hello-elementor-csa-site` when available.
-  - Renamed active child theme label to `Chestnut Square Academy` in theme metadata.
-  - Removed deprecated `hello-elementor-csa` theme files and local `hello-elementor-kiddie-mock` folder to prevent accidental fallback.
-  - Bumped child-theme version to `1.0.70`.
-- `fix(migration-runtime): force CSA theme options and replace stale legacy content paths`
-  - Upgraded `csa-theme-guard` to override `template` and `stylesheet` at runtime via `pre_option_*` filters (safer than one-time switching).
-  - Added persistence step to write corrected theme options once.
-  - Added content-level replacements for old theme asset paths and legacy `Kiddie Academy`/`5/6` text so imported DB content cannot regress visuals or wording.
-- `fix(regression): restore post-migration visual parity after fallback drift`
-  - Root cause identified: runtime drift temporarily dropped `csa-site` body marker on some requests while stale mobile shell/card styles and oversized hero clamps remained, producing a barebones middle + oversized tagline.
-  - Added MU-plugin body-class guard to always provide `csa-site` and `page-home` markers on frontend.
-  - Restored mobile sticky/header baseline (`--csa-sticky-header-height-mobile: 76px`) and removed mobile navbar card shell styling (no rounded burger card, no menu panel rounding/shadow).
-  - Rebalanced hero headline clamp variables to non-overflow values and bumped child-theme version to `1.0.71`.
+- `fix(recovery): restore approved no-code baseline and harden hero layering`
+  - Re-synced `style.css` and `csa-site-tools.php` from the previously approved snapshot to undo post-approval drift.
+  - Added a deployment-stability CSS block for hero layering to force full-height background fill and bottom-left tagline anchoring.
+  - Removed mobile header card shell styling regression (rounded/shadow burger shell) in override layer.
+  - Bumped child-theme version to `1.0.72`.
