@@ -5,7 +5,7 @@
  * Version: 1.3.30
  * Author: CSA Web Team
  * License: GPL-2.0-or-later
- * Text Domain: csa-site-tools
+ * Text Domain: kiddie-mock-seed
  *
  * @package CSASiteTools
  */

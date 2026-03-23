@@ -72,8 +72,3 @@ Exact clone-level behavior can still vary because Elementor and third-party sour
   - Added mobile flush overrides so `main` and first hero section cannot introduce extra top spacing.
   - Kept sticky behavior and no-code Elementor structure unchanged; CSS-only adjustment.
   - Bumped child-theme version to `1.0.69`.
-- `fix(recovery): restore approved no-code baseline and harden hero layering`
-  - Re-synced `style.css` and `csa-site-tools.php` from the previously approved snapshot to undo post-approval drift.
-  - Added a deployment-stability CSS block for hero layering to force full-height background fill and bottom-left tagline anchoring.
-  - Removed mobile header card shell styling regression (rounded/shadow burger shell) in override layer.
-  - Bumped child-theme version to `1.0.72`.

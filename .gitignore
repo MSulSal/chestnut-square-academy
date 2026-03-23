@@ -11,21 +11,20 @@
 /app/public/wp-content/*
 !/app/public/wp-content/plugins/
 !/app/public/wp-content/themes/
-!/app/public/wp-content/mu-plugins/
 
 # Ignore all plugins/themes by default
 /app/public/wp-content/plugins/*
 /app/public/wp-content/themes/*
-/app/public/wp-content/mu-plugins/*
 
 # Keep only project-owned plugin/theme code
 !/app/public/wp-content/plugins/csa-launch-kit/
 !/app/public/wp-content/plugins/csa-launch-kit/**
+!/app/public/wp-content/themes/hello-elementor-csa/
+!/app/public/wp-content/themes/hello-elementor-csa/**
 !/app/public/wp-content/plugins/csa-site-tools/
 !/app/public/wp-content/plugins/csa-site-tools/**
 !/app/public/wp-content/themes/hello-elementor-csa-site/
 !/app/public/wp-content/themes/hello-elementor-csa-site/**
-!/app/public/wp-content/mu-plugins/csa-theme-guard.php
 
 # Keep docs and root project files
 !/docs/
