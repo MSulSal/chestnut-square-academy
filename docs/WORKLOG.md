@@ -18,7 +18,63 @@
 - `chore(activation):` changed plugin activation behavior to native-parity + small-business simplification defaults.
 - `chore(admin-labels):` relabeled admin tools/assets screens to CSA wording for client clarity.
 - `docs(cleanup):` rewrote operational docs to reflect current Chestnut ownership and no-code handoff expectations.
+- `fix(mobile-nav-root):` patched `assets/css/csa-core.css` source rules (not overlay-only) to remove mobile header card shell and top-gap behavior at origin.
+- `fix(logos):` added legacy theme-path normalization for header/footer logo sources so deleted theme paths no longer break logo rendering.
+- `chore(cache-bust):` bumped child-theme version to `1.0.62` so updated CSS/JS assets invalidate stale browser cache.
+- `fix(hero-mobile-root):` corrected hero source layout rules so `.kms-dom-id-hero/.animated-hero .background-image` fills the full hero container (removes strip/offset behavior without layering a new override file).
+- `chore(cache-bust):` bumped child-theme version to `1.0.64` after mobile hero root-rule corrections.
+- `fix(mobile-nav-radius-root):` removed remaining mobile header/nav corner radius and card-like shadow from existing source rules (header, inner container, function nav, and mobile nav panel).
+- `fix(hero-mobile-tagline):` tuned existing mobile hero headline sizing/width rules to keep tagline bottom-left and on-canvas across narrow viewports.
+- `chore(cache-bust):` bumped child-theme version to `1.0.65` for immediate CSS pickup.
+- `fix(hero-mobile-tagline-root):` corrected remaining home-specific hero tagline rules that were still forcing oversized mobile text; updated existing mobile clamps/max-width directly in source.
+- `chore(cache-bust):` bumped child-theme version to `1.0.66`.
+- `fix(hero-mobile-tagline-fit):` reduced mobile hero headline clamp/line-height/width in the existing home + responsive blocks so tagline anchors bottom-left without bleeding below viewport.
+- `fix(hero-highlight-margin):` removed negative bottom margin from existing highlight span rule in `assets/css/csa-overrides.css`.
+- `chore(cache-bust):` bumped child-theme version to `1.0.67`.
+- `fix(hero-mobile-height-root):` updated existing mobile home hero height to `viewport - sticky header` (instead of full `100svh`) so bottom-left tagline stays on-screen.
+- `fix(hero-mobile-wrap-root):` widened existing mobile tagline max-width and adjusted clamps so text wraps less vertically on narrow screens.
+- `chore(cache-bust):` bumped child-theme version to `1.0.68`.
+- `fix(hero-mobile-height):` restored mobile home hero section to full viewport height (`100svh/100dvh`) so hero reaches the bottom of screen.
+- `fix(hero-mobile-size):` increased existing mobile tagline clamps and adjusted max-width so bottom-left tagline is larger without dropping off-canvas.
+- `chore(cache-bust):` bumped child-theme version to `1.0.69`.
+- `fix(hero-mobile-viewport-match):` corrected mobile home hero height fallbacks to use the same sticky-header baseline as body top offset (`88px`) and added `vh/svh/dvh` parity so hero lands exactly at viewport bottom.
+- `fix(hero-mobile-size):` increased the existing mobile headline clamp in the same source rules to make the bottom-left tagline visibly larger.
+- `chore(cache-bust):` bumped child-theme version to `1.0.70`.
+- `refactor(hero-height-source):` removed duplicate desktop/mobile hero height blocks and consolidated height/min-height into the main hero source rule to stop conflicting viewport behavior.
+- `fix(hero-mobile-position):` kept hero top spacing zeroed at source (`margin-top: 0; padding-top: 0`) so it sits directly under the fixed navbar.
+- `chore(cache-bust):` bumped child-theme version to `1.0.71`.
+- `fix(home-mobile-offset-source):` moved fixed-header top offset responsibility from global mobile body to non-home pages only, then bound home hero top directly to live header height.
+- `fix(home-mobile-fit):` ensured home hero starts immediately under navbar and still uses viewport-fit height logic (no extra spacer stack).
+- `chore(cache-bust):` bumped child-theme version to `1.0.72`.
+- `fix(home-hero-offset-simplify):` removed the home-specific hero top offset and restored a single mobile body top-offset source rule for all pages.
+- `fix(home-hero-fit):` kept hero top margin at `0` and retained viewport-minus-header height logic for direct navbar-to-viewport coverage.
+- `chore(cache-bust):` bumped child-theme version to `1.0.73`.
+- `fix(hero-mobile-fallback-sync):` aligned mobile header fallback token to `88px` so body offset and hero height math cannot diverge when live JS header metric is unavailable.
+- `chore(cache-bust):` bumped child-theme version to `1.0.74`.
+- `refactor(hero-header-single-path):` removed `--csa-sticky-header-live` dependency and consolidated hero/header sizing to explicit desktop/mobile header-height tokens.
+- `refactor(js-single-path):` removed `syncStickyHeaderMetrics()` runtime CSS-var writer and simplified about-anchor header offset logic to direct `#header.offsetHeight`.
+- `fix(mobile-hero-layout):` locked mobile header container height to the single header token and aligned body offset + hero viewport math to the same value.
+- `chore(cache-bust):` bumped child-theme version to `1.0.75`.
+- `fix(hero-mobile-tagline-fit):` updated the existing mobile hero source rules (no overlay layer added) to increase bottom inset and slightly reduce headline clamp so the bottom-left tagline stays fully visible inside the viewport.
+- `qa(render-pass):` ran fresh Playwright capture passes for mobile (home + core pages + menu-open state) and desktop (home + core routes) to verify hero/nav geometry after the fix.
+- `chore(cache-bust):` bumped child-theme version to `1.0.77`.
+- `fix(hero-mobile-tagline-resilience):` standardized all mobile headline rules to a single token path (`--csa-hero-headline-size-mobile`) and widened wrap window so font fallback/device differences do not push tagline below viewport.
+- `qa(render-pass):` executed additional multi-viewport checks (`390x844`, `375x812`, `375x667`, `360x740`, `320x568`) and stress checks; confirmed hero bottom fit and tagline in-bounds across tested sizes.
+- `chore(cache-bust):` bumped child-theme version to `1.0.78`.
+- `fix(desktop-navbar-hero-gap):` removed desktop whitespace between fixed header and hero by aligning desktop sticky-header token to actual navbar height (`135px`) at source.
+- `qa(render-pass):` re-ran desktop geometry check; confirmed `header.bottom === hero.top` (gap `0px`) and refreshed desktop home screenshot.
+- `chore(cache-bust):` bumped child-theme version to `1.0.79`.
+- `qa(snapshot-complete):` generated full post-fix snapshot set for all published pages with desktop/mobile scroll slices, full-page captures, and mobile menu-open top captures.
+- `chore(tooling):` added `scripts/capture-local-complete-snapshot.mjs` to auto-discover published pages from WP REST API and produce timestamped capture archives with manifest metadata.
+- `qa(capture-archive):` generated full scroll-slice render archive for all published pages (`/`, `/life-at-chestnut/`, `/faq/`, `/contact-us/`) in desktop and mobile viewports.
+- `chore(tooling):` added `scripts/capture-local-scroll-slices.mjs` to reproduce complete top-to-bottom visual captures and manifest output before cleanup passes.
 
 ## Operating Notes
 - Commit policy: major milestones committed and pushed; smaller atomic changes logged here when grouped into a larger pass.
 - Handoff priority: every routine update (copy, images, menu links, gallery entries, footer details) remains editable through WordPress admin + Elementor without direct code edits.
+- chore(cleanup-runtime): removed unused legacy theme directory pp/public/wp-content/themes/hello-elementor-csa/ after verifying active site renders from hello-elementor-csa-site only.
+- chore(cleanup-runtime): removed setup-only plugin pp/public/wp-content/plugins/csa-launch-kit/ (no live dependency in current deployment path).
+- chore(cleanup-tooling): removed superseded capture scripts (scripts/capture-local-desktop.mjs, scripts/capture-local-mobile.mjs, scripts/capture-local-scroll-slices.mjs) and kept unified scripts/capture-local-complete-snapshot.mjs.
+- qa(stability-after-each-batch): ran full desktop/mobile render capture passes after each cleanup batch and validated home/nav/menu/inner pages remained stable.
+- qa(snapshot-final): pruned old capture archives and generated final complete snapshot: docs/render-captures/20260324-112151-complete-snapshot/.
+- ix(seed-trim): corrected home simplification XPath rules to remove legacy #why-Chestnut section variants (not just #why-kiddie) so stale 'Why Parents Love...' blocks cannot reappear on native-parity reseed/deploy.

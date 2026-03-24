@@ -177,6 +177,37 @@ function kms_set_asset_overrides( $overrides ) {
 }
 
 /**
+ * Normalize stale asset URLs that still reference deleted legacy theme folders.
+ *
+ * @param string $url         Raw URL.
+ * @param string $default_url Default URL.
+ * @return string
+ */
+function kms_normalize_legacy_theme_asset_url( $url, $default_url = '' ) {
+	$url = trim( (string) $url );
+
+	if ( '' === $url ) {
+		return '';
+	}
+
+	if ( false === stripos( $url, '/wp-content/themes/hello-elementor-kiddie-mock/' ) ) {
+		return esc_url_raw( $url );
+	}
+
+	$path     = wp_parse_url( $url, PHP_URL_PATH );
+	$filename = is_string( $path ) ? basename( $path ) : '';
+
+	if ( '' !== $filename ) {
+		$local_candidate = trailingslashit( get_stylesheet_directory() ) . 'assets/images/' . $filename;
+		if ( file_exists( $local_candidate ) ) {
+			return trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/' . rawurlencode( $filename );
+		}
+	}
+
+	return '' !== $default_url ? esc_url_raw( $default_url ) : '';
+}
+
+/**
  * Resolve asset URL by key with optional override.
  *
  * @param string $default_url Default URL.
@@ -187,10 +218,13 @@ function kms_resolve_asset_url( $default_url, $asset_key ) {
 	$overrides = kms_get_asset_overrides();
 
 	if ( isset( $overrides[ $asset_key ] ) && '' !== $overrides[ $asset_key ] ) {
-		return esc_url_raw( $overrides[ $asset_key ] );
+		$normalized = kms_normalize_legacy_theme_asset_url( $overrides[ $asset_key ], $default_url );
+		if ( '' !== $normalized ) {
+			return $normalized;
+		}
 	}
 
-	return $default_url;
+	return esc_url_raw( $default_url );
 }
 add_filter( 'kms_asset_url', 'kms_resolve_asset_url', 10, 2 );
 
@@ -2970,6 +3004,9 @@ function kms_trim_small_business_html( $path, $html ) {
 			"//*[@id='hero']//*[contains(concat(' ', normalize-space(@class), ' '), ' locator ')]",
 			"//*[@id='curriculum']",
 			"//*[@id='why-kiddie']",
+			"//*[@id='why-Chestnut']",
+			"//*[@id='why-chestnut']",
+			"//*[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='why-chestnut']",
 			"//section[contains(translate(normalize-space(string(.)),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'learning with momentum')]",
 			"//*[@id='join-us']",
 			"//*[@id='start-your-career']",

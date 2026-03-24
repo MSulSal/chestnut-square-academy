@@ -17,10 +17,6 @@
 /app/public/wp-content/themes/*
 
 # Keep only project-owned plugin/theme code
-!/app/public/wp-content/plugins/csa-launch-kit/
-!/app/public/wp-content/plugins/csa-launch-kit/**
-!/app/public/wp-content/themes/hello-elementor-csa/
-!/app/public/wp-content/themes/hello-elementor-csa/**
 !/app/public/wp-content/plugins/csa-site-tools/
 !/app/public/wp-content/plugins/csa-site-tools/**
 !/app/public/wp-content/themes/hello-elementor-csa-site/
@@ -36,5 +32,6 @@
 /docs/local-*.png
 /docs/live-*.png
 /docs/compare-*.png
+/docs/render-captures/
 
 

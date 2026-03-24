@@ -684,6 +684,38 @@ function csa_site_render_footer_menu( $location, $menu_id, $fallback_items ) {
 }
 
 /**
+ * Normalize stale logo URLs that still point at removed legacy theme folders.
+ *
+ * @param string $url Raw URL.
+ * @return string
+ */
+function csa_site_normalize_legacy_theme_asset_url( $url ) {
+	$url = trim( (string) $url );
+
+	if ( '' === $url ) {
+		return '';
+	}
+
+	if ( false === stripos( $url, '/wp-content/themes/hello-elementor-kiddie-mock/' ) ) {
+		return $url;
+	}
+
+	$path     = wp_parse_url( $url, PHP_URL_PATH );
+	$filename = is_string( $path ) ? basename( $path ) : '';
+
+	if ( '' === $filename ) {
+		return '';
+	}
+
+	$local_candidate = trailingslashit( get_stylesheet_directory() ) . 'assets/images/' . $filename;
+	if ( ! file_exists( $local_candidate ) ) {
+		return '';
+	}
+
+	return trailingslashit( get_stylesheet_directory_uri() ) . 'assets/images/' . rawurlencode( $filename );
+}
+
+/**
  * Resolve site logo URL from Elementor Site Settings (fallback: WP custom logo).
  *
  * @return string
@@ -714,6 +746,7 @@ function csa_site_get_elementor_site_logo_url() {
 	}
 
 	$url = wp_get_attachment_image_url( $logo_id, 'full' );
+	$url = csa_site_normalize_legacy_theme_asset_url( $url );
 
 	return is_string( $url ) ? $url : '';
 }

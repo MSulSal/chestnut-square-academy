@@ -399,28 +399,6 @@
     });
   }
 
-  function syncStickyHeaderMetrics() {
-    var header = document.getElementById("header");
-    if (!header) {
-      return;
-    }
-
-    var root = document.documentElement;
-
-    function apply() {
-      var rect = header.getBoundingClientRect();
-      var height = Math.ceil(rect && rect.height ? rect.height : header.offsetHeight || 0);
-      if (height > 0) {
-        root.style.setProperty("--csa-sticky-header-live", height + "px");
-      }
-    }
-
-    apply();
-    window.addEventListener("resize", apply, { passive: true });
-    window.addEventListener("load", apply, { passive: true });
-    setTimeout(apply, 220);
-  }
-
   function bindAboutAnchorScroll() {
     function normalizePath(pathname) {
       var value = pathname || "/";
@@ -436,29 +414,10 @@
 
     function getHeaderOffset() {
       var header = document.getElementById("header");
-      var cssValue = 0;
-      var parsed = 0;
-      var root = document.documentElement;
-
-      if (root && window.getComputedStyle) {
-        cssValue = window.getComputedStyle(root).getPropertyValue("--csa-sticky-header-live");
-        parsed = parseFloat(cssValue);
-        if (!isNaN(parsed) && parsed > 0) {
-          cssValue = parsed;
-        } else {
-          cssValue = 0;
-        }
-      } else {
-        cssValue = 0;
-      }
-
       if (!header) {
-        return cssValue || 0;
+        return 0;
       }
-
-      var rect = header.getBoundingClientRect();
-      var headerBottom = rect && rect.bottom ? rect.bottom : 0;
-      return Math.max(cssValue || 0, headerBottom || 0);
+      return Math.ceil(header.offsetHeight || 0);
     }
 
     function scrollToAbout(behavior) {
@@ -542,7 +501,6 @@
     bindLifeAgeTabs();
     faqToggle();
     scrollTopWidget();
-    syncStickyHeaderMetrics();
     bindAboutAnchorScroll();
   });
 })();
